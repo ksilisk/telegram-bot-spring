@@ -1,1 +1,1 @@
-# telegram-bot-spring-boot-starter
+# telegram-bot-spring
