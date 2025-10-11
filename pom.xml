@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.ksilisk</groupId>
+    <artifactId>telegram-boot-spring-parent</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/ksilisk/telegram-bot-spring/issues</url>
+    </issueManagement>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
+        <revision>1.0.0</revision>
+        <pengrad.bot.api.version>9.2.0</pengrad.bot.api.version>
+    </properties>
+
+    <modules>
+        <module>telegram-bot-core</module>
+        <module>telegram-bot-spring-boot-autoconfigure</module>
+        <module>telegram-bot-spring-boot-starter</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pengrad</groupId>
+                <artifactId>java-telegram-bot-api</artifactId>
+                <version>${pengrad.bot.api.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
