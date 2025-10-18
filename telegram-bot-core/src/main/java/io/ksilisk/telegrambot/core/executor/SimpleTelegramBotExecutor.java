@@ -1,13 +1,13 @@
-package io.ksilisk.telegrambot.core.api;
+package io.ksilisk.telegrambot.core.executor;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 
-public class BotGateway {
+public class SimpleTelegramBotExecutor implements TelegramBotExecutor {
     private final TelegramBot telegramBot;
 
-    public BotGateway(TelegramBot telegramBot) {
+    public SimpleTelegramBotExecutor(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
 
