@@ -18,6 +18,7 @@
         <spring.boot.version>3.3.5</spring.boot.version>
         <revision>1.0.0</revision>
         <pengrad.bot.api.version>9.2.0</pengrad.bot.api.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
     </properties>
 
     <modules>

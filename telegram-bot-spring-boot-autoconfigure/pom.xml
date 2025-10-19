@@ -12,7 +12,4 @@
 
     <artifactId>telegram-bot-spring-boot-autoconfigure</artifactId>
 
-    <properties>
-    </properties>
-
 </project>
