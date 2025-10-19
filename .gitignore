@@ -1,5 +1,15 @@
+# Other files
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.DS_Store
+
+# VS Code
+.vscode/
+
 # IDEA files
-.idea
+.idea/**/*
 
 # Compiled class file
 *.class

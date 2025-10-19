@@ -12,10 +12,6 @@
 
     <artifactId>telegram-bot-core</artifactId>
 
-    <properties>
-
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.github.pengrad</groupId>

@@ -12,10 +12,6 @@
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>io.github.ksilisk</groupId>
