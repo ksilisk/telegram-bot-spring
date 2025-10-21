@@ -7,9 +7,9 @@ import java.util.Optional;
  * Rules based on Telegram Bot API:
  * - A command must start at the very beginning of the message.
  * - If there is any whitespace or newline before '/', it is NOT a valid command.
- * - Commands can start with "/" or "@".
- * - Valid examples: "/start", "/start@mybot", "/help arg1"
- * - Invalid examples: " /start", " hello /start", "\n/start"
+ * - Commands can start only with "/".
+ * - Valid examples: "/start", "/help arg1"
+ * - Invalid examples: " /start", " hello /start", "\n/start", "@start"
  */
 public class DefaultCommandDetector implements CommandDetector {
 
@@ -26,8 +26,8 @@ public class DefaultCommandDetector implements CommandDetector {
 			return Optional.empty();
 		}
 
-		// Command must start with '/' or '@'
-		if (!message.startsWith("/") && !message.startsWith("@")) {
+		// Command must start with '/'
+		if (!message.startsWith("/")) {
 			return Optional.empty();
 		}
 
@@ -35,7 +35,8 @@ public class DefaultCommandDetector implements CommandDetector {
 		String[] parts = message.split("\\s+", 2);
 		String firstWord = parts[0];
 
-		boolean isValid = firstWord.matches("^[/@][a-zA-Z0-9_]+(@[a-zA-Z0-9_]+)?$");
+		// Command validation: must start with '/' followed by valid chars
+		boolean isValid = firstWord.matches("^/[a-zA-Z0-9_]+$");
 		if (!isValid) {
 			return Optional.empty();
 		}

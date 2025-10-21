@@ -16,10 +16,10 @@ public class MessageUpdateRouter implements UpdateRouter {
     private final CommandDetector commandDetector;
 
     public MessageUpdateRouter(CommandHandlerRegistry commandHandlerRegistry,
-                               MessageRuleRegistry messageRuleRegistry) {
+                               MessageRuleRegistry messageRuleRegistry,CommandDetector commandDetector) {
         this.commandHandlerRegistry = commandHandlerRegistry;
         this.messageRuleRegistry = messageRuleRegistry;
-        this.commandDetector = new DefaultCommandDetector();
+        this.commandDetector = commandDetector;
     }
 
     @Override
