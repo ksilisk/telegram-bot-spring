@@ -6,7 +6,6 @@ import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.rule.message.MessageRuleRegistry;
 import io.ksilisk.telegrambot.core.router.detector.CommandDetector;
-import io.ksilisk.telegrambot.core.router.detector.DefaultCommandDetector;
 
 import java.util.Optional;
 
@@ -16,7 +15,8 @@ public class MessageUpdateRouter implements UpdateRouter {
     private final CommandDetector commandDetector;
 
     public MessageUpdateRouter(CommandHandlerRegistry commandHandlerRegistry,
-                               MessageRuleRegistry messageRuleRegistry,CommandDetector commandDetector) {
+                               MessageRuleRegistry messageRuleRegistry,
+                               CommandDetector commandDetector) {
         this.commandHandlerRegistry = commandHandlerRegistry;
         this.messageRuleRegistry = messageRuleRegistry;
         this.commandDetector = commandDetector;
