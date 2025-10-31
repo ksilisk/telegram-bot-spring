@@ -7,6 +7,7 @@ import io.ksilisk.telegrambot.core.selector.impl.DefaultNoMatchStrategySelector;
 import io.ksilisk.telegrambot.core.strategy.CompositeNoMatchStrategy;
 import io.ksilisk.telegrambot.core.strategy.NoMatchStrategy;
 import io.ksilisk.telegrambot.core.strategy.StrategyErrorPolicy;
+import io.ksilisk.telegrambot.core.strategy.impl.LoggingNoMatchStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +19,9 @@ public class NoMatchStrategyConfiguration {
     @Bean
     @ConditionalOnMissingBean(CompositeNoMatchStrategy.class)
     public CompositeNoMatchStrategy noMatchStrategy(List<NoMatchStrategy> noMatchStrategies,
-                                           NoMatchStrategySelector noMatchStrategySelector,
-                                           TelegramBotProperties telegramBotProperties,
-                                           BotLogger botLogger) {
+                                                    NoMatchStrategySelector noMatchStrategySelector,
+                                                    TelegramBotProperties telegramBotProperties,
+                                                    BotLogger botLogger) {
         StrategyErrorPolicy errorPolicy = telegramBotProperties.getNomatch().getErrorPolicy();
         return new CompositeNoMatchStrategy(noMatchStrategies, noMatchStrategySelector, errorPolicy, botLogger);
     }
@@ -29,5 +30,11 @@ public class NoMatchStrategyConfiguration {
     @ConditionalOnMissingBean(NoMatchStrategySelector.class)
     public NoMatchStrategySelector noMatchStrategySelector() {
         return new DefaultNoMatchStrategySelector();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = NoMatchStrategy.class, ignored = CompositeNoMatchStrategy.class)
+    public NoMatchStrategy defaultLoggingNoMatchStrategy(BotLogger botLogger) {
+        return new LoggingNoMatchStrategy(botLogger);
     }
 }
