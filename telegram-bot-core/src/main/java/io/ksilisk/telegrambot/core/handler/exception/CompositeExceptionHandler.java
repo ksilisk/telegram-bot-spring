@@ -2,25 +2,25 @@ package io.ksilisk.telegrambot.core.handler.exception;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.exception.handler.ExceptionHandlerExecutionException;
-import io.ksilisk.telegrambot.core.logger.BotLogger;
 import io.ksilisk.telegrambot.core.selector.ExceptionHandlerSelector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class CompositeExceptionHandler implements ExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(CompositeExceptionHandler.class);
+
     private final List<ExceptionHandler> exceptionHandlers;
     private final ExceptionHandlerSelector exceptionHandlerSelector;
     private final ExceptionHandlerErrorPolicy errorPolicy;
-    private final BotLogger log;
 
     public CompositeExceptionHandler(List<ExceptionHandler> exceptionHandlers,
                                      ExceptionHandlerSelector exceptionHandlerSelector,
-                                     ExceptionHandlerErrorPolicy errorPolicy,
-                                     BotLogger log) {
+                                     ExceptionHandlerErrorPolicy errorPolicy) {
         this.exceptionHandlers = exceptionHandlers;
         this.exceptionHandlerSelector = exceptionHandlerSelector;
         this.errorPolicy = errorPolicy;
-        this.log = log;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CompositeExceptionHandler implements ExceptionHandler {
                 }
             } catch (Exception ex) {
                 switch (errorPolicy) {
-                    case LOG -> log.error("ExceptionHandler '{}' failed.", ex, exceptionHandler.name());
+                    case LOG -> log.error("ExceptionHandler '{}' failed.", exceptionHandler.name(), ex);
                     case THROW -> throw new ExceptionHandlerExecutionException(ex);
                 }
             }

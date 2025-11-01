@@ -5,7 +5,6 @@ import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DispatcherConfigurat
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.ExceptionHandlerConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.NoMatchStrategyConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RouterConfiguration;
-import io.ksilisk.telegrambot.autoconfigure.config.log.LoggingConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.registry.RegistryConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.HttpClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingConfiguration;
@@ -27,8 +26,7 @@ import org.springframework.context.annotation.Import;
         RegistryConfiguration.class,
         NoMatchStrategyConfiguration.class,
         ExceptionHandlerConfiguration.class,
-        DispatcherConfiguration.class,
-        LoggingConfiguration.class
+        DispatcherConfiguration.class
 })
 public class TelegramBotAutoConfiguration {
 }
