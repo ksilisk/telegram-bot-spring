@@ -4,6 +4,7 @@ import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import io.ksilisk.telegrambot.core.handler.exception.CompositeExceptionHandler;
 import io.ksilisk.telegrambot.core.handler.exception.ExceptionHandler;
 import io.ksilisk.telegrambot.core.handler.exception.ExceptionHandlerErrorPolicy;
+import io.ksilisk.telegrambot.core.handler.exception.impl.LoggingExceptionHandler;
 import io.ksilisk.telegrambot.core.logger.BotLogger;
 import io.ksilisk.telegrambot.core.selector.ExceptionHandlerSelector;
 import io.ksilisk.telegrambot.core.selector.impl.DefaultExceptionHandlerSelector;
@@ -30,5 +31,11 @@ public class ExceptionHandlerConfiguration {
     @ConditionalOnMissingBean(ExceptionHandlerSelector.class)
     public ExceptionHandlerSelector exceptionHandlerSelector() {
         return new DefaultExceptionHandlerSelector();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = ExceptionHandler.class, ignored = CompositeExceptionHandler.class)
+    public ExceptionHandler defaultLoggingExceptionHandler(BotLogger botLogger) {
+        return new LoggingExceptionHandler(botLogger);
     }
 }

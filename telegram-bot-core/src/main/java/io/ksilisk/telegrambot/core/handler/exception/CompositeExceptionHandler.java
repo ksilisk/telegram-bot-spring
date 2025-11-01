@@ -23,12 +23,6 @@ public class CompositeExceptionHandler implements ExceptionHandler {
         this.log = log;
     }
 
-    public CompositeExceptionHandler(List<ExceptionHandler> exceptionHandlers,
-                                     ExceptionHandlerSelector exceptionHandlerSelector,
-                                     ExceptionHandlerErrorPolicy errorPolicy) {
-        this(exceptionHandlers, exceptionHandlerSelector, errorPolicy, BotLogger.NO_OP);
-    }
-
     @Override
     public boolean supports(Throwable t, Update update) {
         return true;
@@ -36,20 +30,20 @@ public class CompositeExceptionHandler implements ExceptionHandler {
 
     @Override
     public void handle(Throwable t, Update update) {
-        try {
-            List<ExceptionHandler> selectedHandlers = exceptionHandlerSelector.select(this.exceptionHandlers, t, update);
-            for (ExceptionHandler exceptionHandler : selectedHandlers) {
+        List<ExceptionHandler> selectedHandlers = exceptionHandlerSelector.select(this.exceptionHandlers, t, update);
+        for (ExceptionHandler exceptionHandler : selectedHandlers) {
+            try {
                 if (exceptionHandler.supports(t, update)) {
                     exceptionHandler.handle(t, update);
                     if (exceptionHandler.terminal()) {
                         return;
                     }
                 }
-            }
-        } catch (Exception ex) {
-            switch (errorPolicy) {
-                case LOG -> log.error("", ex, "");
-                case THROW -> throw new ExceptionHandlerExecutionException(ex);
+            } catch (Exception ex) {
+                switch (errorPolicy) {
+                    case LOG -> log.error("ExceptionHandler '{}' failed.", ex, exceptionHandler.name());
+                    case THROW -> throw new ExceptionHandlerExecutionException(ex);
+                }
             }
         }
     }

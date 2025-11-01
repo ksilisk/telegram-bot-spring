@@ -22,6 +22,7 @@
     </properties>
 
     <modules>
+        <module>examples</module>
         <module>telegram-bot-core</module>
         <module>telegram-bot-spring-boot-autoconfigure</module>
         <module>telegram-bot-spring-boot-starter</module>
