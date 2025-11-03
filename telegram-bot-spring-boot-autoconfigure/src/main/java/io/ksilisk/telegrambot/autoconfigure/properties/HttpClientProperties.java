@@ -9,11 +9,8 @@ public class HttpClientProperties {
     private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(5);
 
     private Duration readTimeout = DEFAULT_READ_TIMEOUT;
-
     private Duration writeTimeout = DEFAULT_WRITE_TIMEOUT;
-
     private Duration callTimeout = DEFAULT_CALL_TIMEOUT;
-
     private Duration connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 
     public Duration getReadTimeout() {
