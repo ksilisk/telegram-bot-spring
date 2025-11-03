@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.autoconfigure.properties;
+package io.ksilisk.telegrambot.core.properties;
 
 import io.ksilisk.telegrambot.core.handler.exception.ExceptionHandlerErrorPolicy;
 

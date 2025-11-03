@@ -1,5 +1,9 @@
 package io.ksilisk.telegrambot.autoconfigure.properties;
 
+import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
+import io.ksilisk.telegrambot.core.properties.ExceptionHandlerProperties;
+import io.ksilisk.telegrambot.core.properties.LongPollingProperties;
+import io.ksilisk.telegrambot.core.properties.NoMatchStrategyProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -51,6 +55,19 @@ public class TelegramBotProperties {
     @NotNull
     @NestedConfigurationProperty
     private HttpClientProperties httpClient = new HttpClientProperties();
+
+    @Valid
+    @NotNull
+    @NestedConfigurationProperty
+    private DeliveryProperties delivery = new DeliveryProperties();
+
+    public DeliveryProperties getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(DeliveryProperties delivery) {
+        this.delivery = delivery;
+    }
 
     public ExceptionHandlerProperties getException() {
         return exception;
