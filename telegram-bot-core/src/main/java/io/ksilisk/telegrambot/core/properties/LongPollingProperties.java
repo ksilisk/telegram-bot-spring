@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.core.properties;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -12,17 +13,38 @@ public class LongPollingProperties {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(1);
     private static final Duration DEFAULT_SHUTDOWN_TIMEOUT = Duration.ofSeconds(2);
     private static final boolean DEFAULT_DROP_PENDING_ON_START = false;
+    private static final boolean DEFAULT_USE_TEST_SERVER = false;
     private static final int DEFAULT_LIMIT = 100;
 
     private Duration retryDelay = DEFAULT_RETRY_DELAY;
     private boolean dropPendingOnStart = DEFAULT_DROP_PENDING_ON_START;
+    private boolean useTestServer = DEFAULT_USE_TEST_SERVER;
     private List<String> allowedUpdates = new ArrayList<>();
 
     @Min(1)
     @Max(100)
     private int limit = DEFAULT_LIMIT;
+
+    @NotBlank
+    private String token;
     private Duration timeout = DEFAULT_TIMEOUT;
     private Duration shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
+
+    public boolean getUseTestServer() {
+        return useTestServer;
+    }
+
+    public void setUseTestServer(boolean useTestServer) {
+        this.useTestServer = useTestServer;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public Duration getShutdownTimeout() {
         return shutdownTimeout;
