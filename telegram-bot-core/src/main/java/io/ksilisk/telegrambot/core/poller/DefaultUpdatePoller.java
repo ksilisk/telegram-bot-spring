@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
@@ -25,9 +24,8 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
     private final UpdateDelivery updateDelivery;
     private final LongPollingProperties properties;
 
-    private final ExecutorService executorService = newSingleThreadExecutor(r -> new Thread(r, "telegram-poller"));
-    private final AtomicBoolean started = new AtomicBoolean(false);
-    private final AtomicBoolean stopped = new AtomicBoolean(false);
+    private ExecutorService executorService = buildExecutorService();
+    private volatile boolean running = false;
 
     public DefaultUpdatePoller(OffsetStore offsetStore,
                                TelegramBotExecutor telegramBotExecutor,
@@ -40,33 +38,33 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
     }
 
     @Override
-    public void start() {
+    public synchronized void start() {
         log.info("Starting Telegram Update Poller");
-        if (started.compareAndExchange(false, true)) {
-            return;
+        if (!running) {
+            if (executorService.isShutdown() || executorService.isTerminated()) {
+                executorService = buildExecutorService();
+            }
+            executorService.submit(this::runLoop);
+            running = true;
+        } else {
+            log.warn("Telegram Update Poller is already started");
         }
-        stopped.set(false);
-        executorService.submit(this::runLoop);
     }
 
     @Override
-    public void stop() {
+    public synchronized void stop() {
         log.info("Stopping Telegram Update Poller");
-        if (!started.get() || stopped.get()) {
-            return;
-        }
-        stopped.compareAndExchange(false, true);
-
-        executorService.shutdown();
-        try {
-            if (!executorService.awaitTermination(properties.getShutdownTimeout().getSeconds(), TimeUnit.SECONDS)) {
+        if (running) {
+            running = false;
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(properties.getShutdownTimeout().getSeconds(), TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 executorService.shutdownNow();
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            executorService.shutdownNow();
-        } finally {
-            started.set(false);
         }
     }
 
@@ -81,7 +79,7 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
                 drainPendingUpdates();
             }
             GetUpdates getUpdates = new GetUpdates();
-            while (!stopped.get()) {
+            while (running) {
                 updateGetUpdatesRequest(getUpdates);
                 GetUpdatesResponse getUpdatesResponse;
                 try {
@@ -89,7 +87,7 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
                 } catch (Exception ex) {
                     log.warn("Error while executing GetUpdates request", ex);
 
-                    if (stopped.get() || Thread.currentThread().isInterrupted()) {
+                    if (!running || Thread.currentThread().isInterrupted()) {
                         break;
                     }
 
@@ -147,11 +145,15 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
     private void updateGetUpdatesRequest(GetUpdates getUpdates) {
         int offset = offsetStore.read().orElse(0);
 
-        if (!properties.getAllowedUpdates().isEmpty()) {
+        if (properties.getAllowedUpdates() != null && !properties.getAllowedUpdates().isEmpty()) {
             getUpdates.allowedUpdates(properties.getAllowedUpdates().toArray(String[]::new));
         }
         getUpdates.offset(offset);
         getUpdates.timeout((int) properties.getTimeout().getSeconds());
         getUpdates.limit(properties.getLimit());
+    }
+
+    private ExecutorService buildExecutorService() {
+        return newSingleThreadExecutor(r -> new Thread(r, "telegram-poller"));
     }
 }
