@@ -4,6 +4,7 @@ import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import io.ksilisk.telegrambot.core.properties.ExceptionHandlerProperties;
 import io.ksilisk.telegrambot.core.properties.NoMatchStrategyProperties;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -13,13 +14,18 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "telegram.bot")
 public class TelegramBotProperties {
     private static final TelegramBotMode DEFAULT_TELEGRAM_BOT_MODE = TelegramBotMode.LONG_POLLING;
+    private static final boolean DEFAULT_USE_TEST_SERVER = false;
 
     public enum TelegramBotMode {
         LONG_POLLING,
         WEBHOOK
     }
 
+    @NotBlank
+    private String token;
+
     private String botUsername;
+    private boolean useTestServer = DEFAULT_USE_TEST_SERVER;
 
     @NotNull
     private TelegramBotMode mode = DEFAULT_TELEGRAM_BOT_MODE;
@@ -43,6 +49,22 @@ public class TelegramBotProperties {
     @NotNull
     @NestedConfigurationProperty
     private DeliveryProperties delivery = new DeliveryProperties();
+
+    public boolean getUseTestServer() {
+        return useTestServer;
+    }
+
+    public void setUseTestServer(boolean useTestServer) {
+        this.useTestServer = useTestServer;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public DeliveryProperties getDelivery() {
         return delivery;

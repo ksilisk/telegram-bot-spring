@@ -1,0 +1,10 @@
+telegram:
+  bot:
+    mode: webhook
+    webhook:
+      auto-register: false
+      auto-remove: false
+    token: "your-token-is-here"
+
+server:
+  port: 8181

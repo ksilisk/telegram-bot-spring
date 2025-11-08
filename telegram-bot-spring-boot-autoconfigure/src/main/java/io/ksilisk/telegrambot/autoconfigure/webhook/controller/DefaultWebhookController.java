@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "${telegram.bot.webhook.endpoint}")
+@RequestMapping(value = "${telegram.bot.webhook.endpoint:/telegrambot/webhook}")
 public class DefaultWebhookController implements WebhookController {
     private final UpdateDelivery updateDelivery;
 

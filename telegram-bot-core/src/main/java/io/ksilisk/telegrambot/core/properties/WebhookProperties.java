@@ -18,7 +18,6 @@ public class WebhookProperties {
     @NotBlank
     private String endpoint = DEFAULT_ENDPOINT;
 
-    @NotBlank
     private String externalUrl;
     private String certificatePath;
     private String idAddress;
