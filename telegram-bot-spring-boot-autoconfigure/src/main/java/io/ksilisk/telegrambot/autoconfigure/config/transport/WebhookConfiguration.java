@@ -1,6 +1,7 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import io.ksilisk.telegrambot.autoconfigure.webhook.controller.DefaultWebhookController;
+import io.ksilisk.telegrambot.autoconfigure.webhook.converter.TelegramUpdateHttpMessageConverter;
 import io.ksilisk.telegrambot.autoconfigure.webhook.filter.WebhookSecretTokenFilter;
 import io.ksilisk.telegrambot.autoconfigure.webhook.lifecycle.DefaultWebhookLifecycle;
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
@@ -30,7 +31,7 @@ public class WebhookConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(WebhookController.class)
-    public WebhookController webhookController(UpdateDelivery updateDelivery) {
+    public DefaultWebhookController webhookController(UpdateDelivery updateDelivery) {
         return new DefaultWebhookController(updateDelivery);
     }
 
@@ -53,5 +54,11 @@ public class WebhookConfiguration {
     public WebhookLifecycle webhookLifecycle(WebhookProperties webhookProperties,
                                              TelegramBotExecutor telegramBotExecutor) {
         return new DefaultWebhookLifecycle(webhookProperties, telegramBotExecutor);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TelegramUpdateHttpMessageConverter.class)
+    public TelegramUpdateHttpMessageConverter telegramUpdateHttpMessageConverter() {
+        return new TelegramUpdateHttpMessageConverter();
     }
 }

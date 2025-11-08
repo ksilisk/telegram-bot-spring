@@ -3,7 +3,7 @@ package io.ksilisk.telegrambot.autoconfigure;
 import com.pengrad.telegrambot.TelegramBot;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.*;
 import io.ksilisk.telegrambot.autoconfigure.config.registry.RegistryConfiguration;
-import io.ksilisk.telegrambot.autoconfigure.config.transport.HttpClientConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookMissingWebMvcConfiguration;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties(TelegramBotProperties.class)
 @ConditionalOnClass(TelegramBot.class)
 @Import({
-        HttpClientConfiguration.class,
+        TelegramClientConfiguration.class,
         DeliveryConfiguration.class,
         RouterConfiguration.class,
         RegistryConfiguration.class,
