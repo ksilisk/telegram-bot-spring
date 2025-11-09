@@ -3,6 +3,7 @@ package io.ksilisk.telegrambot.core.executor;
 import com.pengrad.telegrambot.impl.TelegramBotClient;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
+import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
 
 public class SimpleTelegramBotExecutor implements TelegramBotExecutor {
     private final TelegramBotClient telegramBot;
@@ -12,6 +13,12 @@ public class SimpleTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
-        return telegramBot.send(request);
+        R response  = telegramBot.send(request);
+        if (!response.isOk()) {
+            String errorMessage = String.format("Request failed. Error code : %d, Reason : %s"
+                    ,response.errorCode(), response.description());
+            throw new RequestFailedException(errorMessage);
+        }
+        return response;
     }
 }
