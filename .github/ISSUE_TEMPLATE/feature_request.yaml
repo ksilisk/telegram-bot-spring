@@ -1,0 +1,34 @@
+name: 💡 Feature Request
+description: Suggest a new feature or improvement for Telegram Bot Spring Boot Starter
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement!  
+        Please describe what you'd like to see and why it would be useful.
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why do you need this feature? What problem does it solve?
+      placeholder: "For example: I'd like to handle callback queries using reactive streams"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How would you like this feature to work?
+      placeholder: "Maybe via ReactiveUpdatePoller interface with Mono<Update>"
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Did you try any workarounds or alternatives?
+      placeholder: "e.g. custom poller bean with WebClient"
+  - type: input
+    id: version
+    attributes:
+      label: Library version
+      placeholder: "e.g. 1.0.0"
