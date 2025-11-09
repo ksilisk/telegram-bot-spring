@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: 💬 Questions & Support
+    url: https://github.com/ksilisk/telegram-bot-spring/discussions
+    about: >
+      For general questions, troubleshooting, or how-to discussions, please use GitHub Discussions instead of opening an issue.
+
+  - name: 📄 Documentation & Examples
+    url: https://github.com/ksilisk/telegram-bot-spring#readme
+    about: >
+      Check out the README and usage examples before reporting a bug or requesting a feature.
