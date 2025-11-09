@@ -13,8 +13,10 @@ public class SimpleTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
-        R response  = telegramBot.send(request);
-        if (!response.isOk()) {
+        R response = telegramBot.send(request);
+        if(response == null) {
+            throw new RequestFailedException("Request Failed. No response received");
+        } else if (!response.isOk()) {
             String errorMessage = String.format("Request failed. Error code : %d, Reason : %s"
                     ,response.errorCode(), response.description());
             throw new RequestFailedException(errorMessage);
