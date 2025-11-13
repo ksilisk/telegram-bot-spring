@@ -50,6 +50,15 @@ public class TelegramBotProperties {
     @NestedConfigurationProperty
     private DeliveryProperties delivery = new DeliveryProperties();
 
+    @Valid
+    @NotNull
+    @NestedConfigurationProperty
+    private ClientProperties client = new ClientProperties();
+
+    public ClientProperties getClient() { return client; }
+
+    public void setClient(ClientProperties client) { this.client = client;}
+
     public boolean getUseTestServer() {
         return useTestServer;
     }
@@ -113,4 +122,5 @@ public class TelegramBotProperties {
     public void setHttpClient(HttpClientProperties httpClient) {
         this.httpClient = httpClient;
     }
+
 }
