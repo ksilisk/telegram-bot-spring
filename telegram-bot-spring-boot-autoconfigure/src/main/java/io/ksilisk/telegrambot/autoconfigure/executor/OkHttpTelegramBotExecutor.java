@@ -1,9 +1,10 @@
-package io.ksilisk.telegrambot.core.executor;
+package io.ksilisk.telegrambot.autoconfigure.executor;
 
 import com.pengrad.telegrambot.model.request.InputFile;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
+import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import okhttp3.*;
 
 import com.google.gson.Gson;

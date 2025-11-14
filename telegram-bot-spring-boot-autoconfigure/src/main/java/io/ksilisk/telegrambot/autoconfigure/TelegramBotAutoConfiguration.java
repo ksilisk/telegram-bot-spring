@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Import;
 @ConditionalOnClass(TelegramBot.class)
 @Import({
         TelegramClientConfiguration.class,
-        OkHttpTelegramClientConfiguration.class,
-        SpringTelegramClientConfiguration.class,
         DeliveryConfiguration.class,
         RouterConfiguration.class,
         RegistryConfiguration.class,
