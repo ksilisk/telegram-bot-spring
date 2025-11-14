@@ -1,16 +1,12 @@
-package io.ksilisk.telegrambot.core.executor;
+package io.ksilisk.telegrambot.autoconfigure.executor;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.pengrad.telegrambot.model.request.InputFile;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
+import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.io.File;
@@ -20,12 +16,10 @@ import java.util.Map;
 
 public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     private final RestClient restClient;
-    private final ObjectMapper objectMapper;
     private final String baseUrl;
 
     public RestClientTelegramBotExecutor(RestClient restClient,String baseUrl) {
         this.restClient = restClient;
-        this.objectMapper = createDefaultObjectMapper();
         this.baseUrl = baseUrl;
     }
 
@@ -55,15 +49,6 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
             }
             throw new RequestFailedException("Request failed: " + e.getMessage());
         }
-    }
-
-
-    private static ObjectMapper createDefaultObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        // Configuration pour matcher le format snake_case de Telegram
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return mapper;
     }
 
     private <T extends BaseRequest<T, R>, R extends BaseResponse> R executeMultipartRequest(BaseRequest<T, R> request) {
@@ -101,7 +86,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
                         .filename(inputFile.getFileName())
                         .contentType(MediaType.parseMediaType(inputFile.getContentType()));
             } else {
-                builder.part(name, toParamValue(value));
+                builder.part(name, value);
             }
         }
 
@@ -114,33 +99,13 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     private <T extends BaseRequest<T, R>, R extends BaseResponse> R executeFormRequest(BaseRequest<T, R> request) {
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-
-        for (Map.Entry<String, Object> parameter : request.getParameters().entrySet()) {
-            formData.add(parameter.getKey(), toParamValue(parameter.getValue()));
-        }
 
         return restClient.post()
                 .uri(baseUrl + request.getMethod())
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(formData)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request.getParameters())
                 .retrieve()
                 .body(request.getResponseType());
     }
 
-    private String toParamValue(Object obj) {
-        if (obj == null) {
-            return "";
-        }
-        if (obj.getClass().isPrimitive() ||
-                obj.getClass().isEnum() ||
-                obj.getClass().getName().startsWith("java.lang")) {
-            return String.valueOf(obj);
-        }
-        try {
-            return objectMapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to serialize parameter: " + obj, e);
-        }
-    }
 }

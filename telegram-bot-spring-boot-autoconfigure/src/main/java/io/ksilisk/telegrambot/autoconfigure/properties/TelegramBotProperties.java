@@ -43,11 +43,6 @@ public class TelegramBotProperties {
     @Valid
     @NotNull
     @NestedConfigurationProperty
-    private HttpClientProperties httpClient = new HttpClientProperties();
-
-    @Valid
-    @NotNull
-    @NestedConfigurationProperty
     private DeliveryProperties delivery = new DeliveryProperties();
 
     @Valid
@@ -113,14 +108,6 @@ public class TelegramBotProperties {
 
     public void setNomatch(NoMatchStrategyProperties nomatch) {
         this.nomatch = nomatch;
-    }
-
-    public HttpClientProperties getHttpClient() {
-        return httpClient;
-    }
-
-    public void setHttpClient(HttpClientProperties httpClient) {
-        this.httpClient = httpClient;
     }
 
 }
