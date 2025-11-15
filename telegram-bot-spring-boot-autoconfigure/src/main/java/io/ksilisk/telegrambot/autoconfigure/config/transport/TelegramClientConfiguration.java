@@ -34,7 +34,6 @@ public class TelegramClientConfiguration {
     @ConditionalOnProperty(name = "telegram.bot.client.implementation", havingValue = "AUTO", matchIfMissing =  true)
     public static class AutoTelegramClientConfiguration {
         @Configuration
-        @Import(OkHttpTelegramClientConfiguration.class)
         @ConditionalOnClass(name = "okhttp3.OkHttpClient")
         @ConditionalOnMissingBean(TelegramBotExecutor.class)
         @Order(1)
@@ -59,7 +58,6 @@ public class TelegramClientConfiguration {
         }
 
         @Configuration
-        @Import(SpringTelegramClientConfiguration.class)
         @ConditionalOnMissingClass("okhttp3.OkHttpClient")
         @ConditionalOnClass(name = "org.springframework.web.client.RestClient")
         @ConditionalOnMissingBean(TelegramBotExecutor.class)
