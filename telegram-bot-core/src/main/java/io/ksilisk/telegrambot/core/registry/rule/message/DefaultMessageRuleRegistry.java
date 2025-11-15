@@ -5,7 +5,9 @@ import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.rule.MessageRule;
 import io.ksilisk.telegrambot.core.rule.Rule;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.PriorityQueue;
 
 /// default implementation of the MessageRuleRegistry
 public class DefaultMessageRuleRegistry implements MessageRuleRegistry {

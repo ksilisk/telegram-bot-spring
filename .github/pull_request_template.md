@@ -8,7 +8,7 @@ Please link the related issue (required for all PRs):
 
 - Closes #ISSUE_NUMBER
 
-> 💡 Follow the branch naming convention described in CONTRIBUTING.md  
+> 💡 Follow the branch naming convention described in CONTRIBUTING.md
 > Example: `feature/123-add-update-filter`
 
 ---
