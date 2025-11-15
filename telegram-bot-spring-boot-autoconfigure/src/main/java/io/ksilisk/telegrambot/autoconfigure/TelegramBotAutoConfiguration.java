@@ -1,7 +1,11 @@
 package io.ksilisk.telegrambot.autoconfigure;
 
 import com.pengrad.telegrambot.TelegramBot;
-import io.ksilisk.telegrambot.autoconfigure.config.dispatch.*;
+import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DeliveryConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DispatcherConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.dispatch.ExceptionHandlerConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.dispatch.NoMatchStrategyConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RouterConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.registry.RegistryConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingConfiguration;

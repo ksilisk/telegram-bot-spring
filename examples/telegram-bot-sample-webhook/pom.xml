@@ -12,6 +12,7 @@
 
     <artifactId>telegram-bot-sample-webhook</artifactId>
     <packaging>jar</packaging>
+    <description>Telegram Bot Sample: Simple Webhook App</description>
 
     <dependencies>
         <dependency>

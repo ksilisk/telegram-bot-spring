@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting an improvement!  
+        Thanks for suggesting an improvement!
         Please describe what you'd like to see and why it would be useful.
   - type: textarea
     id: motivation

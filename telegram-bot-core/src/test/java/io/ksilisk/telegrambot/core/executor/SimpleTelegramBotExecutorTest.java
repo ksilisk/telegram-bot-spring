@@ -50,13 +50,12 @@ class SimpleTelegramBotExecutorTest {
         assertTrue(thrown.getMessage().contains("Reason : Bad Request: chat not found"));
         verify(mockTelegramBot, times(1)).send(mockRequest);
     }
+
     @Test
     void testExecute_NullResponse() {
         when(mockTelegramBot.send(any())).thenReturn(null);
 
-        RequestFailedException thrown = assertThrows(RequestFailedException.class, () -> {
-            executor.execute(mockRequest);
-        });
+        RequestFailedException thrown = assertThrows(RequestFailedException.class, () -> executor.execute(mockRequest));
 
         assertEquals("Request Failed. No response received", thrown.getMessage());
         verify(mockTelegramBot, times(1)).send(mockRequest);

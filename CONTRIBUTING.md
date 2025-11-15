@@ -1,6 +1,6 @@
 # Contributing to Telegram Bot Spring Boot Starter
 
-Thank you for your interest in contributing! 💙  
+Thank you for your interest in contributing! 💙
 This project aims to provide a clean, production-ready Spring Boot Starter for building Telegram bots easily and idiomatically.
 
 We welcome pull requests, feature ideas, and issue reports from the community.
@@ -9,9 +9,9 @@ We welcome pull requests, feature ideas, and issue reports from the community.
 
 ## 🧭 Project Structure
 
-- **telegram-bot-core/** — Core classes and Pengrad API adapter  
-- **telegram-bot-autoconfigure/** — Spring Boot AutoConfiguration module  
-- **telegram-bot-starter/** — The actual Starter used by end-user Spring Boot apps  
+- **telegram-bot-core/** — Core classes and Pengrad API adapter
+- **telegram-bot-autoconfigure/** — Spring Boot AutoConfiguration module
+- **telegram-bot-starter/** — The actual Starter used by end-user Spring Boot apps
 
 ---
 
@@ -52,7 +52,7 @@ We welcome pull requests, feature ideas, and issue reports from the community.
 
 ## 🌿 Working with Issues and Branches
 
-If you are contributing from a **fork**, GitHub will not automatically create a linked branch inside this repository.  
+If you are contributing from a **fork**, GitHub will not automatically create a linked branch inside this repository.
 Instead, follow this process:
 
 1. **Create your fork** of the repository (if not already).
@@ -80,7 +80,7 @@ Instead, follow this process:
    ```
    This automatically links the PR to the issue and closes it once the PR is merged.
 
-5. If you're still working on your contribution, mark your PR as a **Draft**.  
+5. If you're still working on your contribution, mark your PR as a **Draft**.
    It allows maintainers to follow your progress and provide early feedback.
 
 6. Always check the box **“Allow edits from maintainers”** in your PR — it lets maintainers make small fixes (e.g., formatting or CI tweaks) directly in your branch.
@@ -89,17 +89,17 @@ Instead, follow this process:
 
 ## ✅ Pull Request Guidelines
 
-- Keep PRs focused — one change per PR.  
-- Ensure your branch is up to date with `master`.  
-- All PRs must pass CI checks before merge.  
-- Include tests for new functionality or bug fixes.  
+- Keep PRs focused — one change per PR.
+- Ensure your branch is up to date with `master`.
+- All PRs must pass CI checks before merge.
+- Include tests for new functionality or bug fixes.
 - Use clear commit messages and PR titles.
 
 ---
 
 ## 🧪 Code Style
 
-- **Java 17**  
+- **Java 17**
 - **Spring Boot 3.3**
 - Follow the existing code style and conventions from the `core` module.
 
@@ -107,16 +107,16 @@ Instead, follow this process:
 
 ## 🧰 Development Tips
 
-- Run `mvn verify` to build and test all modules.  
-- Integration with the Telegram Bot API is handled via [Pengrad/java-telegram-bot-api](https://github.com/pengrad/java-telegram-bot-api).  
+- Run `mvn verify` to build and test all modules.
+- Integration with the Telegram Bot API is handled via [Pengrad/java-telegram-bot-api](https://github.com/pengrad/java-telegram-bot-api).
 - You can run sample bots locally by adding `spring-boot-starter` to a test project.
 
 ---
 
 ## 💬 Communication
 
-- Use **GitHub Issues** to report bugs or request features.  
-- Tag issues with appropriate labels (`bug`, `enhancement`, `help wanted`, etc.).  
+- Use **GitHub Issues** to report bugs or request features.
+- Tag issues with appropriate labels (`bug`, `enhancement`, `help wanted`, etc.).
 - For architecture discussions, open a **Discussion** thread.
 
 ---
@@ -136,8 +136,8 @@ Instead, follow this process:
 
 ## 🔒 Review and Merge Policy
 
-- All PRs require at least one approval.  
-- Merges use **Squash and Merge** for clean history.  
+- All PRs require at least one approval.
+- Merges use **Squash and Merge** for clean history.
 - Only maintainers can push directly to protected branches.
 
 ---
@@ -145,12 +145,12 @@ Instead, follow this process:
 ## 🌱 Becoming a Contributor
 
 After several high-quality PRs, you may be invited as a **Collaborator**:
-- Initially with **Triage** access (can manage issues and PRs).  
+- Initially with **Triage** access (can manage issues and PRs).
 - Later with **Write** access if you become an active maintainer.
 
 ---
 
 ## ❤️ Thank You
 
-Your contributions help make this starter better for everyone.  
+Your contributions help make this starter better for everyone.
 Whether you fix a typo, add a feature, or improve tests — it all matters!
