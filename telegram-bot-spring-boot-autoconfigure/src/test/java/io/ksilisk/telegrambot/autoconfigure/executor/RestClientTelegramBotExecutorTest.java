@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.executor;
+package io.ksilisk.telegrambot.autoconfigure.executor;
 
 import com.pengrad.telegrambot.impl.TelegramBotClient;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class RestClientTelegramBotExecutorTest {
