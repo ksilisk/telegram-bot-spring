@@ -85,11 +85,10 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
                 try {
                     getUpdatesResponse = telegramBotExecutor.execute(getUpdates);
                 } catch (Exception ex) {
-                    log.warn("Error while executing GetUpdates request", ex);
-
                     if (!running || Thread.currentThread().isInterrupted()) {
                         break;
                     }
+                    log.warn("Error while executing GetUpdates request", ex);
 
                     try {
                         Thread.sleep(properties.getRetryDelay().toMillis());
@@ -133,7 +132,7 @@ public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
         try {
             GetUpdates getUpdates = new GetUpdates();
             GetUpdatesResponse getUpdatesResponse = telegramBotExecutor.execute(getUpdates);
-            if (getUpdatesResponse != null && getUpdatesResponse.isOk() && !getUpdatesResponse.updates().isEmpty()) {
+            if (!getUpdatesResponse.updates().isEmpty()) {
                 int lastUpdateId = getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1).updateId();
                 offsetStore.write(lastUpdateId + 1);
             }

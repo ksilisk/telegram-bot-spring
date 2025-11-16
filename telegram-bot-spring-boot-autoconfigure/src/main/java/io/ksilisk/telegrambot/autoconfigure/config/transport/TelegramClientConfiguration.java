@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import com.pengrad.telegrambot.utility.BotUtils;
 import io.ksilisk.telegrambot.autoconfigure.executor.RestClientTelegramBotExecutor;
-import io.ksilisk.telegrambot.autoconfigure.properties.HttpClientProperties;
+import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import io.ksilisk.telegrambot.autoconfigure.executor.OkHttpTelegramBotExecutor;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
@@ -40,7 +40,7 @@ public class TelegramClientConfiguration {
             @Bean
             @ConditionalOnMissingBean
             public OkHttpClient okHttpClient(TelegramBotProperties properties) {
-                HttpClientProperties props = properties.getClient().getHttpClient();
+                OkHttpClientProperties props = properties.getClient().getOkhttp();
                 return new OkHttpClient.Builder()
                         .connectTimeout(props.getConnectTimeout())
                         .readTimeout(props.getReadTimeout())
@@ -114,7 +114,7 @@ public class TelegramClientConfiguration {
         @Bean
         @ConditionalOnMissingBean
         public OkHttpClient okHttpClient(TelegramBotProperties properties) {
-            HttpClientProperties props = properties.getClient().getHttpClient();
+            OkHttpClientProperties props = properties.getClient().getOkhttp();
             return new OkHttpClient.Builder()
                     .connectTimeout(props.getConnectTimeout())
                     .readTimeout(props.getReadTimeout())

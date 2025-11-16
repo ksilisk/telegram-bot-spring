@@ -29,5 +29,23 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: maven
-      - name: Build & Verify
-        run: mvn -B -ntp -Dstyle.color=always clean verify
+      - name: Test
+        run: mvn -B -ntp -Dstyle.color=always test
+
+  code-style:
+    name: Code style check
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Temurin JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: Verify
+        run: mvn -B -ntp -Dstyle.color=always -DskipTests verify

@@ -2,9 +2,7 @@ package io.ksilisk.telegrambot.autoconfigure.webhook.lifecycle;
 
 import com.pengrad.telegrambot.request.DeleteWebhook;
 import com.pengrad.telegrambot.request.SetWebhook;
-import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.webhook.WebhookRegisteringException;
-import io.ksilisk.telegrambot.core.exception.webhook.WebhookRemovingException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.properties.WebhookProperties;
 import io.ksilisk.telegrambot.core.webhook.WebhookLifecycle;
@@ -44,16 +42,7 @@ public class DefaultWebhookLifecycle implements WebhookLifecycle, SmartLifecycle
 
         try {
             log.info("Registering Telegram webhook at URL: {}", webhookProperties.getExternalUrl());
-            BaseResponse setWebhookResponse = telegramBotExecutor.execute(createSetWebhookRequest());
-            if (setWebhookResponse == null || !setWebhookResponse.isOk()) {
-                if (setWebhookResponse == null) {
-                    throw new IllegalStateException("SetWebhook request failed, response is null");
-                } else {
-                    throw new IllegalStateException("SetWebhook request failed. " +
-                            "Description: '" + setWebhookResponse.description() + "'. " +
-                            "Error code: '" + setWebhookResponse.errorCode() + "'");
-                }
-            }
+            telegramBotExecutor.execute(createSetWebhookRequest());
             log.info("Telegram webhook successfully registered");
         } catch (Exception ex) {
             throw new WebhookRegisteringException("Error while webhook registering", ex);
@@ -69,16 +58,7 @@ public class DefaultWebhookLifecycle implements WebhookLifecycle, SmartLifecycle
 
         try {
             log.info("Deleting Telegram webhook");
-            BaseResponse deleteWebhookResponse = telegramBotExecutor.execute(createDeleteWebhookRequest());
-            if (deleteWebhookResponse == null || !deleteWebhookResponse.isOk()) {
-                if (deleteWebhookResponse == null) {
-                    throw new WebhookRemovingException("DeleteWebhook request failed, response is null");
-                } else {
-                    throw new WebhookRemovingException("DeleteWebhook request failed. " +
-                            "Description: '" + deleteWebhookResponse.description() + "'. " +
-                            "Error code: '" + deleteWebhookResponse.errorCode() + "'");
-                }
-            }
+            telegramBotExecutor.execute(createDeleteWebhookRequest());
             log.info("Telegram webhook successfully deleted");
         } catch (Exception ex) {
             log.warn("Failed to delete Telegram webhook during shutdown", ex);

@@ -1,8 +1,8 @@
-package io.ksilisk.telegrambot.autoconfigure.properties;
+package io.ksilisk.telegrambot.core.properties;
 
 import java.time.Duration;
 
-public class HttpClientProperties {
+public class OkHttpClientProperties {
     private static final Duration DEFAULT_READ_TIMEOUT = Duration.ofSeconds(5);
     private static final Duration DEFAULT_WRITE_TIMEOUT = Duration.ofSeconds(5);
     private static final Duration DEFAULT_CALL_TIMEOUT = Duration.ofSeconds(5);

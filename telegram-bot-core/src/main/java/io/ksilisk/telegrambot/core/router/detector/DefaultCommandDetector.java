@@ -1,15 +1,7 @@
 package io.ksilisk.telegrambot.core.router.detector;
 
 import java.util.Optional;
-/**
- * Default implementation of CommandDetector for Telegram bots.
- * Rules based on Telegram Bot API:
- * - A command must start at the very beginning of the message.
- * - If there is any whitespace or newline before '/', it is NOT a valid command.
- * - Commands can start only with "/".
- * - Valid examples: "/start", "/help arg1"
- * - Invalid examples: " /start", " hello /start", "\n/start", "@start"
- */
+
 public class DefaultCommandDetector implements CommandDetector {
 
     @Override

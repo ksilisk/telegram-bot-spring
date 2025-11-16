@@ -1,12 +1,9 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
-import io.ksilisk.telegrambot.core.dispatcher.UpdateDispatcher;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.poller.DefaultUpdatePoller;
 import io.ksilisk.telegrambot.core.poller.UpdatePoller;
-import io.ksilisk.telegrambot.core.processor.DefaultTelegramBotUpdatesProcessor;
-import io.ksilisk.telegrambot.core.processor.TelegramBotUpdatesProcessor;
 import io.ksilisk.telegrambot.core.properties.LongPollingProperties;
 import io.ksilisk.telegrambot.core.store.InMemoryOffsetStore;
 import io.ksilisk.telegrambot.core.store.OffsetStore;
@@ -40,11 +37,5 @@ public class LongPollingConfiguration {
     @ConditionalOnMissingBean(OffsetStore.class)
     public OffsetStore offsetStore() {
         return new InMemoryOffsetStore();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(TelegramBotUpdatesProcessor.class)
-    public TelegramBotUpdatesProcessor telegramBotUpdatesProcessor(UpdateDispatcher updateDispatcher) {
-        return new DefaultTelegramBotUpdatesProcessor(updateDispatcher);
     }
 }
