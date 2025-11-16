@@ -5,9 +5,16 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
-import okhttp3.*;
 
 import com.google.gson.Gson;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +89,9 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
                 String name = parameter.getKey();
                 Object value = parameter.getValue();
 
-                if (value == null) continue;
+                if (value == null) {
+                    continue;
+                }
 
                 if (value instanceof byte[]) {
                     MediaType contentType = MediaType.parse(request.getContentType());
@@ -126,7 +135,9 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     private String toParamValue(Object obj) {
-        if (obj == null) return "";
+        if (obj == null) {
+            return "";
+        }
 
         Class<?> clazz = obj.getClass();
         if (clazz.isPrimitive() || clazz.isEnum() || clazz.getName().startsWith("java.lang")) {
