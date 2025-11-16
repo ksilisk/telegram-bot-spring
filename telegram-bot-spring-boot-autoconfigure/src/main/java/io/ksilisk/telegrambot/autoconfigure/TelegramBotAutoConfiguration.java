@@ -7,8 +7,8 @@ import io.ksilisk.telegrambot.autoconfigure.config.dispatch.ExceptionHandlerConf
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.NoMatchStrategyConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RouterConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.registry.RegistryConfiguration;
-import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookMissingWebMvcConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
