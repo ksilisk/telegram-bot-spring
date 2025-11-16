@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.InlineQuery;
 import io.ksilisk.telegrambot.core.registry.rule.RuleRegistry;
 import io.ksilisk.telegrambot.core.rule.InlineRule;
 
-/// a registry that contains rules to match an inline query update with a handler
+/**
+ * Registry of inline query routing rules.
+ */
 public interface InlineRuleRegistry extends RuleRegistry<InlineRule, InlineQuery> {
 }

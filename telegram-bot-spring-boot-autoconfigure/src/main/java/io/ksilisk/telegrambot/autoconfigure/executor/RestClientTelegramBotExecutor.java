@@ -3,7 +3,7 @@ package io.ksilisk.telegrambot.autoconfigure.executor;
 import com.pengrad.telegrambot.model.request.InputFile;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
-import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
+import io.ksilisk.telegrambot.core.exception.request.TelegramRequestException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -24,7 +24,8 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     @Override
-    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request)
+            throws TelegramRequestException {
         try {
             R response;
 
@@ -35,19 +36,19 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
             }
 
             if (response == null) {
-                throw new RequestFailedException("Request Failed. No response received");
+                throw new TelegramRequestException("Request Failed. No response received");
             } else if (!response.isOk()) {
                 String errorMessage = String.format("Request failed. Error code : %d, Reason : %s",
                         response.errorCode(), response.description());
-                throw new RequestFailedException(errorMessage);
+                throw new TelegramRequestException(errorMessage);
             }
 
             return response;
         } catch (Exception e) {
-            if (e instanceof RequestFailedException) {
-                throw (RequestFailedException) e;
+            if (e instanceof TelegramRequestException) {
+                throw (TelegramRequestException) e;
             }
-            throw new RequestFailedException("Request failed: " + e.getMessage());
+            throw new TelegramRequestException("Request failed: " + e.getMessage());
         }
     }
 

@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Message;
 import io.ksilisk.telegrambot.core.registry.rule.RuleRegistry;
 import io.ksilisk.telegrambot.core.rule.MessageRule;
 
-/// a registry that contains rules to match a plain text message with a handler
+/**
+ * Registry of message-based routing rules.
+ */
 public interface MessageRuleRegistry extends RuleRegistry<MessageRule, Message> {
 }

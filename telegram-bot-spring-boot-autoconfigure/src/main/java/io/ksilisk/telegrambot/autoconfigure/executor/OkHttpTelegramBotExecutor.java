@@ -3,7 +3,7 @@ package io.ksilisk.telegrambot.autoconfigure.executor;
 import com.pengrad.telegrambot.model.request.InputFile;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
-import io.ksilisk.telegrambot.core.exception.request.RequestFailedException;
+import io.ksilisk.telegrambot.core.exception.request.TelegramRequestException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 
 import com.google.gson.Gson;
@@ -33,40 +33,41 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     @Override
-    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request)
+            throws TelegramRequestException {
         try {
             Request httpRequest = createRequest(request);
 
             try (Response response = okHttpClient.newCall(httpRequest).execute()) {
                 if (!response.isSuccessful()) {
-                    throw new RequestFailedException("HTTP request failed with code: " + response.code());
+                    throw new TelegramRequestException("HTTP request failed with code: " + response.code());
                 }
 
                 ResponseBody body = response.body();
                 if (body == null) {
-                    throw new RequestFailedException("Request Failed. No response body received");
+                    throw new TelegramRequestException("Request Failed. No response body received");
                 }
 
                 String responseBody = body.string();
                 R result = gson.fromJson(responseBody, request.getResponseType());
 
                 if (result == null) {
-                    throw new RequestFailedException("Request Failed. Could not parse response");
+                    throw new TelegramRequestException("Request Failed. Could not parse response");
                 } else if (!result.isOk()) {
                     String errorMessage = String.format("Request failed. Error code : %d, Reason : %s",
                             result.errorCode(), result.description());
-                    throw new RequestFailedException(errorMessage);
+                    throw new TelegramRequestException(errorMessage);
                 }
 
                 return result;
             }
         } catch (IOException e) {
-            throw new RequestFailedException("Request failed due to IO error: " + e.getMessage());
+            throw new TelegramRequestException("Request failed due to IO error: " + e.getMessage());
         } catch (Exception e) {
-            if (e instanceof RequestFailedException) {
-                throw (RequestFailedException) e;
+            if (e instanceof TelegramRequestException) {
+                throw (TelegramRequestException) e;
             }
-            throw new RequestFailedException("Request failed: " + e.getMessage());
+            throw new TelegramRequestException("Request failed: " + e.getMessage());
         }
     }
 

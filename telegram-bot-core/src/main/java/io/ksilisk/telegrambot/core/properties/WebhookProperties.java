@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.core.properties;
 
+import io.ksilisk.telegrambot.core.webhook.WebhookController;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,13 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Configuration properties for Telegram webhook mode.
+ *
+ * <p>Controls the webhook endpoint, registration behavior, security options
+ * and the parameters supplied to the Telegram Bot API when registering or
+ * removing a webhook.</p>
+ */
 public class WebhookProperties {
     private static final String DEFAULT_ENDPOINT = "/telegrambot/webhook";
     private static final int DEFAULT_MAX_CONNECTIONS = 10;
@@ -15,21 +23,70 @@ public class WebhookProperties {
     private static final boolean DEFAULT_AUTO_REGISTER = true;
     private static final boolean DEFAULT_AUTO_REMOVE = true;
 
+    /**
+     * Local HTTP endpoint that receives webhook updates.
+     *
+     * <p>Must match the application route exposed by the {@link WebhookController}.</p>
+     */
     @NotBlank
     private String endpoint = DEFAULT_ENDPOINT;
 
+    /**
+     * Publicly accessible HTTPS URL that Telegram should call.
+     *
+     * <p>If not set, the URL must be configured externally in the Bot API or
+     * provided through custom lifecycle logic.</p>
+     */
     private String externalUrl;
+
+    /**
+     * Path to the public certificate file used for self-signed HTTPS endpoints.
+     */
     private String certificatePath;
+
+    /**
+     * IP address to be sent to Telegram to restrict webhook delivery.
+     */
     private String idAddress;
+
+    /**
+     * Secret token to validate webhook requests from Telegram.
+     */
     private String secretToken;
+
+    /**
+     * List of allowed update types for webhook delivery.
+     *
+     * <p>Empty list means no filtering (Telegram default).</p>
+     */
     private List<String> allowedUpdates = new ArrayList<>();
+
+    /**
+     * Whether to drop all pending updates when registering a webhook.
+     */
     private boolean dropPendingUpdatesOnRegister = DEFAULT_DROP_PENDING_UPDATES_ON_REGISTER;
+
+    /**
+     * Whether to drop all pending updates when removing a webhook.
+     */
     private boolean dropPendingUpdatesOnRemove = DEFAULT_DROP_PENDING_UPDATES_ON_REMOVE;
 
+    /**
+     * Maximum number of simultaneous HTTPS connections Telegram can use
+     * to deliver updates.
+     */
     @Min(1)
     @Max(100)
     private int maxConnections = DEFAULT_MAX_CONNECTIONS;
+
+    /**
+     * Whether to automatically remove the webhook on application shutdown.
+     */
     private boolean autoRemove = DEFAULT_AUTO_REMOVE;
+
+    /**
+     * Whether to automatically register the webhook on application startup.
+     */
     private boolean autoRegister = DEFAULT_AUTO_REGISTER;
 
 
