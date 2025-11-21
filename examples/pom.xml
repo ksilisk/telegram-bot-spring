@@ -12,10 +12,6 @@
     <artifactId>examples</artifactId>
     <packaging>pom</packaging>
 
-    <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
-
     <modules>
         <module>telegram-bot-sample-long-polling</module>
         <module>telegram-bot-sample-webhook</module>
