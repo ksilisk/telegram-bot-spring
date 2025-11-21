@@ -105,20 +105,27 @@ You write only **handlers**.
 
 ## 🧭 Handlers & Routing
 
-### Command Handler
+### Callback Handler
 
 ```java
 @Component
-public class CommandHandler implements MessageHandler {
+public class TestCallbackHandler implements CallbackUpdateHandler {
+    private final TelegramBotExecutor telegramBotExecutor;
 
-    @Override
-    public boolean supports(Update update) {
-        return update.message() != null && update.message().text().startsWith("/");
+    public TestCallbackHandler(TelegramBotExecutor telegramBotExecutor) {
+        this.telegramBotExecutor = telegramBotExecutor;
     }
 
     @Override
-    public void handle(Update update, TelegramSender sender) {
-        sender.send(update.chatId(), "Command received: " + update.message().text());
+    public void handle(Update update) {
+        Long chatId = update.callbackQuery().maybeInaccessibleMessage().chat().id();
+        SendMessage sendMessage = new SendMessage(chatId, "Successfully handled callback 'test'");
+        telegramBotExecutor.execute(sendMessage);
+    }
+
+    @Override
+    public Set<String> callbacks() {
+        return Set.of("test");
     }
 }
 ```
