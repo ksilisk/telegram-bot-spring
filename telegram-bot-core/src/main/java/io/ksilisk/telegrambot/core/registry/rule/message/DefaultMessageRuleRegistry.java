@@ -9,14 +9,12 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
-/// default implementation of the MessageRuleRegistry
 public class DefaultMessageRuleRegistry implements MessageRuleRegistry {
     private final PriorityQueue<MessageRule> messageRules = new PriorityQueue<>(Comparator.comparingInt(Rule::order));
 
     @Override
     public void register(MessageRule messageRule) {
         messageRules.add(messageRule);
-
     }
 
     @Override

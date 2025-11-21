@@ -6,10 +6,14 @@ import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.rule.message.MessageRuleRegistry;
 import io.ksilisk.telegrambot.core.router.detector.CommandDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 public class MessageUpdateRouter implements UpdateRouter {
+    private static final Logger log = LoggerFactory.getLogger(MessageUpdateRouter.class);
+
     private final CommandHandlerRegistry commandHandlerRegistry;
     private final MessageRuleRegistry messageRuleRegistry;
     private final CommandDetector commandDetector;
@@ -29,6 +33,12 @@ public class MessageUpdateRouter implements UpdateRouter {
 
     @Override
     public boolean route(Update update) {
+        if (!this.supports(update)) {
+            log.warn("MessageUpdateRouter invoked with unsupported update (missing message). \n" +
+                    "Ensure that router.supports(update) is checked before calling route().");
+            return false;
+        }
+
         Message message = update.message();
         String text = Optional.ofNullable(message.text()).orElse("");
 
