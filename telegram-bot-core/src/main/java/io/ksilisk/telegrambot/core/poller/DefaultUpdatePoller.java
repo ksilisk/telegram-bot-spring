@@ -10,13 +10,14 @@ import io.ksilisk.telegrambot.core.store.OffsetStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
-public class DefaultUpdatePoller implements UpdatePoller, AutoCloseable {
+public class DefaultUpdatePoller implements UpdatePoller, Closeable {
     private static final Logger log = LoggerFactory.getLogger(DefaultUpdatePoller.class);
 
     private final OffsetStore offsetStore;

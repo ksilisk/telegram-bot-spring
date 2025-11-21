@@ -18,7 +18,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     private final RestClient restClient;
     private final String baseUrl;
 
-    public RestClientTelegramBotExecutor(RestClient restClient,String baseUrl) {
+    public RestClientTelegramBotExecutor(RestClient restClient, String baseUrl) {
         this.restClient = restClient;
         this.baseUrl = baseUrl;
     }
