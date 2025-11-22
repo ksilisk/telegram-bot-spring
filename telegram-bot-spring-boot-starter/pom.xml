@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
+    <name>Telegram Bot Spring Boot Starter</name>
     <packaging>jar</packaging>
 
     <dependencies>

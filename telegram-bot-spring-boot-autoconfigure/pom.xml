@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>telegram-bot-spring-boot-autoconfigure</artifactId>
+    <name>Telegram Bot Spring Boot Autoconfigure</name>
 
     <dependencies>
         <dependency>

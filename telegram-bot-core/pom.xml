@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>telegram-bot-core</artifactId>
+    <name>Telegram Bot Core</name>
 
     <dependencies>
         <dependency>
