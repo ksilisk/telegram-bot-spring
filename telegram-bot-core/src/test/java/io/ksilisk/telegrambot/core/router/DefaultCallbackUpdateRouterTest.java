@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.callback.CallbackHandlerRegistry;
+import io.ksilisk.telegrambot.core.router.impl.DefaultCallbackUpdateRouter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +13,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CallbackUpdateRouterTest {
+class DefaultCallbackUpdateRouterTest {
     private CallbackHandlerRegistry callbackHandlerRegistry;
-    private CallbackUpdateRouter router;
+    private DefaultCallbackUpdateRouter router;
 
     private Update update;
     private CallbackQuery callbackQuery;
@@ -22,7 +23,7 @@ class CallbackUpdateRouterTest {
     @BeforeEach
     void setUp() {
         callbackHandlerRegistry = mock(CallbackHandlerRegistry.class);
-        router = new CallbackUpdateRouter(callbackHandlerRegistry);
+        router = new DefaultCallbackUpdateRouter(callbackHandlerRegistry);
 
         update = mock(Update.class);
         callbackQuery = mock(CallbackQuery.class);

@@ -1,31 +1,29 @@
 package io.ksilisk.telegrambot.core.dispatcher;
 
 import com.pengrad.telegrambot.model.Update;
-import io.ksilisk.telegrambot.core.router.UpdateRouter;
+import io.ksilisk.telegrambot.core.router.CompositeUpdateRouter;
 import io.ksilisk.telegrambot.core.strategy.CompositeNoMatchStrategy;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleUpdateDispatcher implements UpdateDispatcher {
-    private final List<UpdateRouter> updateRouters;
+    private static final Logger log = LoggerFactory.getLogger(SimpleUpdateDispatcher.class);
+
+    private final CompositeUpdateRouter compositeUpdateRouter;
     private final CompositeNoMatchStrategy noMatchStrategy;
 
-    public SimpleUpdateDispatcher(List<UpdateRouter> updateRouters,
+    public SimpleUpdateDispatcher(CompositeUpdateRouter compositeUpdateRouter,
                                   CompositeNoMatchStrategy noMatchStrategy) {
-        this.updateRouters = updateRouters;
         this.noMatchStrategy = noMatchStrategy;
+        this.compositeUpdateRouter = compositeUpdateRouter;
     }
 
     @Override
     public void dispatch(Update update) {
-        for (UpdateRouter updateRouter : updateRouters) {
-            if (updateRouter.supports(update)) {
-                if (!updateRouter.route(update)) {
-                    noMatchStrategy.handle(update);
-                }
-                return;
-            }
+        if (!compositeUpdateRouter.route(update)) {
+            noMatchStrategy.handle(update);
+            return;
         }
-        noMatchStrategy.handle(update);
+        log.debug("Successfully dispatched update with id: '{}'", update.updateId());
     }
 }

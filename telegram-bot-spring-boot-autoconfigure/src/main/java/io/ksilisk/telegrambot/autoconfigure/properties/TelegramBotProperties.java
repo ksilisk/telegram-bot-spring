@@ -3,6 +3,7 @@ package io.ksilisk.telegrambot.autoconfigure.properties;
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import io.ksilisk.telegrambot.core.properties.ExceptionHandlerProperties;
 import io.ksilisk.telegrambot.core.properties.NoMatchStrategyProperties;
+import io.ksilisk.telegrambot.core.properties.RoutingProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -91,9 +92,29 @@ public class TelegramBotProperties {
     @NestedConfigurationProperty
     private ClientProperties client = new ClientProperties();
 
-    public ClientProperties getClient() { return client; }
+    /**
+     * Configuration for routing different types of updates.
+     */
+    @Valid
+    @NotNull
+    @NestedConfigurationProperty
+    private RoutingProperties routing = new RoutingProperties();
 
-    public void setClient(ClientProperties client) { this.client = client;}
+    public RoutingProperties getRouting() {
+        return routing;
+    }
+
+    public void setRouting(RoutingProperties routing) {
+        this.routing = routing;
+    }
+
+    public ClientProperties getClient() {
+        return client;
+    }
+
+    public void setClient(ClientProperties client) {
+        this.client = client;
+    }
 
     public boolean getUseTestServer() {
         return useTestServer;
