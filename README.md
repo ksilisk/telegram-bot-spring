@@ -4,10 +4,6 @@
 >
 > Supports long polling, webhooks, routing, interceptors, and pluggable HTTP clients.
 
-## ⚠️ Status
-
-This project is **not yet published to Maven Central**. You can use it via local build or GitHub Packages until the first release is deployed.
-
 ## 🚀 Features
 
 * **Plug & Play** — launch a Telegram bot easily.

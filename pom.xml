@@ -58,7 +58,7 @@
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>3.3.5</spring.boot.version>
-        <revision>0.1.0</revision>
+        <revision>0.2.0</revision>
         <pengrad.bot.api.version>9.2.0</pengrad.bot.api.version>
         <spotless.plugin.version>3.0.0</spotless.plugin.version>
         <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
