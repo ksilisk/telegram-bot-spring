@@ -54,7 +54,7 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
 
     @Override
     public void close() {
-        log.info("Stopping Update delivery");
+        log.info("Stopping Update Delivery");
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(

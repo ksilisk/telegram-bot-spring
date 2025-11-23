@@ -6,6 +6,8 @@ import io.ksilisk.telegrambot.autoconfigure.webhook.filter.WebhookSecretTokenFil
 import io.ksilisk.telegrambot.autoconfigure.webhook.lifecycle.DefaultWebhookLifecycle;
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.ingress.WebhookUpdateIngress;
+import io.ksilisk.telegrambot.core.ingress.impl.DefaultWebhookUpdateIngress;
 import io.ksilisk.telegrambot.core.properties.WebhookProperties;
 import io.ksilisk.telegrambot.core.webhook.WebhookController;
 import io.ksilisk.telegrambot.core.webhook.WebhookLifecycle;
@@ -30,9 +32,15 @@ public class WebhookConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(WebhookUpdateIngress.class)
+    public WebhookUpdateIngress webhookUpdateIngress(UpdateDelivery updateDelivery) {
+        return new DefaultWebhookUpdateIngress(updateDelivery);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(WebhookController.class)
-    public DefaultWebhookController webhookController(UpdateDelivery updateDelivery) {
-        return new DefaultWebhookController(updateDelivery);
+    public DefaultWebhookController webhookController(WebhookUpdateIngress webhookUpdateIngress) {
+        return new DefaultWebhookController(webhookUpdateIngress);
     }
 
     @Bean

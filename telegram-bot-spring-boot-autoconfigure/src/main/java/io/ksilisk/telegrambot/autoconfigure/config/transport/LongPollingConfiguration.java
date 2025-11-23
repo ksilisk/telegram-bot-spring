@@ -2,6 +2,8 @@ package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.ingress.LongPollingUpdateIngress;
+import io.ksilisk.telegrambot.core.ingress.impl.DefaultLongPollingUpdateIngress;
 import io.ksilisk.telegrambot.core.poller.DefaultUpdatePoller;
 import io.ksilisk.telegrambot.core.poller.UpdatePoller;
 import io.ksilisk.telegrambot.core.properties.LongPollingProperties;
@@ -23,7 +25,7 @@ public class LongPollingConfiguration {
         return new LongPollingProperties();
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
+    @Bean(destroyMethod = "") // should be destroyed by LongPollingUpdateIngress
     @ConditionalOnMissingBean(UpdatePoller.class)
     public UpdatePoller updatePoller(OffsetStore offsetStore,
                                      TelegramBotExecutor telegramBotExecutor,
@@ -31,6 +33,12 @@ public class LongPollingConfiguration {
                                      UpdateDelivery updateDelivery) {
         return new DefaultUpdatePoller(offsetStore, telegramBotExecutor,
                 updateDelivery, longPollingProperties);
+    }
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    @ConditionalOnMissingBean(LongPollingUpdateIngress.class)
+    public LongPollingUpdateIngress longPollingUpdateIngress(UpdatePoller updatePoller) {
+        return new DefaultLongPollingUpdateIngress(updatePoller);
     }
 
     @Bean
