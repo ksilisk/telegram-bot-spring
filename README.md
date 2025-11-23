@@ -212,6 +212,89 @@ Run:
 cd examples/telegram-bot-sample-long-polling
 mvn spring-boot:run
 ```
+### 📌 Additional Example: Simple Echo Bot
+
+Here is a minimal example showing how to receive a message and reply using this starter.
+
+#### 1. Configure your bot
+
+Create `src/main/resources/application.properties`:
+
+```properties
+telegram.bot.token=YOUR_TELEGRAM_BOT_TOKEN
+telegram.bot.username=YOUR_BOT_USERNAME
+```
+
+#### 2. Create a handler to process messages
+
+Create:
+
+
+`src/main/java/com/example/bot/EchoHandler.java`
+
+```java
+
+@Component
+public class EchoHandler implements MessageUpdateHandler {
+    private final TelegramBotExecutor executor;
+
+    public EchoHandler(TelegramBotExecutor executor) {
+        this.executor = executor;
+    }
+
+    @Override
+    public void handle(Update update) {
+        if (update.message() != null && update.message().text() != null) {
+            Long chatId = update.message().chat().id();
+            String text = update.message().text();
+
+            SendMessage reply = new SendMessage(chatId, "You said: " + text);
+            executor.execute(reply);
+        }
+    }
+}
+
+```
+
+#### 3. Create a rule to route all messages
+
+Create:
+
+`src/main/java/com/example/bot/EchoRule.java`
+
+```java
+@Component
+public class EchoRule implements MessageRule {
+    private final EchoHandler handler;
+
+    public EchoRule(EchoHandler handler) {
+        this.handler = handler;
+    }
+
+    @Override
+    public Matcher<Message> matcher() {
+        return msg -> true; // handle every message
+    }
+
+    @Override
+    public UpdateHandler updateHandler() {
+        return handler;
+    }
+}
+
+```
+
+#### 4. Run the bot
+```bash
+mvn spring-boot:run
+```
+
+Now the bot will reply:
+
+```
+You said: <the user’s message>
+```
+
 
 ---
 
