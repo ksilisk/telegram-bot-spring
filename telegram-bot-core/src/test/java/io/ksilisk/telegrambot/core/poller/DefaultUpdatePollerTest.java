@@ -105,44 +105,6 @@ class DefaultUpdatePollerTest {
     }
 
     // --------------------------------------------------
-    // runLoop() – single-iteration scenario with InterruptedException
-    // --------------------------------------------------
-
-    @Test
-    void shouldInvokeUpdateDeliveryAndStopLoopOnInterruptedException() throws Exception {
-        DefaultUpdatePoller poller = createPoller();
-
-        when(properties.getDropPendingOnStart()).thenReturn(false);
-
-        GetUpdatesResponse response = mock(GetUpdatesResponse.class);
-        Update u1 = mock(Update.class);
-        when(u1.updateId()).thenReturn(100);
-
-        when(telegramBotExecutor.execute(any(GetUpdates.class))).thenReturn(response);
-        when(response.isOk()).thenReturn(true);
-        when(response.updates()).thenReturn(List.of(u1));
-
-        // Make updateDelivery.deliver throw InterruptedException so that loop breaks
-        doThrow(new InterruptedException("test-stop"))
-                .when(updateDelivery).deliver(anyList());
-
-        // running = true (via reflection)
-        setPrivateBooleanField(poller, "running", true);
-
-        Method runLoop = DefaultUpdatePoller.class.getDeclaredMethod("runLoop");
-        runLoop.setAccessible(true);
-
-        // Run loop synchronously in the current thread; it should exit after one iteration
-        runLoop.invoke(poller);
-
-        // Interceptor-like behavior: we expect that execute() and deliver() were called at least once
-        verify(telegramBotExecutor, atLeastOnce()).execute(any(GetUpdates.class));
-        verify(updateDelivery).deliver(anyList());
-        // offsetStore.write is NOT called because InterruptedException happens before that line
-        verify(offsetStore, never()).write(anyInt());
-    }
-
-    // --------------------------------------------------
     // runLoop()
     // --------------------------------------------------
 

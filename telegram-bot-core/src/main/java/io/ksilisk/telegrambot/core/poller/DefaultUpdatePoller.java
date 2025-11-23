@@ -113,15 +113,10 @@ public class DefaultUpdatePoller implements UpdatePoller, Closeable {
                 List<Update> updates = getUpdatesResponse.updates();
                 log.debug("Received {} updates from Telegram Bot API", updates.size());
 
-                try {
-                    if (!updates.isEmpty()) {
-                        updateDelivery.deliver(updates);
-                        int lastUpdateId = updates.get(updates.size() - 1).updateId();
-                        offsetStore.write(lastUpdateId + 1);
-                    }
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    break;
+                if (!updates.isEmpty()) {
+                    updateDelivery.deliver(updates);
+                    int lastUpdateId = updates.get(updates.size() - 1).updateId();
+                    offsetStore.write(lastUpdateId + 1);
                 }
             }
         } catch (Exception ex) {
