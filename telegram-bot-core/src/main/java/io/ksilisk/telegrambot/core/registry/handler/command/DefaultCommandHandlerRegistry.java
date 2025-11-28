@@ -4,20 +4,22 @@ import io.ksilisk.telegrambot.core.exception.registry.CommandHandlerAlreadyExist
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.handler.update.command.CommandUpdateHandler;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class DefaultCommandHandlerRegistry implements CommandHandlerRegistry {
-    private final Map<String, UpdateHandler> commandUpdateHandlerMap = new HashMap<>();
+    private final Map<String, CommandUpdateHandler> commandUpdateHandlerMap = new HashMap<>();
 
-    @Override
-    public void register(CommandUpdateHandler handler) {
-        for (String command : handler.commands()) {
-            if (commandUpdateHandlerMap.containsKey(command)) {
-                throw new CommandHandlerAlreadyExists("Handler for command '" + command + "' has been already registered");
+    public DefaultCommandHandlerRegistry(Collection<? extends CommandUpdateHandler> commandUpdateHandlers) {
+        for (CommandUpdateHandler handler : commandUpdateHandlers) {
+            for (String command : handler.commands()) {
+                if (commandUpdateHandlerMap.containsKey(command)) {
+                    throw new CommandHandlerAlreadyExists("Handler for command '" + command + "' has been already registered");
+                }
+                commandUpdateHandlerMap.put(command, handler);
             }
-            commandUpdateHandlerMap.put(command, handler);
         }
     }
 

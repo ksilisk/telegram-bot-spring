@@ -63,17 +63,13 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(MessageRuleRegistry.class)
         public MessageRuleRegistry messageRuleRegistry(List<MessageRule> messageRules) {
-            DefaultMessageRuleRegistry defaultMessageRuleRegistry = new DefaultMessageRuleRegistry();
-            messageRules.forEach(defaultMessageRuleRegistry::register);
-            return defaultMessageRuleRegistry;
+            return new DefaultMessageRuleRegistry(messageRules);
         }
 
         @Bean
         @ConditionalOnMissingBean(CommandHandlerRegistry.class)
         public CommandHandlerRegistry commandHandlerRegistry(List<CommandUpdateHandler> commandUpdateHandlers) {
-            DefaultCommandHandlerRegistry defaultCommandHandlerRegistry = new DefaultCommandHandlerRegistry();
-            commandUpdateHandlers.forEach(defaultCommandHandlerRegistry::register);
-            return defaultCommandHandlerRegistry;
+            return new DefaultCommandHandlerRegistry(commandUpdateHandlers);
         }
     }
 
@@ -94,9 +90,7 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(InlineRuleRegistry.class)
         public InlineRuleRegistry inlineRuleRegistry(List<InlineRule> inlineRules) {
-            DefaultInlineRuleRegistry defaultInlineRuleRegistry = new DefaultInlineRuleRegistry();
-            inlineRules.forEach(defaultInlineRuleRegistry::register);
-            return defaultInlineRuleRegistry;
+            return new DefaultInlineRuleRegistry(inlineRules);
         }
     }
 
@@ -118,9 +112,7 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(CallbackHandlerRegistry.class)
         public CallbackHandlerRegistry callbackHandlerRegistry(List<CallbackUpdateHandler> callbackUpdateHandlers) {
-            DefaultCallbackHandlerRegistry defaultCallbackHandlerRegistry = new DefaultCallbackHandlerRegistry();
-            callbackUpdateHandlers.forEach(defaultCallbackHandlerRegistry::register);
-            return defaultCallbackHandlerRegistry;
+            return new DefaultCallbackHandlerRegistry(callbackUpdateHandlers);
         }
     }
 }

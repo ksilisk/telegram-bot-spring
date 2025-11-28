@@ -3,9 +3,9 @@ package io.ksilisk.telegrambot.core.registry.handler.command;
 import io.ksilisk.telegrambot.core.exception.registry.CommandHandlerAlreadyExists;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.handler.update.command.CommandUpdateHandler;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,20 +14,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DefaultCommandHandlerRegistryTest {
-    private DefaultCommandHandlerRegistry registry;
-
-    @BeforeEach
-    void setUp() {
-        registry = new DefaultCommandHandlerRegistry();
-    }
-
     @Test
     void shouldRegisterSingleCommandHandler() {
         CommandUpdateHandler handler = mock(CommandUpdateHandler.class);
 
         when(handler.commands()).thenReturn(Set.of("/start"));
 
-        registry.register(handler);
+        DefaultCommandHandlerRegistry registry = new DefaultCommandHandlerRegistry(List.of(handler));
 
         Optional<UpdateHandler> found = registry.find("/start");
 
@@ -41,7 +34,7 @@ class DefaultCommandHandlerRegistryTest {
 
         when(handler.commands()).thenReturn(Set.of("/start", "/help", "/ping"));
 
-        registry.register(handler);
+        DefaultCommandHandlerRegistry registry = new DefaultCommandHandlerRegistry(List.of(handler));
 
         assertSame(handler, registry.find("/start").orElseThrow());
         assertSame(handler, registry.find("/help").orElseThrow());
@@ -50,6 +43,8 @@ class DefaultCommandHandlerRegistryTest {
 
     @Test
     void shouldReturnEmptyForUnknownCommand() {
+        DefaultCommandHandlerRegistry registry = new DefaultCommandHandlerRegistry(List.of());
+
         Optional<UpdateHandler> found = registry.find("/unknown");
 
         assertTrue(found.isEmpty(), "Unknown command should return empty Optional");
@@ -63,11 +58,9 @@ class DefaultCommandHandlerRegistryTest {
         when(handler1.commands()).thenReturn(Set.of("/dup"));
         when(handler2.commands()).thenReturn(Set.of("/dup"));
 
-        registry.register(handler1);
-
         CommandHandlerAlreadyExists ex = assertThrows(
                 CommandHandlerAlreadyExists.class,
-                () -> registry.register(handler2),
+                () -> new DefaultCommandHandlerRegistry(List.of(handler1, handler2)),
                 "Duplicate command registration should throw CommandHandlerAlreadyExists"
         );
 
@@ -85,8 +78,7 @@ class DefaultCommandHandlerRegistryTest {
         when(handler1.commands()).thenReturn(Set.of("/one"));
         when(handler2.commands()).thenReturn(Set.of("/two"));
 
-        registry.register(handler1);
-        registry.register(handler2);
+        DefaultCommandHandlerRegistry registry = new DefaultCommandHandlerRegistry(List.of(handler1, handler2));
 
         assertSame(handler1, registry.find("/one").orElseThrow());
         assertSame(handler2, registry.find("/two").orElseThrow());

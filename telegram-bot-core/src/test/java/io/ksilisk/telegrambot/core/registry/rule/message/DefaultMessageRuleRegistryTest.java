@@ -3,27 +3,23 @@ package io.ksilisk.telegrambot.core.registry.rule.message;
 import com.pengrad.telegrambot.model.Message;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.rule.MessageRule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DefaultMessageRuleRegistryTest {
-    private DefaultMessageRuleRegistry registry;
-
-    @BeforeEach
-    void setUp() {
-        registry = new DefaultMessageRuleRegistry();
-    }
-
     @Test
     void shouldReturnEmptyWhenNoRulesRegistered() {
         Message message = mock(Message.class);
+        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(Collections.emptyList());
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -40,7 +36,7 @@ class DefaultMessageRuleRegistryTest {
         when(rule.matcher().match(message)).thenReturn(true);
         when(rule.updateHandler()).thenReturn(handler);
 
-        registry.register(rule);
+        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(Collections.singletonList(rule));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -57,8 +53,7 @@ class DefaultMessageRuleRegistryTest {
         when(rule1.matcher().match(message)).thenReturn(false);
         when(rule2.matcher().match(message)).thenReturn(false);
 
-        registry.register(rule1);
-        registry.register(rule2);
+        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(rule1, rule2));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -79,8 +74,7 @@ class DefaultMessageRuleRegistryTest {
         when(rule2.matcher().match(message)).thenReturn(true);
         when(rule2.updateHandler()).thenReturn(handler2);
 
-        registry.register(rule1);
-        registry.register(rule2);
+        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(rule1, rule2));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -105,15 +99,12 @@ class DefaultMessageRuleRegistryTest {
 
         when(highPriorityRule.updateHandler()).thenReturn(highPriorityHandler);
 
-        registry.register(lowPriorityRule);
-        registry.register(highPriorityRule);
+        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(lowPriorityRule, highPriorityRule));
+
 
         Optional<UpdateHandler> result = registry.find(message);
 
-        // Technically, PriorityQueue iterator does not guarantee strict ordering,
-        // but we at least assert that some matching handler is returned.
         assertTrue(result.isPresent(), "Matching rules should return a handler");
-        // If you later change implementation to iterate in strict priority order,
-        // you can tighten this assertion to expect `highPriorityHandler`.
+        assertSame(highPriorityHandler, result.get());
     }
 }

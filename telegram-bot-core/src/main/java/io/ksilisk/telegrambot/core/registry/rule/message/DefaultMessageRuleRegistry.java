@@ -3,18 +3,23 @@ package io.ksilisk.telegrambot.core.registry.rule.message;
 import com.pengrad.telegrambot.model.Message;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.rule.MessageRule;
-import io.ksilisk.telegrambot.core.rule.Rule;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
 
 public class DefaultMessageRuleRegistry implements MessageRuleRegistry {
-    private final PriorityQueue<MessageRule> messageRules = new PriorityQueue<>(Comparator.comparingInt(Rule::order));
+    private static final Comparator<MessageRule> RULE_COMPARATOR =
+            Comparator.comparingInt(MessageRule::order);
 
-    @Override
-    public void register(MessageRule messageRule) {
-        messageRules.add(messageRule);
+    private final List<MessageRule> messageRules;
+
+    public DefaultMessageRuleRegistry(Collection<? extends MessageRule> rules) {
+        List<MessageRule> sorted = new ArrayList<>(rules);
+        sorted.sort(RULE_COMPARATOR);
+        this.messageRules = List.copyOf(sorted);
     }
 
     @Override

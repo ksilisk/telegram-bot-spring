@@ -15,7 +15,5 @@ import java.util.Optional;
  * @param <K> the lookup key or update payload type
  */
 public interface Registry<S, K> {
-    void register(S object);
-
     Optional<UpdateHandler> find(K update);
 }
