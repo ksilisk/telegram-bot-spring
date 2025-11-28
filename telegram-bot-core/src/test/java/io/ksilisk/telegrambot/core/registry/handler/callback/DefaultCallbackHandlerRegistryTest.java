@@ -3,9 +3,9 @@ package io.ksilisk.telegrambot.core.registry.handler.callback;
 import io.ksilisk.telegrambot.core.exception.registry.CallbackHandlerAlreadyExists;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.handler.update.callback.CallbackUpdateHandler;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,12 +14,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DefaultCallbackHandlerRegistryTest {
-    private DefaultCallbackHandlerRegistry registry;
-
-    @BeforeEach
-    void setUp() {
-        registry = new DefaultCallbackHandlerRegistry();
-    }
 
     @Test
     void shouldRegisterHandlerForSingleCallback() {
@@ -28,7 +22,7 @@ class DefaultCallbackHandlerRegistryTest {
         // Handler declares a single callback key
         when(handler.callbacks()).thenReturn(Set.of("cb:one"));
 
-        registry.register(handler);
+        DefaultCallbackHandlerRegistry registry = new DefaultCallbackHandlerRegistry(List.of(handler));
 
         Optional<UpdateHandler> result = registry.find("cb:one");
 
@@ -43,7 +37,7 @@ class DefaultCallbackHandlerRegistryTest {
         // Handler is responsible for multiple callback_data values
         when(handler.callbacks()).thenReturn(Set.of("cb:one", "cb:two", "cb:three"));
 
-        registry.register(handler);
+        DefaultCallbackHandlerRegistry registry = new DefaultCallbackHandlerRegistry(List.of(handler));
 
         assertTrue(registry.find("cb:one").isPresent());
         assertTrue(registry.find("cb:two").isPresent());
@@ -56,6 +50,8 @@ class DefaultCallbackHandlerRegistryTest {
 
     @Test
     void shouldReturnEmptyWhenCallbackNotRegistered() {
+        DefaultCallbackHandlerRegistry registry = new DefaultCallbackHandlerRegistry(List.of());
+
         Optional<UpdateHandler> result = registry.find("unknown");
 
         assertTrue(result.isEmpty(), "Registry should return empty optional for unknown callback");
@@ -69,12 +65,10 @@ class DefaultCallbackHandlerRegistryTest {
         when(firstHandler.callbacks()).thenReturn(Set.of("cb:dup"));
         when(secondHandler.callbacks()).thenReturn(Set.of("cb:dup"));
 
-        registry.register(firstHandler);
-
         // Second registration with the same callback key should fail
         CallbackHandlerAlreadyExists ex = assertThrows(
                 CallbackHandlerAlreadyExists.class,
-                () -> registry.register(secondHandler),
+                () -> new DefaultCallbackHandlerRegistry(List.of(firstHandler, secondHandler)),
                 "Expected duplicate callback registration to throw CallbackHandlerAlreadyExists"
         );
 
@@ -91,9 +85,7 @@ class DefaultCallbackHandlerRegistryTest {
 
         when(firstHandler.callbacks()).thenReturn(Set.of("cb:first"));
         when(secondHandler.callbacks()).thenReturn(Set.of("cb:second"));
-
-        registry.register(firstHandler);
-        registry.register(secondHandler);
+        DefaultCallbackHandlerRegistry registry = new DefaultCallbackHandlerRegistry(List.of(firstHandler, secondHandler));
 
         assertSame(firstHandler, registry.find("cb:first").orElseThrow());
         assertSame(secondHandler, registry.find("cb:second").orElseThrow());

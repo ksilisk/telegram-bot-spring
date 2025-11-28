@@ -3,18 +3,23 @@ package io.ksilisk.telegrambot.core.registry.rule.inline;
 import com.pengrad.telegrambot.model.InlineQuery;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.rule.InlineRule;
-import io.ksilisk.telegrambot.core.rule.Rule;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
 
 public class DefaultInlineRuleRegistry implements InlineRuleRegistry {
-    private final PriorityQueue<InlineRule> inlineRules = new PriorityQueue<>(Comparator.comparingInt(Rule::order));
+    private static final Comparator<InlineRule> RULE_COMPARATOR =
+            Comparator.comparingInt(InlineRule::order);
 
-    @Override
-    public void register(InlineRule inlineRule) {
-        inlineRules.add(inlineRule);
+    private final List<InlineRule> inlineRules;
+
+    public DefaultInlineRuleRegistry(Collection<? extends InlineRule> inlineRules) {
+        List<InlineRule> sorted = new ArrayList<>(inlineRules);
+        sorted.sort(RULE_COMPARATOR);
+        this.inlineRules = List.copyOf(sorted);
     }
 
     @Override
