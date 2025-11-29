@@ -146,10 +146,10 @@ public class AnyMessageHandler implements MessageUpdateHandler {
 }
 
 @Component
-public class AnyMessageRule implements MessageRule {
-    private final AnyMessageHandler anyMessageHandler;
+public class AnyMessageRule implements MessageUpdateRule {
+    private final AnyMessageUpdateHandler anyMessageHandler;
 
-    public AnyMessageRule(AnyMessageHandler anyMessageHandler) {
+    public AnyMessageRule(AnyMessageUpdateHandler anyMessageHandler) {
         this.anyMessageHandler = anyMessageHandler;
     }
 
@@ -159,7 +159,7 @@ public class AnyMessageRule implements MessageRule {
     }
 
     @Override
-    public UpdateHandler updateHandler() {
+    public UpdateHandler handler() {
         return anyMessageHandler;
     }
 }
