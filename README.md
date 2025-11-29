@@ -25,7 +25,7 @@
 <dependency>
     <groupId>io.ksilisk.telegrambot</groupId>
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
-    <version>YOUR_VERSION</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
