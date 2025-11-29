@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.core.registry.rule.message;
 
 import com.pengrad.telegrambot.model.Message;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
-import io.ksilisk.telegrambot.core.rule.MessageRule;
+import io.ksilisk.telegrambot.core.rule.MessageUpdateRule;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -15,11 +15,11 @@ import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DefaultMessageRuleRegistryTest {
+class DefaultMessageUpdateRuleRegistryTest {
     @Test
     void shouldReturnEmptyWhenNoRulesRegistered() {
         Message message = mock(Message.class);
-        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(Collections.emptyList());
+        DefaultMessageUpdateRuleRegistry registry = new DefaultMessageUpdateRuleRegistry(Collections.emptyList());
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -28,15 +28,15 @@ class DefaultMessageRuleRegistryTest {
 
     @Test
     void shouldReturnHandlerWhenSingleRuleMatches() {
-        MessageRule rule = mock(MessageRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule rule = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
         Message message = mock(Message.class);
         UpdateHandler handler = mock(UpdateHandler.class);
 
         // Rule definition
         when(rule.matcher().match(message)).thenReturn(true);
-        when(rule.updateHandler()).thenReturn(handler);
+        when(rule.handler()).thenReturn(handler);
 
-        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(Collections.singletonList(rule));
+        DefaultMessageUpdateRuleRegistry registry = new DefaultMessageUpdateRuleRegistry(Collections.singletonList(rule));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -46,14 +46,14 @@ class DefaultMessageRuleRegistryTest {
 
     @Test
     void shouldReturnEmptyWhenNoRulesMatch() {
-        MessageRule rule1 = mock(MessageRule.class, RETURNS_DEEP_STUBS);
-        MessageRule rule2 = mock(MessageRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule rule1 = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule rule2 = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
         Message message = mock(Message.class);
 
         when(rule1.matcher().match(message)).thenReturn(false);
         when(rule2.matcher().match(message)).thenReturn(false);
 
-        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(rule1, rule2));
+        DefaultMessageUpdateRuleRegistry registry = new DefaultMessageUpdateRuleRegistry(List.of(rule1, rule2));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -62,8 +62,8 @@ class DefaultMessageRuleRegistryTest {
 
     @Test
     void shouldReturnHandlerOfFirstMatchingRule() {
-        MessageRule rule1 = mock(MessageRule.class, RETURNS_DEEP_STUBS);
-        MessageRule rule2 = mock(MessageRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule rule1 = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule rule2 = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
         Message message = mock(Message.class);
         UpdateHandler handler2 = mock(UpdateHandler.class);
 
@@ -72,9 +72,9 @@ class DefaultMessageRuleRegistryTest {
 
         // Second rule matches
         when(rule2.matcher().match(message)).thenReturn(true);
-        when(rule2.updateHandler()).thenReturn(handler2);
+        when(rule2.handler()).thenReturn(handler2);
 
-        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(rule1, rule2));
+        DefaultMessageUpdateRuleRegistry registry = new DefaultMessageUpdateRuleRegistry(List.of(rule1, rule2));
 
         Optional<UpdateHandler> result = registry.find(message);
 
@@ -84,8 +84,8 @@ class DefaultMessageRuleRegistryTest {
 
     @Test
     void shouldRespectRuleOrderingWhenMatchingRulesExist() {
-        MessageRule lowPriorityRule = mock(MessageRule.class, RETURNS_DEEP_STUBS);
-        MessageRule highPriorityRule = mock(MessageRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule lowPriorityRule = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
+        MessageUpdateRule highPriorityRule = mock(MessageUpdateRule.class, RETURNS_DEEP_STUBS);
         Message message = mock(Message.class);
         UpdateHandler highPriorityHandler = mock(UpdateHandler.class);
 
@@ -97,9 +97,9 @@ class DefaultMessageRuleRegistryTest {
         when(lowPriorityRule.matcher().match(message)).thenReturn(true);
         when(highPriorityRule.matcher().match(message)).thenReturn(true);
 
-        when(highPriorityRule.updateHandler()).thenReturn(highPriorityHandler);
+        when(highPriorityRule.handler()).thenReturn(highPriorityHandler);
 
-        DefaultMessageRuleRegistry registry = new DefaultMessageRuleRegistry(List.of(lowPriorityRule, highPriorityRule));
+        DefaultMessageUpdateRuleRegistry registry = new DefaultMessageUpdateRuleRegistry(List.of(lowPriorityRule, highPriorityRule));
 
 
         Optional<UpdateHandler> result = registry.find(message);

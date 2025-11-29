@@ -3,15 +3,15 @@ package io.ksilisk.telegrambot.examples.webhook.rule;
 import com.pengrad.telegrambot.model.InlineQuery;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.matcher.Matcher;
-import io.ksilisk.telegrambot.core.rule.InlineRule;
+import io.ksilisk.telegrambot.core.rule.InlineUpdateRule;
 import io.ksilisk.telegrambot.examples.webhook.handler.inline.AnyInlineHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AnyInlineRule implements InlineRule {
+public class AnyInlineUpdateRule implements InlineUpdateRule {
     private final AnyInlineHandler anyInlineHandler;
 
-    public AnyInlineRule(AnyInlineHandler anyInlineHandler) {
+    public AnyInlineUpdateRule(AnyInlineHandler anyInlineHandler) {
         this.anyInlineHandler = anyInlineHandler;
     }
 
@@ -21,7 +21,7 @@ public class AnyInlineRule implements InlineRule {
     }
 
     @Override
-    public UpdateHandler updateHandler() {
+    public UpdateHandler handler() {
         return anyInlineHandler;
     }
 }

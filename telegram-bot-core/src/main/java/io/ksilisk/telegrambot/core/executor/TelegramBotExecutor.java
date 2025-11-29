@@ -9,14 +9,16 @@ import io.ksilisk.telegrambot.core.exception.request.TelegramRequestException;
  *
  * <p>This is a thin abstraction over the underlying HTTP client / Bot API library.
  * Implementations perform a synchronous call and return the parsed {@link BaseResponse}.</p>
+ *
+ * NOTE: see {@link ApiExecutor}
  */
-public interface TelegramBotExecutor {
+public interface TelegramBotExecutor extends ApiExecutor {
     /**
      * Execute the given request.
      *
      * @param request the request to execute, never {@code null}
-     * @param <T> the concrete request type
-     * @param <R> the concrete response type
+     * @param <T>     the concrete request type
+     * @param <R>     the concrete response type
      * @return the successful Telegram response, never {@code null}
      * @throws TelegramRequestException if the request cannot be completed or Telegram returns an error
      */

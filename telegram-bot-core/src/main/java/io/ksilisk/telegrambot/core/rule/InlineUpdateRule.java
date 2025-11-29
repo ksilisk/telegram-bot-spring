@@ -9,5 +9,5 @@ import io.ksilisk.telegrambot.core.handler.update.inline.InlineUpdateHandler;
  * <p>Used by the routing layer to decide which {@link InlineUpdateHandler}
  * should handle a given inline query.</p>
  */
-public interface InlineRule extends Rule<InlineQuery>{
+public interface InlineUpdateRule extends UpdateRule<InlineQuery> {
 }

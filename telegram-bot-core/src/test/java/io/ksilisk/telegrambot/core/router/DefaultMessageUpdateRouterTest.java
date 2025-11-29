@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.message.MessageRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.message.MessageUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.detector.CommandDetector;
 import io.ksilisk.telegrambot.core.router.impl.DefaultMessageUpdateRouter;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 class DefaultMessageUpdateRouterTest {
     private CommandHandlerRegistry commandRegistry;
-    private MessageRuleRegistry messageRuleRegistry;
+    private MessageUpdateRuleRegistry messageRuleRegistry;
     private CommandDetector commandDetector;
     private DefaultMessageUpdateRouter router;
 
@@ -27,7 +27,7 @@ class DefaultMessageUpdateRouterTest {
     @BeforeEach
     void setUp() {
         commandRegistry = mock(CommandHandlerRegistry.class);
-        messageRuleRegistry = mock(MessageRuleRegistry.class);
+        messageRuleRegistry = mock(MessageUpdateRuleRegistry.class);
         commandDetector = mock(CommandDetector.class);
 
         router = new DefaultMessageUpdateRouter(commandRegistry, messageRuleRegistry, commandDetector);

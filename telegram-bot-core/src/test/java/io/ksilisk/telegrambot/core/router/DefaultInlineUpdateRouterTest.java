@@ -3,7 +3,7 @@ package io.ksilisk.telegrambot.core.router;
 import com.pengrad.telegrambot.model.InlineQuery;
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
-import io.ksilisk.telegrambot.core.registry.rule.inline.InlineRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.inline.InlineUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.impl.DefaultInlineUpdateRouter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class DefaultInlineUpdateRouterTest {
-    private InlineRuleRegistry inlineRuleRegistry;
+    private InlineUpdateRuleRegistry inlineRuleRegistry;
     private DefaultInlineUpdateRouter router;
     private Update update;
     private InlineQuery inlineQuery;
 
     @BeforeEach
     void setUp() {
-        inlineRuleRegistry = mock(InlineRuleRegistry.class);
+        inlineRuleRegistry = mock(InlineUpdateRuleRegistry.class);
         router = new DefaultInlineUpdateRouter(inlineRuleRegistry);
 
         update = mock(Update.class);

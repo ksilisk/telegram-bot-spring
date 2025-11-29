@@ -2,32 +2,32 @@ package io.ksilisk.telegrambot.core.handler.exception;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.exception.handler.ExceptionHandlerExecutionException;
-import io.ksilisk.telegrambot.core.selector.ExceptionHandlerSelector;
+import io.ksilisk.telegrambot.core.selector.UpdateExceptionHandlerSelector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class CompositeExceptionHandlerTest {
-    private ExceptionHandler handler1;
-    private ExceptionHandler handler2;
-    private ExceptionHandlerSelector selector;
-    private CompositeExceptionHandler compositeHandler;
+class CompositeUpdateExceptionHandlerTest {
+    private UpdateExceptionHandler handler1;
+    private UpdateExceptionHandler handler2;
+    private UpdateExceptionHandlerSelector selector;
+    private CompositeUpdateExceptionHandler compositeHandler;
     private Update update;
     private Throwable throwable;
 
     @BeforeEach
     void setUp() {
-        handler1 = mock(ExceptionHandler.class);
-        handler2 = mock(ExceptionHandler.class);
-        selector = mock(ExceptionHandlerSelector.class);
+        handler1 = mock(UpdateExceptionHandler.class);
+        handler2 = mock(UpdateExceptionHandler.class);
+        selector = mock(UpdateExceptionHandlerSelector.class);
         update = mock(Update.class);
         throwable = new RuntimeException("test");
 
-        compositeHandler = new CompositeExceptionHandler(
+        compositeHandler = new CompositeUpdateExceptionHandler(
                 List.of(handler1, handler2),
                 selector,
                 ExceptionHandlerErrorPolicy.LOG
@@ -82,7 +82,7 @@ class CompositeExceptionHandlerTest {
 
     @Test
     void shouldContinueProcessingHandlersWhenErrorPolicyIsLog() {
-        compositeHandler = new CompositeExceptionHandler(
+        compositeHandler = new CompositeUpdateExceptionHandler(
                 List.of(handler1, handler2),
                 selector,
                 ExceptionHandlerErrorPolicy.LOG
@@ -110,7 +110,7 @@ class CompositeExceptionHandlerTest {
 
     @Test
     void shouldThrowExceptionHandlerExecutionExceptionWhenErrorPolicyIsThrow() {
-        compositeHandler = new CompositeExceptionHandler(
+        compositeHandler = new CompositeUpdateExceptionHandler(
                 List.of(handler1, handler2),
                 selector,
                 ExceptionHandlerErrorPolicy.THROW

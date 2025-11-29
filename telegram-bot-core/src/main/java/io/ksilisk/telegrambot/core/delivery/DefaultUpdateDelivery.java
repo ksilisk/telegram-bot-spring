@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.core.delivery;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.dispatcher.UpdateDispatcher;
-import io.ksilisk.telegrambot.core.handler.exception.CompositeExceptionHandler;
+import io.ksilisk.telegrambot.core.handler.exception.CompositeUpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.interceptor.CompositeUpdateInterceptor;
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import org.slf4j.Logger;
@@ -19,13 +19,13 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
     private final ExecutorService executorService;
     private final DeliveryProperties deliveryProperties;
     private final CompositeUpdateInterceptor compositeUpdateInterceptor;
-    private final CompositeExceptionHandler exceptionHandler;
+    private final CompositeUpdateExceptionHandler exceptionHandler;
 
     public DefaultUpdateDelivery(UpdateDispatcher updateDispatcher,
                                  ExecutorService executorService,
                                  DeliveryProperties deliveryProperties,
                                  CompositeUpdateInterceptor compositeUpdateInterceptor,
-                                 CompositeExceptionHandler exceptionHandler) {
+                                 CompositeUpdateExceptionHandler exceptionHandler) {
         this.updateDispatcher = updateDispatcher;
         this.executorService = executorService;
         this.deliveryProperties = deliveryProperties;
@@ -40,6 +40,11 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
         }
     }
 
+    @Override
+    public void start() {
+        // noop
+    }
+
     private void processUpdate(Update update) {
         try {
             Update intercepted = compositeUpdateInterceptor.intercept(update);
@@ -52,8 +57,7 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
         }
     }
 
-    @Override
-    public void close() {
+    public void stop() {
         log.info("Stopping Update Delivery");
         executorService.shutdown();
         try {

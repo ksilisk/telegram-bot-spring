@@ -3,7 +3,7 @@ package io.ksilisk.telegrambot.core.dispatcher;
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.router.CompositeUpdateRouter;
 import io.ksilisk.telegrambot.core.router.UpdateRouter;
-import io.ksilisk.telegrambot.core.strategy.CompositeNoMatchStrategy;
+import io.ksilisk.telegrambot.core.strategy.CompositeUpdateNoMatchStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 class SimpleUpdateDispatcherTest {
     private UpdateRouter router1;
     private UpdateRouter router2;
-    private CompositeNoMatchStrategy noMatchStrategy;
+    private CompositeUpdateNoMatchStrategy noMatchStrategy;
     private SimpleUpdateDispatcher dispatcher;
     private Update update;
 
@@ -22,7 +22,7 @@ class SimpleUpdateDispatcherTest {
     void setUp() {
         router1 = mock(CompositeUpdateRouter.class);
         router2 = mock(UpdateRouter.class);
-        noMatchStrategy = mock(CompositeNoMatchStrategy.class);
+        noMatchStrategy = mock(CompositeUpdateNoMatchStrategy.class);
         update = mock(Update.class);
 
         dispatcher = new SimpleUpdateDispatcher(new CompositeUpdateRouter(List.of(router1, router2)), noMatchStrategy);

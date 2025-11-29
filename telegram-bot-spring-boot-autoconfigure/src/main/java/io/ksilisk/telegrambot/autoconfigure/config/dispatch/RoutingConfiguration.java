@@ -6,10 +6,10 @@ import io.ksilisk.telegrambot.core.registry.handler.callback.CallbackHandlerRegi
 import io.ksilisk.telegrambot.core.registry.handler.callback.DefaultCallbackHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.handler.command.DefaultCommandHandlerRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.inline.DefaultInlineRuleRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.inline.InlineRuleRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.message.DefaultMessageRuleRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.message.MessageRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.inline.DefaultInlineUpdateRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.inline.InlineUpdateRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.message.DefaultMessageUpdateRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.message.MessageUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.CallbackUpdateRouter;
 import io.ksilisk.telegrambot.core.router.CompositeUpdateRouter;
 import io.ksilisk.telegrambot.core.router.InlineUpdateRouter;
@@ -20,8 +20,8 @@ import io.ksilisk.telegrambot.core.router.detector.DefaultCommandDetector;
 import io.ksilisk.telegrambot.core.router.impl.DefaultCallbackUpdateRouter;
 import io.ksilisk.telegrambot.core.router.impl.DefaultInlineUpdateRouter;
 import io.ksilisk.telegrambot.core.router.impl.DefaultMessageUpdateRouter;
-import io.ksilisk.telegrambot.core.rule.InlineRule;
-import io.ksilisk.telegrambot.core.rule.MessageRule;
+import io.ksilisk.telegrambot.core.rule.InlineUpdateRule;
+import io.ksilisk.telegrambot.core.rule.MessageUpdateRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -55,15 +55,15 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(MessageUpdateRouter.class)
         public MessageUpdateRouter messageUpdateRouter(CommandHandlerRegistry commandHandlerRegistry,
-                                                       MessageRuleRegistry messageRuleRegistry,
+                                                       MessageUpdateRuleRegistry messageRuleRegistry,
                                                        CommandDetector commandDetector) {
             return new DefaultMessageUpdateRouter(commandHandlerRegistry, messageRuleRegistry, commandDetector);
         }
 
         @Bean
-        @ConditionalOnMissingBean(MessageRuleRegistry.class)
-        public MessageRuleRegistry messageRuleRegistry(List<MessageRule> messageRules) {
-            return new DefaultMessageRuleRegistry(messageRules);
+        @ConditionalOnMissingBean(MessageUpdateRuleRegistry.class)
+        public MessageUpdateRuleRegistry messageRuleRegistry(List<MessageUpdateRule> messageUpdateRules) {
+            return new DefaultMessageUpdateRuleRegistry(messageUpdateRules);
         }
 
         @Bean
@@ -83,14 +83,14 @@ public class RoutingConfiguration {
     public static class InlineRoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(InlineUpdateRouter.class)
-        public InlineUpdateRouter inlineUpdateRouter(InlineRuleRegistry inlineRuleRegistry) {
+        public InlineUpdateRouter inlineUpdateRouter(InlineUpdateRuleRegistry inlineRuleRegistry) {
             return new DefaultInlineUpdateRouter(inlineRuleRegistry);
         }
 
         @Bean
-        @ConditionalOnMissingBean(InlineRuleRegistry.class)
-        public InlineRuleRegistry inlineRuleRegistry(List<InlineRule> inlineRules) {
-            return new DefaultInlineRuleRegistry(inlineRules);
+        @ConditionalOnMissingBean(InlineUpdateRuleRegistry.class)
+        public InlineUpdateRuleRegistry inlineRuleRegistry(List<InlineUpdateRule> inlineUpdateRules) {
+            return new DefaultInlineUpdateRuleRegistry(inlineUpdateRules);
         }
     }
 

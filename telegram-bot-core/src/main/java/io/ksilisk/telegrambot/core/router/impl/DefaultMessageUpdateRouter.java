@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
-import io.ksilisk.telegrambot.core.registry.rule.message.MessageRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.message.MessageUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.MessageUpdateRouter;
 import io.ksilisk.telegrambot.core.router.detector.CommandDetector;
 import org.slf4j.Logger;
@@ -16,11 +16,11 @@ public class DefaultMessageUpdateRouter implements MessageUpdateRouter {
     private static final Logger log = LoggerFactory.getLogger(DefaultMessageUpdateRouter.class);
 
     private final CommandHandlerRegistry commandHandlerRegistry;
-    private final MessageRuleRegistry messageRuleRegistry;
+    private final MessageUpdateRuleRegistry messageRuleRegistry;
     private final CommandDetector commandDetector;
 
     public DefaultMessageUpdateRouter(CommandHandlerRegistry commandHandlerRegistry,
-                                      MessageRuleRegistry messageRuleRegistry,
+                                      MessageUpdateRuleRegistry messageRuleRegistry,
                                       CommandDetector commandDetector) {
         this.commandHandlerRegistry = commandHandlerRegistry;
         this.messageRuleRegistry = messageRuleRegistry;

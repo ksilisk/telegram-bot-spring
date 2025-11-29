@@ -1,12 +1,12 @@
 package io.ksilisk.telegrambot.core.handler.exception.impl;
 
 import com.pengrad.telegrambot.model.Update;
-import io.ksilisk.telegrambot.core.handler.exception.ExceptionHandler;
+import io.ksilisk.telegrambot.core.handler.exception.UpdateExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoggingExceptionHandler implements ExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(LoggingExceptionHandler.class);
+public class LoggingUpdateExceptionHandler implements UpdateExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(LoggingUpdateExceptionHandler.class);
 
     @Override
     public boolean supports(Throwable t, Update update) {
