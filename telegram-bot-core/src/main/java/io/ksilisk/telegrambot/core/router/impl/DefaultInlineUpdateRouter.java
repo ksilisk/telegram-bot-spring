@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.core.router.impl;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
-import io.ksilisk.telegrambot.core.registry.rule.inline.InlineRuleRegistry;
+import io.ksilisk.telegrambot.core.registry.rule.inline.InlineUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.InlineUpdateRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import java.util.Optional;
 public class DefaultInlineUpdateRouter implements InlineUpdateRouter {
     private static final Logger log = LoggerFactory.getLogger(DefaultInlineUpdateRouter.class);
 
-    private final InlineRuleRegistry inlineRuleRegistry;
+    private final InlineUpdateRuleRegistry inlineRuleRegistry;
 
-    public DefaultInlineUpdateRouter(InlineRuleRegistry inlineRuleRegistry) {
+    public DefaultInlineUpdateRouter(InlineUpdateRuleRegistry inlineRuleRegistry) {
         this.inlineRuleRegistry = inlineRuleRegistry;
     }
 

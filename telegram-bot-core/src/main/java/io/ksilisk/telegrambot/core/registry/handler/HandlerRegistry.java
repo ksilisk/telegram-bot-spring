@@ -1,7 +1,7 @@
 package io.ksilisk.telegrambot.core.registry.handler;
 
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
-import io.ksilisk.telegrambot.core.registry.Registry;
+import io.ksilisk.telegrambot.core.registry.UpdateRegistry;
 
 /**
  * Registry for direct {@link UpdateHandler} mappings.
@@ -12,6 +12,6 @@ import io.ksilisk.telegrambot.core.registry.Registry;
  * @param <S> the handler type
  * @param <K> the lookup key type
  */
-public interface HandlerRegistry<S extends UpdateHandler, K> extends Registry<S, K> {
+public interface HandlerRegistry<S extends UpdateHandler, K> extends UpdateRegistry<K> {
 
 }

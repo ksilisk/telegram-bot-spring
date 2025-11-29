@@ -1,17 +1,17 @@
-package io.ksilisk.telegrambot.examples.longpolling.rule;
+package io.ksilisk.telegrambot.examples.webhook.rule;
 
 import com.pengrad.telegrambot.model.Message;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.matcher.Matcher;
-import io.ksilisk.telegrambot.core.rule.MessageRule;
-import io.ksilisk.telegrambot.examples.longpolling.handler.message.AnyMessageHandler;
+import io.ksilisk.telegrambot.core.rule.MessageUpdateRule;
+import io.ksilisk.telegrambot.examples.webhook.handler.message.AnyMessageHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AnyMessageRule implements MessageRule {
+public class AnyMessageUpdateRule implements MessageUpdateRule {
     private final AnyMessageHandler anyMessageHandler;
 
-    public AnyMessageRule(AnyMessageHandler anyMessageHandler) {
+    public AnyMessageUpdateRule(AnyMessageHandler anyMessageHandler) {
         this.anyMessageHandler = anyMessageHandler;
     }
 
@@ -21,7 +21,7 @@ public class AnyMessageRule implements MessageRule {
     }
 
     @Override
-    public UpdateHandler updateHandler() {
+    public UpdateHandler handler() {
         return anyMessageHandler;
     }
 }

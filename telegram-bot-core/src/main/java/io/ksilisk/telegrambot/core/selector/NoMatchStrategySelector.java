@@ -1,6 +1,5 @@
 package io.ksilisk.telegrambot.core.selector;
 
-import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.strategy.NoMatchStrategy;
 
 import java.util.List;
@@ -12,15 +11,18 @@ import java.util.List;
  * <p>The selector controls which strategies will be invoked and in what
  * order. It may also consider {@link NoMatchStrategy#terminal()} to stop
  * further selection.</p>
+ *
+ * @param <U> the type of value being selected
+ * @param <N> the type of strategies
  */
 @FunctionalInterface
-public interface NoMatchStrategySelector {
+public interface NoMatchStrategySelector<N extends NoMatchStrategy<U>, U> {
     /**
      * Select strategies for the given update.
      *
      * @param noMatchStrategies all available strategies, never {@code null}
-     * @param update the unmatched update, never {@code null}
+     * @param update            the unmatched update, never {@code null}
      * @return ordered strategies to apply, never {@code null}
      */
-    List<NoMatchStrategy> select(List<NoMatchStrategy> noMatchStrategies, Update update);
+    List<N> select(List<N> noMatchStrategies, U update);
 }

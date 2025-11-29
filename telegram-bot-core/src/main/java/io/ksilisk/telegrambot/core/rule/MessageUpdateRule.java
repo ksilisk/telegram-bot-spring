@@ -9,5 +9,5 @@ import io.ksilisk.telegrambot.core.handler.update.message.MessageUpdateHandler;
  * <p>Used by the routing layer to select appropriate {@link MessageUpdateHandler}
  * instances for a given message.</p>
  */
-public interface MessageRule extends Rule<Message>{
+public interface MessageUpdateRule extends UpdateRule<Message> {
 }

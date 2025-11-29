@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.core.delivery;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.dispatcher.UpdateDispatcher;
-import io.ksilisk.telegrambot.core.handler.exception.CompositeExceptionHandler;
+import io.ksilisk.telegrambot.core.handler.exception.CompositeUpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.interceptor.CompositeUpdateInterceptor;
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class DefaultUpdateDeliveryTest {
     private ExecutorService executorService;
     private DeliveryProperties deliveryProperties;
     private CompositeUpdateInterceptor compositeUpdateInterceptor;
-    private CompositeExceptionHandler exceptionHandler;
+    private CompositeUpdateExceptionHandler exceptionHandler;
 
     private DefaultUpdateDelivery delivery;
 
@@ -34,7 +34,7 @@ class DefaultUpdateDeliveryTest {
         executorService = mock(ExecutorService.class);
         deliveryProperties = mock(DeliveryProperties.class);
         compositeUpdateInterceptor = mock(CompositeUpdateInterceptor.class);
-        exceptionHandler = mock(CompositeExceptionHandler.class);
+        exceptionHandler = mock(CompositeUpdateExceptionHandler.class);
 
         when(deliveryProperties.getShutdownTimeout()).thenReturn(Duration.ofMillis(100));
 
@@ -181,7 +181,7 @@ class DefaultUpdateDeliveryTest {
     void shouldShutdownGracefullyWhenExecutorTerminatesInTime() throws Exception {
         when(executorService.awaitTermination(100L, TimeUnit.MILLISECONDS)).thenReturn(true);
 
-        delivery.close();
+        delivery.stop();
 
         verify(executorService).shutdown();
         verify(executorService).awaitTermination(100L, TimeUnit.MILLISECONDS);
@@ -192,7 +192,7 @@ class DefaultUpdateDeliveryTest {
     void shouldForceShutdownWhenExecutorDoesNotTerminateInTime() throws Exception {
         when(executorService.awaitTermination(100L, TimeUnit.MILLISECONDS)).thenReturn(false);
 
-        delivery.close();
+        delivery.stop();
 
         verify(executorService).shutdown();
         verify(executorService).awaitTermination(100L, TimeUnit.MILLISECONDS);
@@ -207,7 +207,7 @@ class DefaultUpdateDeliveryTest {
         // Make sure interrupt flag is clear before
         Thread.interrupted(); // clears current thread's interrupt status
 
-        delivery.close();
+        delivery.stop();
 
         // Executor shutdown sequence
         verify(executorService).shutdown();

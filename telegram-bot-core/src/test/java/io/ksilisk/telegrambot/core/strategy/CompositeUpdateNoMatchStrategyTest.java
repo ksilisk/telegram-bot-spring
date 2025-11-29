@@ -2,30 +2,31 @@ package io.ksilisk.telegrambot.core.strategy;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.exception.strategy.StrategyExecutionException;
-import io.ksilisk.telegrambot.core.selector.NoMatchStrategySelector;
+import io.ksilisk.telegrambot.core.selector.UpdateNoMatchStrategySelector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class CompositeNoMatchStrategyTest {
-    private NoMatchStrategy strategy1;
-    private NoMatchStrategy strategy2;
-    private NoMatchStrategySelector selector;
-    private CompositeNoMatchStrategy composite;
+class CompositeUpdateNoMatchStrategyTest {
+    private UpdateNoMatchStrategy strategy1;
+    private UpdateNoMatchStrategy strategy2;
+    private UpdateNoMatchStrategySelector selector;
+    private CompositeUpdateNoMatchStrategy composite;
     private Update update;
 
     @BeforeEach
     void setUp() {
-        strategy1 = mock(NoMatchStrategy.class);
-        strategy2 = mock(NoMatchStrategy.class);
-        selector = mock(NoMatchStrategySelector.class);
+        strategy1 = mock(UpdateNoMatchStrategy.class);
+        strategy2 = mock(UpdateNoMatchStrategy.class);
+        selector = mock(UpdateNoMatchStrategySelector.class);
         update = mock(Update.class);
 
-        composite = new CompositeNoMatchStrategy(
+        composite = new CompositeUpdateNoMatchStrategy(
                 List.of(strategy1, strategy2),
                 selector,
                 StrategyErrorPolicy.LOG // default, can be overridden in specific tests
@@ -75,7 +76,7 @@ class CompositeNoMatchStrategyTest {
 
     @Test
     void shouldContinueOnExceptionWhenPolicyIsLog() {
-        composite = new CompositeNoMatchStrategy(
+        composite = new CompositeUpdateNoMatchStrategy(
                 List.of(strategy1, strategy2),
                 selector,
                 StrategyErrorPolicy.LOG
@@ -103,7 +104,7 @@ class CompositeNoMatchStrategyTest {
 
     @Test
     void shouldThrowStrategyExecutionExceptionWhenPolicyIsThrow() {
-        composite = new CompositeNoMatchStrategy(
+        composite = new CompositeUpdateNoMatchStrategy(
                 List.of(strategy1, strategy2),
                 selector,
                 StrategyErrorPolicy.THROW

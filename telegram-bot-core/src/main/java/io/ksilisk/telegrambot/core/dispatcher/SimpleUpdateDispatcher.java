@@ -2,7 +2,7 @@ package io.ksilisk.telegrambot.core.dispatcher;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.router.CompositeUpdateRouter;
-import io.ksilisk.telegrambot.core.strategy.CompositeNoMatchStrategy;
+import io.ksilisk.telegrambot.core.strategy.CompositeUpdateNoMatchStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,10 +10,10 @@ public class SimpleUpdateDispatcher implements UpdateDispatcher {
     private static final Logger log = LoggerFactory.getLogger(SimpleUpdateDispatcher.class);
 
     private final CompositeUpdateRouter compositeUpdateRouter;
-    private final CompositeNoMatchStrategy noMatchStrategy;
+    private final CompositeUpdateNoMatchStrategy noMatchStrategy;
 
     public SimpleUpdateDispatcher(CompositeUpdateRouter compositeUpdateRouter,
-                                  CompositeNoMatchStrategy noMatchStrategy) {
+                                  CompositeUpdateNoMatchStrategy noMatchStrategy) {
         this.noMatchStrategy = noMatchStrategy;
         this.compositeUpdateRouter = compositeUpdateRouter;
     }

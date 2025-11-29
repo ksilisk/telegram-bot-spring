@@ -1,23 +1,25 @@
 package io.ksilisk.telegrambot.core.rule;
 
-import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
+import io.ksilisk.telegrambot.core.handler.update.Handler;
 import io.ksilisk.telegrambot.core.matcher.Matcher;
 
 /**
  * Defines a routing rule for a specific update type.
  *
  * <p>A rule consists of a {@link Matcher} used to determine whether the
- * rule applies to a given update, and an associated {@link UpdateHandler}
+ * rule applies to a given update, and an associated {@link Handler}
  * that will be invoked if the rule matches.</p>
  *
  * <p>Rules may be ordered; lower values have higher priority.</p>
  *
- * @param <U> the update payload type this rule matches on
+ * @param <K> the update payload type this rule matches on
+ * @param <H> the handler implementation type this rule returns
+ * @param <U> the type of value being ruled
  */
-public interface Rule<U> {
-    Matcher<U> matcher();
+public interface Rule<K, H extends Handler<U>, U> {
+    Matcher<K> matcher();
 
-    UpdateHandler updateHandler();
+    H handler();
 
     default int order() {
         return 0;
