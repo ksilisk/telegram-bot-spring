@@ -15,6 +15,7 @@
     <modules>
         <module>telegram-bot-sample-long-polling</module>
         <module>telegram-bot-sample-webhook</module>
+        <module>telegram-bot-advanced-sample-long-polling</module>
     </modules>
 
 </project>

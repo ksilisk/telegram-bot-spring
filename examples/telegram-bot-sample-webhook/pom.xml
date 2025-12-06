@@ -11,8 +11,8 @@
     </parent>
 
     <artifactId>telegram-bot-sample-webhook</artifactId>
-    <packaging>jar</packaging>
     <name>Telegram Bot Sample: Simple Webhook App</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

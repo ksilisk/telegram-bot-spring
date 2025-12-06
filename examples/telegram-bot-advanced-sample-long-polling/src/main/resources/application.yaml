@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: telegram-bot-advanced-sample-long-polling
+
+telegram:
+  bot:
+    token: "your-bot-token-here"
