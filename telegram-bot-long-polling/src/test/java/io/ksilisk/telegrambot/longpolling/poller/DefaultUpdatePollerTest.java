@@ -1,12 +1,12 @@
-package io.ksilisk.telegrambot.core.poller;
+package io.ksilisk.telegrambot.longpolling.poller;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
-import io.ksilisk.telegrambot.core.properties.LongPollingProperties;
-import io.ksilisk.telegrambot.core.store.OffsetStore;
+import io.ksilisk.telegrambot.longpolling.properties.LongPollingProperties;
+import io.ksilisk.telegrambot.longpolling.store.OffsetStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

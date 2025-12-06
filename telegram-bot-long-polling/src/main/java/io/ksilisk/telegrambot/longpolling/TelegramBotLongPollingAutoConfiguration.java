@@ -1,31 +1,30 @@
-package io.ksilisk.telegrambot.autoconfigure.config.transport;
+package io.ksilisk.telegrambot.longpolling;
 
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
-import io.ksilisk.telegrambot.core.ingress.LongPollingUpdateIngress;
-import io.ksilisk.telegrambot.core.ingress.impl.DefaultLongPollingUpdateIngress;
-import io.ksilisk.telegrambot.core.poller.DefaultUpdatePoller;
 import io.ksilisk.telegrambot.core.poller.UpdatePoller;
-import io.ksilisk.telegrambot.core.properties.LongPollingProperties;
-import io.ksilisk.telegrambot.core.store.InMemoryOffsetStore;
-import io.ksilisk.telegrambot.core.store.OffsetStore;
+import io.ksilisk.telegrambot.longpolling.ingress.DefaultLongPollingUpdateIngress;
+import io.ksilisk.telegrambot.longpolling.ingress.LongPollingUpdateIngress;
+import io.ksilisk.telegrambot.longpolling.poller.DefaultUpdatePoller;
+import io.ksilisk.telegrambot.longpolling.properties.LongPollingProperties;
+import io.ksilisk.telegrambot.longpolling.store.InMemoryOffsetStore;
+import io.ksilisk.telegrambot.longpolling.store.OffsetStore;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "telegram.bot", name = "mode", havingValue = "LONG_POLLING", matchIfMissing = true)
-public class LongPollingConfiguration {
-
+public class TelegramBotLongPollingAutoConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "telegram.bot.long-polling")
     public LongPollingProperties longPollingProperties() {
         return new LongPollingProperties();
     }
 
-    @Bean(destroyMethod = "") // should be destroyed by LongPollingUpdateIngress
+    @Bean
     @ConditionalOnMissingBean(UpdatePoller.class)
     public UpdatePoller updatePoller(OffsetStore offsetStore,
                                      TelegramBotExecutor telegramBotExecutor,

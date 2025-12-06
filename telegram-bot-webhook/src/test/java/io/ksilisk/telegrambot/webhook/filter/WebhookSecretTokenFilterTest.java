@@ -1,6 +1,5 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.filter;
+package io.ksilisk.telegrambot.webhook.filter;
 
-import io.ksilisk.telegrambot.webhook.filter.WebhookSecretTokenFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

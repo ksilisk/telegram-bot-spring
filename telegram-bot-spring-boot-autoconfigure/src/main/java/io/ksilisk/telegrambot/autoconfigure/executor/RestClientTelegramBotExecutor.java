@@ -63,8 +63,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
                 builder.part(name, value)
                         .filename(request.getFileName())
                         .contentType(MediaType.parseMediaType(request.getContentType()));
-            } else if (value instanceof File) {
-                File file = (File) value;
+            } else if (value instanceof File file) {
                 try {
                     byte[] fileBytes = Files.readAllBytes(file.toPath());
                     builder.part(name, fileBytes)
@@ -73,8 +72,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to read file: " + file.getName(), e);
                 }
-            } else if (value instanceof InputFile) {
-                InputFile inputFile = (InputFile) value;
+            } else if (value instanceof InputFile inputFile) {
                 byte[] bytes = inputFile.getBytes();
                 if (bytes == null && inputFile.getFile() != null) {
                     try {
