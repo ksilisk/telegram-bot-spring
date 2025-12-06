@@ -90,8 +90,8 @@ class DefaultMessageUpdateRuleRegistryTest {
         UpdateHandler highPriorityHandler = mock(UpdateHandler.class);
 
         // Order: lower value means higher priority (based on Comparator.comparingInt(Rule::order))
-        when(lowPriorityRule.order()).thenReturn(10);
-        when(highPriorityRule.order()).thenReturn(0);
+        when(lowPriorityRule.getOrder()).thenReturn(10);
+        when(highPriorityRule.getOrder()).thenReturn(0);
 
         // Both rules match the message
         when(lowPriorityRule.matcher().match(message)).thenReturn(true);

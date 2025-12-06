@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.core.handler.exception;
 
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 import io.ksilisk.telegrambot.core.selector.ExceptionHandlerSelector;
 
 /**
@@ -15,7 +16,7 @@ import io.ksilisk.telegrambot.core.selector.ExceptionHandlerSelector;
  *
  * @param <U> the type of value being handled
  */
-public interface ExceptionHandler<U> {
+public interface ExceptionHandler<U> extends CoreOrdered {
     /**
      * Determine whether this handler can process the given exception.
      *

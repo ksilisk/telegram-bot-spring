@@ -1,7 +1,9 @@
 package io.ksilisk.telegrambot.autoconfigure.config.dispatch;
 
+import io.ksilisk.telegrambot.autoconfigure.adapter.SpringCoreOrderAdapter;
 import io.ksilisk.telegrambot.core.handler.update.callback.CallbackUpdateHandler;
 import io.ksilisk.telegrambot.core.handler.update.command.CommandUpdateHandler;
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 import io.ksilisk.telegrambot.core.registry.handler.callback.CallbackHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.handler.callback.DefaultCallbackHandlerRegistry;
 import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegistry;
@@ -63,7 +65,11 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(MessageUpdateRuleRegistry.class)
         public MessageUpdateRuleRegistry messageRuleRegistry(List<MessageUpdateRule> messageUpdateRules) {
-            return new DefaultMessageUpdateRuleRegistry(messageUpdateRules);
+            List<MessageUpdateRule> adopt = messageUpdateRules.stream()
+                    .map(SpringCoreOrderAdapter::adaptIfNecessary)
+                    .sorted(CoreOrdered.COMPARATOR)
+                    .toList();
+            return new DefaultMessageUpdateRuleRegistry(adopt);
         }
 
         @Bean
@@ -90,7 +96,10 @@ public class RoutingConfiguration {
         @Bean
         @ConditionalOnMissingBean(InlineUpdateRuleRegistry.class)
         public InlineUpdateRuleRegistry inlineRuleRegistry(List<InlineUpdateRule> inlineUpdateRules) {
-            return new DefaultInlineUpdateRuleRegistry(inlineUpdateRules);
+            List<InlineUpdateRule> adopt = inlineUpdateRules.stream()
+                    .map(SpringCoreOrderAdapter::adaptIfNecessary)
+                    .toList();
+            return new DefaultInlineUpdateRuleRegistry(adopt);
         }
     }
 

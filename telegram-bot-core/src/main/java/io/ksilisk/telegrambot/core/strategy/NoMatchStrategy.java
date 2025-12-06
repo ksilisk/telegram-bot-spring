@@ -1,6 +1,7 @@
 package io.ksilisk.telegrambot.core.strategy;
 
 import io.ksilisk.telegrambot.core.handler.update.Handler;
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 import io.ksilisk.telegrambot.core.selector.NoMatchStrategySelector;
 
 /**
@@ -12,7 +13,7 @@ import io.ksilisk.telegrambot.core.selector.NoMatchStrategySelector;
  *
  * @param <U> the type of value for strategy
  */
-public interface NoMatchStrategy<U> {
+public interface NoMatchStrategy<U> extends CoreOrdered {
     /**
      * Handle an update that was not matched by any handler.
      *

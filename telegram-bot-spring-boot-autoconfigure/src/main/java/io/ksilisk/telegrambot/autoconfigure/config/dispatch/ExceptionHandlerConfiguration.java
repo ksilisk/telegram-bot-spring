@@ -1,10 +1,12 @@
 package io.ksilisk.telegrambot.autoconfigure.config.dispatch;
 
+import io.ksilisk.telegrambot.autoconfigure.adapter.SpringCoreOrderAdapter;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import io.ksilisk.telegrambot.core.handler.exception.CompositeUpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.handler.exception.ExceptionHandlerErrorPolicy;
 import io.ksilisk.telegrambot.core.handler.exception.UpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.handler.exception.impl.LoggingUpdateExceptionHandler;
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 import io.ksilisk.telegrambot.core.selector.UpdateExceptionHandlerSelector;
 import io.ksilisk.telegrambot.core.selector.impl.DefaultExceptionHandlerSelector;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,7 +24,11 @@ public class ExceptionHandlerConfiguration {
                                                             UpdateExceptionHandlerSelector exceptionHandlerSelector,
                                                             TelegramBotProperties telegramBotProperties) {
         ExceptionHandlerErrorPolicy errorPolicy = telegramBotProperties.getException().getErrorPolicy();
-        return new CompositeUpdateExceptionHandler(updateExceptionHandlers, exceptionHandlerSelector, errorPolicy);
+        List<UpdateExceptionHandler> adopt = updateExceptionHandlers.stream()
+                .map(SpringCoreOrderAdapter::adaptIfNecessary)
+                .sorted(CoreOrdered.COMPARATOR)
+                .toList();
+        return new CompositeUpdateExceptionHandler(adopt, exceptionHandlerSelector, errorPolicy);
     }
 
     @Bean

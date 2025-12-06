@@ -1,6 +1,8 @@
 package io.ksilisk.telegrambot.autoconfigure.config.dispatch;
 
+import io.ksilisk.telegrambot.autoconfigure.adapter.SpringCoreOrderAdapter;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 import io.ksilisk.telegrambot.core.selector.UpdateNoMatchStrategySelector;
 import io.ksilisk.telegrambot.core.selector.impl.DefaultNoMatchStrategySelector;
 import io.ksilisk.telegrambot.core.strategy.CompositeUpdateNoMatchStrategy;
@@ -21,7 +23,11 @@ public class NoMatchStrategyConfiguration {
                                                           UpdateNoMatchStrategySelector noMatchStrategySelector,
                                                           TelegramBotProperties telegramBotProperties) {
         StrategyErrorPolicy errorPolicy = telegramBotProperties.getNomatch().getErrorPolicy();
-        return new CompositeUpdateNoMatchStrategy(noMatchStrategies, noMatchStrategySelector, errorPolicy);
+        List<UpdateNoMatchStrategy> adopt = noMatchStrategies.stream()
+                .map(SpringCoreOrderAdapter::adaptIfNecessary)
+                .sorted(CoreOrdered.COMPARATOR)
+                .toList();
+        return new CompositeUpdateNoMatchStrategy(adopt, noMatchStrategySelector, errorPolicy);
     }
 
     @Bean
