@@ -1,6 +1,6 @@
-package io.ksilisk.telegrambot.core.properties;
+package io.ksilisk.telegrambot.webhook.properties;
 
-import io.ksilisk.telegrambot.core.webhook.WebhookController;
+import io.ksilisk.telegrambot.webhook.controller.WebhookController;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.converter;
+package io.ksilisk.telegrambot.webhook.converter;
 
 import com.pengrad.telegrambot.model.Update;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.springframework.mock.http.MockHttpInputMessage;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class TelegramUpdateHttpMessageConverterTest {
     private final TelegramUpdateHttpMessageConverter converter = new TelegramUpdateHttpMessageConverter();
@@ -56,4 +56,5 @@ class TelegramUpdateHttpMessageConverterTest {
         assertThat(update.message().chat()).isNotNull();
         assertThat(update.message().chat().id()).isEqualTo(1111111L);
     }
+
 }

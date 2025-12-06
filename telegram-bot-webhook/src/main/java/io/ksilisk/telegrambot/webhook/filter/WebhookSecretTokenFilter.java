@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.filter;
+package io.ksilisk.telegrambot.webhook.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,8 +1,7 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.controller;
+package io.ksilisk.telegrambot.webhook.controller;
 
 import com.pengrad.telegrambot.model.Update;
-import io.ksilisk.telegrambot.core.ingress.WebhookUpdateIngress;
-import io.ksilisk.telegrambot.core.webhook.WebhookController;
+import io.ksilisk.telegrambot.webhook.ingress.WebhookUpdateIngress;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

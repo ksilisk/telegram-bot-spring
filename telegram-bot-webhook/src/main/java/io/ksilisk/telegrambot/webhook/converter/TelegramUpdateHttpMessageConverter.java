@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.converter;
+package io.ksilisk.telegrambot.webhook.converter;
 
 import com.google.gson.Gson;
 import com.pengrad.telegrambot.model.Update;
