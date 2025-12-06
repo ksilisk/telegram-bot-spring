@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.properties;
+package io.ksilisk.telegrambot.longpolling.properties;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

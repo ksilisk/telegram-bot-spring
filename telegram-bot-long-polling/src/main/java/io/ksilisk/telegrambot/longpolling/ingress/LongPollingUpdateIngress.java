@@ -1,6 +1,7 @@
-package io.ksilisk.telegrambot.core.ingress;
+package io.ksilisk.telegrambot.longpolling.ingress;
 
 import com.pengrad.telegrambot.model.Update;
+import io.ksilisk.telegrambot.core.ingress.UpdateIngress;
 
 /**
  * An ingress that actively retrieves Telegram {@link Update} objects using the
