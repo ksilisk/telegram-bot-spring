@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnMissingClass("io.ksilisk.telegrambot.webhook.ingress.WebhookUpdateIngress")
 public class WebhookMissingIngressConfiguration {
     @Bean
-    public TelegramBotExecutor telegramWebhookModeButNoWebMvc() {
+    public TelegramBotExecutor telegramWebhookModeButNoIngress() {
         throw new IllegalStateException(
                 "telegram.bot.mode=WEBHOOK, but Webhook ingress is not on the classpath. " +
                         "Please add 'telegram-bot-webhook' dependency or switch telegram.bot.mode to LONG_POLLING."
