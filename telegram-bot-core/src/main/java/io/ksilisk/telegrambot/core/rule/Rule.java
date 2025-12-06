@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.core.rule;
 
 import io.ksilisk.telegrambot.core.handler.update.Handler;
 import io.ksilisk.telegrambot.core.matcher.Matcher;
+import io.ksilisk.telegrambot.core.order.CoreOrdered;
 
 /**
  * Defines a routing rule for a specific update type.
@@ -16,12 +17,8 @@ import io.ksilisk.telegrambot.core.matcher.Matcher;
  * @param <H> the handler implementation type this rule returns
  * @param <U> the type of value being ruled
  */
-public interface Rule<K, H extends Handler<U>, U> {
+public interface Rule<K, H extends Handler<U>, U> extends CoreOrdered {
     Matcher<K> matcher();
 
     H handler();
-
-    default int order() {
-        return 0;
-    }
 }
