@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.store;
+package io.ksilisk.telegrambot.longpolling.store;
 
 import java.util.OptionalInt;
 

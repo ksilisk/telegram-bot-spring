@@ -1,6 +1,5 @@
-package io.ksilisk.telegrambot.core.ingress.impl;
+package io.ksilisk.telegrambot.longpolling.ingress;
 
-import io.ksilisk.telegrambot.core.ingress.LongPollingUpdateIngress;
 import io.ksilisk.telegrambot.core.poller.UpdatePoller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
