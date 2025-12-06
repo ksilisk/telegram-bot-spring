@@ -94,7 +94,7 @@ You write only **handlers**.
 
 ### Notes
 
-* **Webhook** mode requires `spring-boot-starter-web`.
+* **Webhook** mode requires `telegram-bot-webhook`.
 * **AUTO** prefers OkHttp if present → otherwise uses Spring `RestClient`.
 
 ---
