@@ -1,6 +1,7 @@
-package io.ksilisk.telegrambot.core.ingress;
+package io.ksilisk.telegrambot.webhook.ingress;
 
 import com.pengrad.telegrambot.model.Update;
+import io.ksilisk.telegrambot.core.ingress.UpdateIngress;
 
 /**
  * An ingress for receiving Telegram {@link Update} objects via HTTP webhooks.

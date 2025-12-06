@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.webhook;
+package io.ksilisk.telegrambot.webhook.lifecycle;
 
 /**
  * Manages the Telegram webhook lifecycle.

@@ -1,8 +1,7 @@
-package io.ksilisk.telegrambot.core.ingress.impl;
+package io.ksilisk.telegrambot.webhook.ingress;
 
 import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
-import io.ksilisk.telegrambot.core.ingress.WebhookUpdateIngress;
 
 import java.util.List;
 

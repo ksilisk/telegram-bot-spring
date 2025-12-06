@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.exception.webhook;
+package io.ksilisk.telegrambot.webhook.exception;
 
 public class WebhookRegisteringException extends RuntimeException {
     public WebhookRegisteringException(String message) {

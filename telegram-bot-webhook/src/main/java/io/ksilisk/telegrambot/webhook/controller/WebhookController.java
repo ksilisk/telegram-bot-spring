@@ -1,4 +1,4 @@
-package io.ksilisk.telegrambot.core.webhook;
+package io.ksilisk.telegrambot.webhook.controller;
 
 /**
  * Entry point for receiving Telegram updates via the webhook mechanism.

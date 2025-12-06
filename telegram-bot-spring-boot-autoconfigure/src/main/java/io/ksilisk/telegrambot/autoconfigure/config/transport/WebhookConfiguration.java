@@ -1,16 +1,16 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
-import io.ksilisk.telegrambot.autoconfigure.webhook.controller.DefaultWebhookController;
-import io.ksilisk.telegrambot.autoconfigure.webhook.converter.TelegramUpdateHttpMessageConverter;
-import io.ksilisk.telegrambot.autoconfigure.webhook.filter.WebhookSecretTokenFilter;
-import io.ksilisk.telegrambot.autoconfigure.webhook.lifecycle.DefaultWebhookLifecycle;
+import io.ksilisk.telegrambot.webhook.controller.DefaultWebhookController;
+import io.ksilisk.telegrambot.webhook.converter.TelegramUpdateHttpMessageConverter;
+import io.ksilisk.telegrambot.webhook.filter.WebhookSecretTokenFilter;
+import io.ksilisk.telegrambot.webhook.lifecycle.DefaultWebhookLifecycle;
 import io.ksilisk.telegrambot.core.delivery.UpdateDelivery;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
-import io.ksilisk.telegrambot.core.ingress.WebhookUpdateIngress;
-import io.ksilisk.telegrambot.core.ingress.impl.DefaultWebhookUpdateIngress;
-import io.ksilisk.telegrambot.core.properties.WebhookProperties;
-import io.ksilisk.telegrambot.core.webhook.WebhookController;
-import io.ksilisk.telegrambot.core.webhook.WebhookLifecycle;
+import io.ksilisk.telegrambot.webhook.ingress.WebhookUpdateIngress;
+import io.ksilisk.telegrambot.webhook.ingress.DefaultWebhookUpdateIngress;
+import io.ksilisk.telegrambot.webhook.properties.WebhookProperties;
+import io.ksilisk.telegrambot.webhook.controller.WebhookController;
+import io.ksilisk.telegrambot.webhook.lifecycle.WebhookLifecycle;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,11 +19,10 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "telegram.bot", name = "mode", havingValue = "WEBHOOK")
-@ConditionalOnClass(DispatcherServlet.class)
+@ConditionalOnClass(WebhookUpdateIngress.class)
 public class WebhookConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "telegram.bot.webhook")

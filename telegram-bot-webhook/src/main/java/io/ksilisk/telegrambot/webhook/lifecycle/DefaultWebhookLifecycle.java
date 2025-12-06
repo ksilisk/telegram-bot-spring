@@ -1,11 +1,10 @@
-package io.ksilisk.telegrambot.autoconfigure.webhook.lifecycle;
+package io.ksilisk.telegrambot.webhook.lifecycle;
 
 import com.pengrad.telegrambot.request.DeleteWebhook;
 import com.pengrad.telegrambot.request.SetWebhook;
-import io.ksilisk.telegrambot.core.exception.webhook.WebhookRegisteringException;
+import io.ksilisk.telegrambot.webhook.exception.WebhookRegisteringException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
-import io.ksilisk.telegrambot.core.properties.WebhookProperties;
-import io.ksilisk.telegrambot.core.webhook.WebhookLifecycle;
+import io.ksilisk.telegrambot.webhook.properties.WebhookProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;

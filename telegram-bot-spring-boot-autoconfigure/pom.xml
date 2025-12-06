@@ -19,6 +19,10 @@
             <artifactId>telegram-bot-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.github.ksilisk</groupId>
+            <artifactId>telegram-bot-webhook</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
