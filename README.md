@@ -23,7 +23,7 @@
 
 ```xml
 <dependency>
-    <groupId>io.ksilisk.telegrambot</groupId>
+    <groupId>io.github.ksilisk</groupId>
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
     <version>0.2.0</version>
 </dependency>
