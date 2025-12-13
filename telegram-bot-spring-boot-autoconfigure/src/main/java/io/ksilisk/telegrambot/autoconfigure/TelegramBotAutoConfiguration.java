@@ -6,6 +6,7 @@ import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DispatcherConfigurat
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.ExceptionHandlerConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.NoMatchStrategyConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RoutingConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.transport.CustomMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookMissingIngressConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         LongPollingMissingIngressConfiguration.class,
         WebhookMissingIngressConfiguration.class,
+        CustomMissingIngressConfiguration.class,
         TelegramClientConfiguration.class,
         NoMatchStrategyConfiguration.class,
         ExceptionHandlerConfiguration.class,

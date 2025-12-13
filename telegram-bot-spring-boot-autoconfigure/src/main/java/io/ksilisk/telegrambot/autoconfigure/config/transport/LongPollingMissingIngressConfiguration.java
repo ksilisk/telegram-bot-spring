@@ -1,6 +1,6 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
-import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.ingress.UpdateIngress;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnMissingClass("io.ksilisk.telegrambot.longpolling.ingress.LongPollingUpdateIngress")
 public class LongPollingMissingIngressConfiguration {
     @Bean
-    public TelegramBotExecutor telegramLongPollingModeButNoIngress() {
+    public UpdateIngress telegramLongPollingModeButNoIngress() {
         throw new IllegalStateException(
                 "telegram.bot.mode=LONG_POLLING, but Long-Polling ingress is not on the classpath. " +
                         "Please add 'telegram-bot-long-polling' dependency"
