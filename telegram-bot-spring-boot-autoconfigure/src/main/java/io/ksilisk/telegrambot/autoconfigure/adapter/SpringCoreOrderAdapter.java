@@ -1,6 +1,8 @@
 package io.ksilisk.telegrambot.autoconfigure.adapter;
 
 import io.ksilisk.telegrambot.core.order.CoreOrdered;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
@@ -22,6 +24,8 @@ import java.lang.reflect.Proxy;
  * This class is internal to the Spring Boot starter and is not intended for direct use.
  */
 public final class SpringCoreOrderAdapter {
+    private static final Logger log = LoggerFactory.getLogger(SpringCoreOrderAdapter.class);
+
     private SpringCoreOrderAdapter() {
         throw new IllegalStateException("Utility class shouldn't be created");
     }
@@ -36,6 +40,8 @@ public final class SpringCoreOrderAdapter {
         int coreOrder = bean.getOrder();
 
         if (coreOrder != 0) {
+            log.debug("Both explicit getOrder() and Spring order metadata found for {} – using explicit getOrder() value",
+                    bean.getClass().getSimpleName());
             return bean;
         }
 

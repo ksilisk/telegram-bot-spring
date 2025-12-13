@@ -30,11 +30,13 @@ public class TelegramBotProperties {
      * <ul>
      *   <li>{@code LONG_POLLING} – receive updates by polling the Telegram API</li>
      *   <li>{@code WEBHOOK} – receive updates via incoming HTTP requests</li>
+     *   <li>{@code CUSTOM} – receive updates via custom ingress</li>
      * </ul>
      */
     public enum TelegramBotMode {
         LONG_POLLING,
-        WEBHOOK
+        WEBHOOK,
+        CUSTOM
     }
 
     /**
