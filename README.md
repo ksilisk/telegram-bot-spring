@@ -25,7 +25,7 @@
 <dependency>
     <groupId>io.github.ksilisk</groupId>
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
