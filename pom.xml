@@ -75,6 +75,7 @@
         <module>telegram-bot-core</module>
         <module>telegram-bot-webhook</module>
         <module>telegram-bot-long-polling</module>
+        <module>telegram-bot-observability</module>
         <module>telegram-bot-spring-boot-autoconfigure</module>
         <module>telegram-bot-spring-boot-starter</module>
     </modules>
@@ -106,6 +107,11 @@
             <dependency>
                 <groupId>io.github.ksilisk</groupId>
                 <artifactId>telegram-bot-long-polling</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.ksilisk</groupId>
+                <artifactId>telegram-bot-observability</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

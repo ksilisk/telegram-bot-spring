@@ -57,7 +57,11 @@ public final class SpringCoreOrderAdapter {
                     if (method.getName().equals("getOrder") && method.getParameterCount() == 0) {
                         return springOrder;
                     }
-                    return method.invoke(bean, args);
+                    try {
+                        return method.invoke(bean, args);
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        throw e.getTargetException();
+                    }
                 }
         );
     }
