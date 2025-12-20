@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Telegram Bot Spring Boot Starter</name>
+    <name>Telegram Bot Spring Boot Starter Parent</name>
     <description>Spring Boot Starter for building Telegram bots</description>
     <url>https://github.com/ksilisk/telegram-bot-spring</url>
     <inceptionYear>2025</inceptionYear>
@@ -72,6 +72,7 @@
 
     <modules>
         <module>examples</module>
+        <module>telegram-bot-dependencies</module>
         <module>telegram-bot-core</module>
         <module>telegram-bot-webhook</module>
         <module>telegram-bot-long-polling</module>
@@ -80,6 +81,7 @@
         <module>telegram-bot-spring-boot-starter</module>
     </modules>
 
+    <!--  Management for internal usage in modules (copied from 'telegram-bot-dependencies' module)  -->
     <dependencyManagement>
         <dependencies>
             <dependency>
