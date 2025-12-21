@@ -1,25 +1,37 @@
-# Telegram Bot Spring Boot Starter
+# **Telegram Bot Spring Boot Starter**
 
-> A lightweight, developer-friendly Spring Boot starter for building Telegram bots using Java 17 and Spring Boot 3.
->
-> Supports long polling, webhooks, routing, interceptors, and pluggable HTTP clients.
+A modular Spring Boot framework for building Telegram bots on **Java 17** and Spring Boot ecosystem.
 
-## 🚀 Features
-
-* **Plug & Play** — launch a Telegram bot easily.
-* **Long Polling & Webhook** — two modes out of the box.
-* **Smart Routing** — commands, text messages, update types.
-* **Interceptors** — logging, filtering, metrics.
-* **Flexible HTTP Client** — OkHttp or Spring RestClient.
-* **Auto Configuration** — minimal boilerplate.
-* **Extensible Architecture** — customize any component.
-* **Examples Included** — ready-to-run sample bots.
+This project provides a structured, extensible foundation for Telegram bots that require clear routing, lifecycle management, transport abstraction, and optional observability.
 
 ---
 
-## ⚡ Quick Start
+## **Overview**
 
-### 1. Add Dependency
+The framework is designed around a **transport-agnostic core pipeline** with explicit extension points.
+
+It allows building anything from small bots to larger, long-lived applications without rewriting the architecture.
+
+The project follows standard Spring Boot conventions and avoids hidden runtime magic.
+
+---
+
+## **Key characteristics**
+
+- Modular, layered architecture
+- Transport-independent core
+- Explicit update processing pipeline
+- Multiple delivery modes (long polling, webhook)
+- Pluggable HTTP client implementations
+- Optional metrics and observability
+- Spring Boot auto-configuration
+- Runnable example applications
+
+---
+
+## **Quick start**
+
+### **1. Add dependency**
 
 ```xml
 <dependency>
@@ -29,205 +41,175 @@
 </dependency>
 ```
 
-### 2. Configure Token
+By default, this enables **long polling** transport.
+
+---
+
+### **2. Configure bot token**
 
 ```yaml
 telegram:
-    bot:
-        token: ${BOT_TOKEN}
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
 ```
 
-### 3. Create Your First Handler
+---
+
+### **3. Implement a handler**
 
 ```java
 @Component
 public class StartCommandHandler implements CommandUpdateHandler {
-    private final TelegramBotExecutor telegramBotExecutor;
+    private final TelegramBotExecutor executor;
 
-    public StartCommandHandler(TelegramBotExecutor telegramBotExecutor) {
-        this.telegramBotExecutor = telegramBotExecutor;
+    public StartCommandHandler(TelegramBotExecutor executor) {
+        this.executor = executor;
     }
 
     @Override
     public void handle(Update update) {
-        SendMessage sendMessage = new SendMessage(update.message().from().id(), "Simple Hello!");
-        telegramBotExecutor.execute(sendMessage);
+        executor.execute(
+            new SendMessage(update.message().chat().id(), "Hello")
+        );
     }
 
     @Override
     public Set<String> commands() {
-        return Set.of("/start", "/help");
+        return Set.of("/start");
     }
 }
 ```
 
-### 4. Run the Application
-
-That’s it — your bot is live ✨
+Run the Spring Boot application to start the bot.
 
 ---
 
-## 🧠 How It Works (in 20 seconds)
+## **Processing model**
+
+Conceptually, updates are processed as follows:
 
 ```
-Telegram → Ingress → Delivery -> Interceptors → Dispatcher → Router -> Your Handlers
+Telegram
+  ↓
+Ingress (long polling / webhook)
+  ↓
+Delivery (thread pool)
+  ↓
+Interceptors
+  ↓
+Dispatcher
+  ↓
+Routers
+  ↓
+Handlers
+  ↓
+(No-match strategies / Exception handlers)
 ```
 
-1. Update arrives (long polling or webhook)
-2. Passes through optional interceptors
-3. Dispatcher selects the right handler
-4. Fallback strategies handle no-match and exceptions
-
-You write only **handlers**.
+Application code usually interacts only with **handlers**, **rules**, and optional interceptors.
 
 ---
 
-## ⚙️ Configuration
+## **Project structure**
 
-### Main Properties
+The repository is organized into focused modules:
 
-| Property                             | Description                           |
-| ------------------------------------ | ------------------------------------- |
-| `telegram.bot.token`                 | Bot token (required)                  |
-| `telegram.bot.mode`                  | `LONG_POLLING` (default) or `WEBHOOK` |
-| `telegram.bot.client.implementation` | `AUTO` / `OKHTTP` / `SPRING`          |
+|**Module**|**Description**|
+|---|---|
+|telegram-bot-core|Core processing pipeline, routing, handlers, SPI|
+|telegram-bot-long-polling|Long polling transport (default)|
+|telegram-bot-webhook|Webhook transport (opt-in)|
+|telegram-bot-observability|Metrics and observability integration|
+|telegram-bot-spring-boot-autoconfigure|Spring Boot auto-configuration|
+|telegram-bot-spring-boot-starter|Starter dependency|
+|telegram-bot-dependencies|BOM for dependency management|
+|examples/|Runnable sample applications|
 
-### Notes
-
-* **Webhook** mode requires `telegram-bot-webhook`.
-* **AUTO** prefers OkHttp if present → otherwise uses Spring `RestClient`.
+Each module contains a dedicated README with detailed documentation.
 
 ---
 
-## 🧭 Handlers & Routing
+## **Transport selection**
 
-### Callback Handler
+The framework supports multiple update ingestion modes.
 
-```java
-@Component
-public class TestCallbackHandler implements CallbackUpdateHandler {
-    private final TelegramBotExecutor telegramBotExecutor;
+### **Built-in transports**
 
-    public TestCallbackHandler(TelegramBotExecutor telegramBotExecutor) {
-        this.telegramBotExecutor = telegramBotExecutor;
-    }
+- **LONG_POLLING** (default)
 
-    @Override
-    public void handle(Update update) {
-        Long chatId = update.callbackQuery().maybeInaccessibleMessage().chat().id();
-        SendMessage sendMessage = new SendMessage(chatId, "Successfully handled callback 'test'");
-        telegramBotExecutor.execute(sendMessage);
-    }
+  Receives updates via Telegram long polling. Requires no HTTP endpoint.
 
-    @Override
-    public Set<String> callbacks() {
-        return Set.of("test");
-    }
-}
+- **WEBHOOK**
+
+  Receives updates via HTTPS callbacks from Telegram.
+
+  Requires an explicit dependency and a public HTTPS endpoint.
+
+### **Custom ingress**
+
+- **CUSTOM**
+
+  Disables built-in transports and allows applications to provide their own UpdateIngress implementation.
+
+
+This mode is intended for advanced use cases, such as:
+
+- custom gateways or proxies
+- message queues or event streams
+- testing and replaying updates
+- non-standard Telegram delivery mechanisms
+
+Transport selection is controlled via:
+
+```yaml
+telegram:
+  bot:
+    mode: LONG_POLLING | WEBHOOK | CUSTOM
 ```
 
-### Catch-all Text Handler
+In CUSTOM mode, application startup will fail if no UpdateIngress bean is provided.
 
-```java
-@Component
-public class AnyMessageHandler implements MessageUpdateHandler {
-    private final TelegramBotExecutor telegramBotExecutor;
+---
 
-    public AnyMessageHandler(TelegramBotExecutor telegramBotExecutor) {
-        this.telegramBotExecutor = telegramBotExecutor;
-    }
+## **Configuration model**
 
-    @Override
-    public void handle(Update update) {
-        Long chatId = update.message().chat().id();
-        SendMessage sendMessage = new SendMessage(chatId, "Your message is successfully handled!");
-        telegramBotExecutor.execute(sendMessage);
-    }
-}
-
-@Component
-public class AnyMessageRule implements MessageUpdateRule {
-    private final AnyMessageUpdateHandler anyMessageHandler;
-
-    public AnyMessageRule(AnyMessageUpdateHandler anyMessageHandler) {
-        this.anyMessageHandler = anyMessageHandler;
-    }
-
-    @Override
-    public Matcher<Message> matcher() {
-        return update -> true; // handle any message, but you can add your custom rule
-    }
-
-    @Override
-    public UpdateHandler handler() {
-        return anyMessageHandler;
-    }
-}
+Configuration is based on Spring Boot @ConfigurationProperties and follows a single, consistent prefix:
 
 ```
-
----
-
-## 🔌 Interceptors
-
-```java
-@Component
-public class LoggingUpdateInterceptor implements UpdateInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(LoggingUpdateInterceptor.class);
-
-    @Override
-    public Update intercept(Update input) {
-        log.info("Handled an update: {}", input);
-        return input;
-    }
-}
-
+telegram.bot.*
 ```
 
-* Interceptors must be **thread-safe**
-* They run **before** dispatcher
-* Return `null` to drop an update
+Transport-specific and optional modules introduce their own nested namespaces.
 
 ---
 
-## 🔧 Choosing HTTP Client
+## **Examples**
 
-| Mode     | Behavior                               |
-| -------- | -------------------------------------- |
-| `AUTO`   | Prefer OkHttp → fallback to RestClient |
-| `OKHTTP` | Fail if OkHttp not on classpath        |
-| `SPRING` | Fail if Spring Web not on classpath    |
+The [/examples](examples) directory contains standalone Spring Boot applications demonstrating:
 
----
+- minimal long polling setup
+- webhook configuration and lifecycle
+- routing and handler composition
 
-## 📦 Examples
-
-Examples are located in the `/examples` directory:
-
-* **telegram-bot-sample-long-polling** — minimal bot example
-
-Run:
-
-```bash
-cd examples/telegram-bot-sample-long-polling
-mvn spring-boot:run
-```
+Each example can be run independently.
 
 ---
 
-## 🤝 Contributing
+## **Design principles**
 
-PRs are welcome!
-See `CONTRIBUTING.md` for details.
-
----
-
-## 🔐 Security
-
-Security guidelines are available in `SECURITY.md`.
+- Explicit over implicit
+- Interfaces over implementations
+- Transport-agnostic core
+- Predictable lifecycle and threading
+- Production-oriented defaults
 
 ---
 
-## 📄 License
+## **Documentation entry points**
 
-MIT — see `LICENSE` file.
+- **Core architecture**: [telegram-bot-core/README.md](telegram-bot-core/README.md)
+- **Long polling transport**: [telegram-bot-long-polling/README.md](telegram-bot-long-polling/README.md)
+- **Webhook transport**: [telegram-bot-webhook/README.md](telegram-bot-webhook/README.md)
+- **Observability**: [telegram-bot-observability/README.md](telegram-bot-observability/README.md)
+
+---
