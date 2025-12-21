@@ -9,7 +9,7 @@
     <inceptionYear>2025</inceptionYear>
 
     <groupId>io.github.ksilisk</groupId>
-    <artifactId>telegram-boot-spring-parent</artifactId>
+    <artifactId>telegram-bot-spring-paren</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
