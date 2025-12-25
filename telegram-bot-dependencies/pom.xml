@@ -54,6 +54,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.github.ksilisk</groupId>
+                <artifactId>telegram-bot-kafka</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.pengrad</groupId>
                 <artifactId>java-telegram-bot-api</artifactId>
                 <version>${pengrad.bot.api.version}</version>

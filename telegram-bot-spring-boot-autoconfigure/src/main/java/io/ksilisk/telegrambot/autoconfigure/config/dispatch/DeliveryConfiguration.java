@@ -9,11 +9,14 @@ import io.ksilisk.telegrambot.core.dispatcher.UpdateDispatcher;
 import io.ksilisk.telegrambot.core.handler.exception.CompositeUpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.interceptor.CompositeUpdateInterceptor;
 import io.ksilisk.telegrambot.core.interceptor.UpdateInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
 
 @Configuration(proxyBeanMethods = false)
 public class DeliveryConfiguration {
@@ -35,6 +38,14 @@ public class DeliveryConfiguration {
     @ConditionalOnMissingBean(DeliveryThreadPoolExecutorFactory.class)
     public DeliveryThreadPoolExecutorFactory deliveryThreadPoolExecutorFactory(TelegramBotProperties telegramBotProperties) {
         return new DefaultDeliveryThreadPoolExecutorFactory(telegramBotProperties.getDelivery());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(DeliveryThreadPoolExecutorFactory.class)
+    @ConditionalOnBean(RejectedExecutionException.class)
+    public DeliveryThreadPoolExecutorFactory deliveryThreadPoolExecutorFactoryWithRejectionHandler(
+            TelegramBotProperties telegramBotProperties, RejectedExecutionHandler rejectedExecutionHandler) {
+        return new DefaultDeliveryThreadPoolExecutorFactory(telegramBotProperties.getDelivery(), rejectedExecutionHandler);
     }
 
     @Bean

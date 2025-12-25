@@ -36,7 +36,8 @@ public class TelegramBotProperties {
     public enum TelegramBotMode {
         LONG_POLLING,
         WEBHOOK,
-        CUSTOM
+        CUSTOM,
+        KAFKA
     }
 
     /**
