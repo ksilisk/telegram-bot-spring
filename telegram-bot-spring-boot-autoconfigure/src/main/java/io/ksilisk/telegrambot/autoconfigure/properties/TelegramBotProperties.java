@@ -1,5 +1,9 @@
 package io.ksilisk.telegrambot.autoconfigure.properties;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.validation.annotation.Validated;
+
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import io.ksilisk.telegrambot.core.properties.ExceptionHandlerProperties;
 import io.ksilisk.telegrambot.core.properties.NoMatchStrategyProperties;
@@ -7,9 +11,6 @@ import io.ksilisk.telegrambot.core.properties.RoutingProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * Root configuration properties for Telegram bot integration.
@@ -36,7 +37,8 @@ public class TelegramBotProperties {
     public enum TelegramBotMode {
         LONG_POLLING,
         WEBHOOK,
-        CUSTOM
+        CUSTOM,
+        DISABLED
     }
 
     /**
