@@ -1,9 +1,5 @@
 package io.ksilisk.telegrambot.autoconfigure.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.validation.annotation.Validated;
-
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import io.ksilisk.telegrambot.core.properties.ExceptionHandlerProperties;
 import io.ksilisk.telegrambot.core.properties.NoMatchStrategyProperties;
@@ -11,6 +7,9 @@ import io.ksilisk.telegrambot.core.properties.RoutingProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Root configuration properties for Telegram bot integration.
@@ -32,13 +31,14 @@ public class TelegramBotProperties {
      *   <li>{@code LONG_POLLING} – receive updates by polling the Telegram API</li>
      *   <li>{@code WEBHOOK} – receive updates via incoming HTTP requests</li>
      *   <li>{@code CUSTOM} – receive updates via custom ingress</li>
+     *   <li>{@code NO_INGRESS} - run without any update ingress (outbound-only mode)</li>
      * </ul>
      */
     public enum TelegramBotMode {
         LONG_POLLING,
         WEBHOOK,
         CUSTOM,
-        DISABLED
+        NO_INGRESS
     }
 
     /**
@@ -175,5 +175,4 @@ public class TelegramBotProperties {
     public void setNomatch(NoMatchStrategyProperties nomatch) {
         this.nomatch = nomatch;
     }
-
 }
