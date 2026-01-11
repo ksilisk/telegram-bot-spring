@@ -31,12 +31,14 @@ public class TelegramBotProperties {
      *   <li>{@code LONG_POLLING} – receive updates by polling the Telegram API</li>
      *   <li>{@code WEBHOOK} – receive updates via incoming HTTP requests</li>
      *   <li>{@code CUSTOM} – receive updates via custom ingress</li>
+     *   <li>{@code NO_INGRESS} - run without any update ingress (outbound-only mode)</li>
      * </ul>
      */
     public enum TelegramBotMode {
         LONG_POLLING,
         WEBHOOK,
-        CUSTOM
+        CUSTOM,
+        NO_INGRESS
     }
 
     /**
@@ -173,5 +175,4 @@ public class TelegramBotProperties {
     public void setNomatch(NoMatchStrategyProperties nomatch) {
         this.nomatch = nomatch;
     }
-
 }

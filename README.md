@@ -145,6 +145,13 @@ The framework supports multiple update ingestion modes.
 
   Requires an explicit dependency and a public HTTPS endpoint.
 
+- **NO_INGRESS**
+
+  Runs the bot without any update ingress.
+
+  Incoming updates from Telegram are not received. Suitable for outbound-only bots,
+  scheduled notifications, and integration-driven use cases.
+
 ### **Custom ingress**
 
 - **CUSTOM**
@@ -164,7 +171,7 @@ Transport selection is controlled via:
 ```yaml
 telegram:
   bot:
-    mode: LONG_POLLING | WEBHOOK | CUSTOM
+    mode: LONG_POLLING | WEBHOOK | CUSTOM | NO_INGRESS
 ```
 
 In CUSTOM mode, application startup will fail if no UpdateIngress bean is provided.

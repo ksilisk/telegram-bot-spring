@@ -8,6 +8,7 @@ import io.ksilisk.telegrambot.autoconfigure.config.dispatch.NoMatchStrategyConfi
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RoutingConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.CustomMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingMissingIngressConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.transport.NoIngressModeConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties(TelegramBotProperties.class)
 @ConditionalOnClass(TelegramBot.class)
 @Import({
+        NoIngressModeConfiguration.class,
         LongPollingMissingIngressConfiguration.class,
         WebhookMissingIngressConfiguration.class,
         CustomMissingIngressConfiguration.class,
