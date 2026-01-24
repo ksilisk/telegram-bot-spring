@@ -5,3 +5,11 @@ spring:
 telegram:
   bot:
     token: "your-bot-token-here"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus

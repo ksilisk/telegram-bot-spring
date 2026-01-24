@@ -7,6 +7,8 @@ import io.ksilisk.telegrambot.core.registry.handler.command.CommandHandlerRegist
 import io.ksilisk.telegrambot.core.registry.rule.message.MessageUpdateRuleRegistry;
 import io.ksilisk.telegrambot.core.router.MessageUpdateRouter;
 import io.ksilisk.telegrambot.core.router.detector.CommandDetector;
+import io.ksilisk.telegrambot.core.update.UpdateType;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +31,7 @@ public class DefaultMessageUpdateRouter implements MessageUpdateRouter {
 
     @Override
     public boolean supports(Update update) {
-        return update.message() != null;
+        return Updates.type(update) == UpdateType.MESSAGE;
     }
 
     @Override

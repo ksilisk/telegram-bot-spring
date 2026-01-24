@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.handler.update.callback.CallbackUpdateHandler;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -18,8 +19,7 @@ public class TestCallbackHandler implements CallbackUpdateHandler {
 
     @Override
     public void handle(Update update) {
-        Long chatId = update.callbackQuery().maybeInaccessibleMessage().chat().id();
-        SendMessage sendMessage = new SendMessage(chatId, "Successfully handled callback 'test'");
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update), "Successfully handled callback 'test'");
         telegramBotExecutor.execute(sendMessage);
     }
 

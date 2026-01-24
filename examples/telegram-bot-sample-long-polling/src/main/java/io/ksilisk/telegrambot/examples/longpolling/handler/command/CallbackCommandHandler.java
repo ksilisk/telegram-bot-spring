@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.handler.update.command.CommandUpdateHandler;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -21,9 +22,7 @@ public class CallbackCommandHandler implements CommandUpdateHandler {
 
     @Override
     public void handle(Update update) {
-        Long chatId = update.message().chat().id();
-
-        SendMessage sendMessage = new SendMessage(chatId, "Callback button is below");
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update), "Callback button is below");
         InlineKeyboardButton validKeyboardButton = new InlineKeyboardButton();
         validKeyboardButton.callbackData("test");
         validKeyboardButton.setText("Click on me!");

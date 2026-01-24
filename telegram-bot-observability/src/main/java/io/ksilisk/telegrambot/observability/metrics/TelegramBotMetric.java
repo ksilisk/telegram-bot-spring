@@ -1,5 +1,7 @@
 package io.ksilisk.telegrambot.observability.metrics;
 
+import com.pengrad.telegrambot.model.Update;
+import io.ksilisk.telegrambot.core.update.Updates;
 import io.micrometer.core.instrument.Tags;
 
 import java.util.Locale;
@@ -72,6 +74,7 @@ public enum TelegramBotMetric {
     public static final String TAG_CHANNEL = "channel";
     public static final String TAG_METHOD = "method";
     public static final String TAG_EXCEPTION = "exception";
+    public static final String TAG_UPDATE_TYPE = "update.type";
 
     private final String name;
     private final String description;
@@ -117,8 +120,16 @@ public enum TelegramBotMetric {
         return Tags.of(TAG_EXCEPTION, error == null ? "unknown" : error.getClass().getSimpleName());
     }
 
+    public static Tags updateType(Update update) {
+        return Tags.of(TAG_UPDATE_TYPE, Updates.type(update).name());
+    }
+
     public static Tags handlerChannel(String handlerId, TelegramBotChannel channel) {
         return handler(handlerId).and(channel(channel));
+    }
+
+    public static Tags exceptionUpdateType(Throwable error, Update update) {
+        return exception(error).and(updateType(update));
     }
 
     private static String sanitize(String value) {

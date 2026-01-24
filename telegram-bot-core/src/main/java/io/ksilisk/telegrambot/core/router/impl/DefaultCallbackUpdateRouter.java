@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.core.registry.handler.callback.CallbackHandlerRegistry;
 import io.ksilisk.telegrambot.core.router.CallbackUpdateRouter;
+import io.ksilisk.telegrambot.core.update.UpdateType;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class DefaultCallbackUpdateRouter implements CallbackUpdateRouter {
 
     @Override
     public boolean supports(Update update) {
-        return update.callbackQuery() != null;
+        return Updates.type(update) == UpdateType.CALLBACK_QUERY;
     }
 
     @Override

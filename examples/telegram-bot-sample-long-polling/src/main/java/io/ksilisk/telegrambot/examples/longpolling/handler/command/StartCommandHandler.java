@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.handler.update.command.CommandUpdateHandler;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -18,7 +19,7 @@ public class StartCommandHandler implements CommandUpdateHandler {
 
     @Override
     public void handle(Update update) {
-        SendMessage sendMessage = new SendMessage(update.message().from().id(), "Simple Hello!");
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update), "Simple Hello!");
         telegramBotExecutor.execute(sendMessage);
     }
 

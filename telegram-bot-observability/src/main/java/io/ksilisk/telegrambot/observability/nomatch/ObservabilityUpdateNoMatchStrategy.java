@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.strategy.UpdateNoMatchStrategy;
 import io.ksilisk.telegrambot.observability.metrics.TelegramBotMetric;
 import io.ksilisk.telegrambot.observability.recorder.MetricsRecorder;
-import io.micrometer.core.instrument.Tags;
 import org.springframework.core.Ordered;
 
 public class ObservabilityUpdateNoMatchStrategy implements UpdateNoMatchStrategy {
@@ -16,7 +15,7 @@ public class ObservabilityUpdateNoMatchStrategy implements UpdateNoMatchStrategy
 
     @Override
     public void handle(Update update) {
-        metricsRecorder.increment(TelegramBotMetric.ROUTING_NO_MATCH, Tags.empty());
+        metricsRecorder.increment(TelegramBotMetric.ROUTING_NO_MATCH, TelegramBotMetric.updateType(update));
     }
 
     @Override
