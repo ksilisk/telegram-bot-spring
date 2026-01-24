@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.strategy.UpdateNoMatchStrategy;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class UserMessageUpdateNoMatchStrategy implements UpdateNoMatchStrategy {
 
     @Override
     public void handle(Update update) {
-        SendMessage sendMessage = new SendMessage(update.message().chat().id(),
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update),
                 "Not found a handler to process this update");
         telegramBotExecutor.execute(sendMessage);
     }

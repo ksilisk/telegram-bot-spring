@@ -20,7 +20,7 @@ public class ObservabilityUpdateExceptionHandler implements UpdateExceptionHandl
 
     @Override
     public void handle(Throwable t, Update update) {
-        metricsRecorder.increment(TelegramBotMetric.EXCEPTIONS_TOTAL, TelegramBotMetric.exception(t));
+        metricsRecorder.increment(TelegramBotMetric.EXCEPTIONS_TOTAL, TelegramBotMetric.exceptionUpdateType(t, update));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.observability.bpp;
 
+import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.handler.update.UpdateHandler;
 import io.ksilisk.telegrambot.observability.metrics.TelegramBotChannel;
 import io.ksilisk.telegrambot.observability.metrics.TelegramBotMetric;
@@ -36,6 +37,8 @@ final class UpdateHandlerMetricsInterceptor implements MethodInterceptor {
             return invocation.proceed();
         }
 
+        Update update = (Update) invocation.getArguments()[0];
+
         TelegramBotChannel channel = channelResolver.resolve(target);
         Tags base = TelegramBotMetric.handlerChannel(handlerId, channel);
 
@@ -51,11 +54,13 @@ final class UpdateHandlerMetricsInterceptor implements MethodInterceptor {
             metrics.increment(
                     TelegramBotMetric.HANDLER_INVOCATIONS,
                     base.and(TelegramBotMetric.status(status))
+                            .and(TelegramBotMetric.updateType(update))
             );
 
             metrics.recordTimer(
                     TelegramBotMetric.HANDLER_DURATION,
-                    base.and(TelegramBotMetric.status(status)),
+                    base.and(TelegramBotMetric.status(status))
+                            .and(TelegramBotMetric.updateType(update)),
                     System.nanoTime() - start
             );
         }

@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.handler.exception.UpdateExceptionHandler;
+import io.ksilisk.telegrambot.core.update.UpdateType;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -24,13 +26,13 @@ public class UserMessageUpdateExceptionHandler implements UpdateExceptionHandler
 
     @Override
     public boolean supports(Throwable t, Update update) {
-        return update.message() != null;
+        return Updates.type(update) == UpdateType.MESSAGE;
     }
 
     @Override
     public void handle(Throwable t, Update update) {
         log.info("Sending fallback message to user");
-        SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Internal bot exception.");
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update), "Internal bot exception.");
         telegramBotExecutor.execute(sendMessage);
     }
 

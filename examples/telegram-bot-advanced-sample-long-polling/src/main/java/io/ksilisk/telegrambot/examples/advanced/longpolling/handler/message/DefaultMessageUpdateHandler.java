@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.handler.update.message.MessageUpdateHandler;
+import io.ksilisk.telegrambot.core.update.Updates;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +17,7 @@ public class DefaultMessageUpdateHandler implements MessageUpdateHandler {
 
     @Override
     public void handle(Update update) {
-        SendMessage sendMessage = new SendMessage(update.message().chat().id(), "This message isn't supported");
+        SendMessage sendMessage = new SendMessage(Updates.chatId(update), "This message isn't supported");
         telegramBotExecutor.execute(sendMessage);
     }
 }
