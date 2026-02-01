@@ -38,10 +38,6 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
             Request httpRequest = createRequest(request);
 
             try (Response response = okHttpClient.newCall(httpRequest).execute()) {
-                if (!response.isSuccessful()) {
-                    throw new TelegramRequestException("HTTP request failed with code: " + response.code());
-                }
-
                 ResponseBody body = response.body();
                 if (body == null) {
                     throw new TelegramRequestException("Request Failed. No response body received");
@@ -61,12 +57,12 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
                 return result;
             }
         } catch (IOException e) {
-            throw new TelegramRequestException("Request failed due to IO error: " + e.getMessage());
+            throw new TelegramRequestException("Request failed due to IO error: " + e.getMessage(), e);
         } catch (Exception e) {
             if (e instanceof TelegramRequestException) {
                 throw (TelegramRequestException) e;
             }
-            throw new TelegramRequestException("Request failed: " + e.getMessage());
+            throw new TelegramRequestException("Request failed: " + e.getMessage(), e);
         }
     }
 
