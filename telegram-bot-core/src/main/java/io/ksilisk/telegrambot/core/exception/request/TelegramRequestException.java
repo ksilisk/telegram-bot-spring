@@ -4,4 +4,8 @@ public class TelegramRequestException extends RuntimeException {
     public TelegramRequestException(String message) {
         super(message);
     }
+
+    public TelegramRequestException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
