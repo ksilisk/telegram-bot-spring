@@ -48,6 +48,27 @@ public enum TelegramBotMetric {
             "Total number of TelegramBotExecutor.execute(..) calls."
     ),
 
+    FILE_DOWNLOAD_DURATION(
+            "telegram.bot.file.download.duration",
+            "Time spent downloading a file into memory via TelegramBotFileClient.downloadBy*(..)."
+    ),
+
+    FILE_STREAM_OPEN_DURATION(
+            "telegram.bot.file.stream.open.duration",
+            "Time spent opening a download stream via TelegramBotFileClient.openStreamBy*(..). " +
+                    "This does NOT include time to fully read the stream."
+    ),
+
+    FILE_CALLS(
+            "telegram.bot.file.calls",
+            "Total number of TelegramBotFileClient operations."
+    ),
+
+    FILE_BYTES(
+            "telegram.bot.file.download.bytes",
+            "Number of bytes downloaded by TelegramBotFileClient downloadBy* methods."
+    ),
+
     EXCEPTIONS_TOTAL(
             "telegram.bot.exceptions.total",
             "Total number of exceptions observed by the update processing pipeline " +

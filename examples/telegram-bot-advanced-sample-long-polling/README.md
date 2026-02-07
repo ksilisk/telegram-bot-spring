@@ -14,6 +14,7 @@ It focuses on:
 
 - Interaction between handlers, rules, and strategies
 
+- Getting metrics via `/actuator/prometheus` endpoint
 
 ---
 
@@ -149,6 +150,12 @@ Effectively:
 - All other messages → handled by DefaultMessageUpdateHandler
 
   (unless a more specific handler/rule matches first)
+
+### **PhotoMessageUpdateRule**
+
+- Matches **any** message that contains a photo.
+
+- Uses PhotoMessageUpdateHandler to send a received photo:
 
 ---
 

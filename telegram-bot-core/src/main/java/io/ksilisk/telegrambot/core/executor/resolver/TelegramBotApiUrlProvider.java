@@ -14,4 +14,6 @@ public interface TelegramBotApiUrlProvider {
      * @return a non-empty absolute URL, never {@code null}
      */
     String getApiUrl();
+
+    String getFileUrl();
 }

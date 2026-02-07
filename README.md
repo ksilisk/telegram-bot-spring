@@ -69,7 +69,7 @@ public class StartCommandHandler implements CommandUpdateHandler {
     @Override
     public void handle(Update update) {
         executor.execute(
-            new SendMessage(update.message().chat().id(), "Hello")
+            new SendMessage(Updates.chatId(update), "Hello")
         );
     }
 

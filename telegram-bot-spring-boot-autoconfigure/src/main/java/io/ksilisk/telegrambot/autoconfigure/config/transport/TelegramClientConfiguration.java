@@ -1,13 +1,16 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import com.pengrad.telegrambot.utility.BotUtils;
-import io.ksilisk.telegrambot.autoconfigure.executor.RestClientTelegramBotExecutor;
-import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
-import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import io.ksilisk.telegrambot.autoconfigure.executor.OkHttpTelegramBotExecutor;
+import io.ksilisk.telegrambot.autoconfigure.executor.OkHttpTelegramBotFileClient;
+import io.ksilisk.telegrambot.autoconfigure.executor.RestClientTelegramBotExecutor;
+import io.ksilisk.telegrambot.autoconfigure.executor.RestClientTelegramBotFileClient;
+import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
 import io.ksilisk.telegrambot.core.executor.resolver.DefaultTelegramBotApiUrlProvider;
 import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
+import io.ksilisk.telegrambot.core.file.TelegramBotFileClient;
+import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -30,7 +33,7 @@ public class TelegramClientConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(name = "telegram.bot.client.implementation", havingValue = "AUTO", matchIfMissing =  true)
+    @ConditionalOnProperty(name = "telegram.bot.client.implementation", havingValue = "AUTO", matchIfMissing = true)
     public static class AutoTelegramClientConfiguration {
         @Configuration
         @ConditionalOnClass(name = "okhttp3.OkHttpClient")
@@ -54,6 +57,14 @@ public class TelegramClientConfiguration {
             public TelegramBotExecutor telegramBotExecutor(OkHttpClient okHttpClient, TelegramBotApiUrlProvider apiUrlProvider) {
                 return new OkHttpTelegramBotExecutor(okHttpClient, BotUtils.GSON, apiUrlProvider.getApiUrl());
             }
+
+            @Bean
+            @ConditionalOnMissingBean
+            public TelegramBotFileClient telegramBotFileClient(OkHttpClient okHttpClient,
+                                                               TelegramBotApiUrlProvider apiUrlProvider,
+                                                               TelegramBotExecutor telegramBotExecutor) {
+                return new OkHttpTelegramBotFileClient(okHttpClient, apiUrlProvider.getFileUrl(), telegramBotExecutor);
+            }
         }
 
         @Configuration
@@ -65,7 +76,7 @@ public class TelegramClientConfiguration {
 
             @Bean
             @ConditionalOnMissingBean
-            public RestClient restClient(RestClient.Builder builder,TelegramBotApiUrlProvider apiUrlProvider) {
+            public RestClient restClient(RestClient.Builder builder, TelegramBotApiUrlProvider apiUrlProvider) {
                 return builder
                         .baseUrl(apiUrlProvider.getApiUrl())
                         .messageConverters(converters -> {
@@ -80,6 +91,14 @@ public class TelegramClientConfiguration {
             public TelegramBotExecutor telegramBotExecutor(RestClient restClient, TelegramBotApiUrlProvider apiUrlProvider) {
                 return new RestClientTelegramBotExecutor(restClient, apiUrlProvider.getApiUrl());
             }
+
+            @Bean
+            @ConditionalOnMissingBean
+            public TelegramBotFileClient telegramBotFileClient(RestClient restClient,
+                                                               TelegramBotApiUrlProvider apiUrlProvider,
+                                                               TelegramBotExecutor telegramBotExecutor) {
+                return new RestClientTelegramBotFileClient(restClient, apiUrlProvider.getFileUrl(), telegramBotExecutor);
+            }
         }
     }
 
@@ -90,7 +109,7 @@ public class TelegramClientConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public RestClient restClient(RestClient.Builder builder,TelegramBotApiUrlProvider apiUrlProvider) {
+        public RestClient restClient(RestClient.Builder builder, TelegramBotApiUrlProvider apiUrlProvider) {
             return builder
                     .baseUrl(apiUrlProvider.getApiUrl())
                     .messageConverters(converters -> {
@@ -104,6 +123,14 @@ public class TelegramClientConfiguration {
         @ConditionalOnMissingBean
         public TelegramBotExecutor telegramBotExecutor(RestClient restClient, TelegramBotApiUrlProvider apiUrlProvider) {
             return new RestClientTelegramBotExecutor(restClient, apiUrlProvider.getApiUrl());
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public TelegramBotFileClient telegramBotFileClient(RestClient restClient,
+                                                           TelegramBotApiUrlProvider apiUrlProvider,
+                                                           TelegramBotExecutor telegramBotExecutor) {
+            return new RestClientTelegramBotFileClient(restClient, apiUrlProvider.getFileUrl(), telegramBotExecutor);
         }
     }
 
@@ -127,6 +154,14 @@ public class TelegramClientConfiguration {
         @ConditionalOnMissingBean
         public TelegramBotExecutor telegramBotExecutor(OkHttpClient okHttpClient, TelegramBotApiUrlProvider apiUrlProvider) {
             return new OkHttpTelegramBotExecutor(okHttpClient, BotUtils.GSON, apiUrlProvider.getApiUrl());
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public TelegramBotFileClient telegramBotFileClient(OkHttpClient okHttpClient,
+                                                           TelegramBotApiUrlProvider apiUrlProvider,
+                                                           TelegramBotExecutor telegramBotExecutor) {
+            return new OkHttpTelegramBotFileClient(okHttpClient, apiUrlProvider.getFileUrl(), telegramBotExecutor);
         }
     }
 }

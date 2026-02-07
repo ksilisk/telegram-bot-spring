@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.observability.configuration;
 
 import io.ksilisk.telegrambot.observability.bpp.DeliveryThreadPoolExecutorFactoryObservabilityBeanPostProcessor;
 import io.ksilisk.telegrambot.observability.bpp.TelegramBotExecutorObservabilityBeanPostProcessor;
+import io.ksilisk.telegrambot.observability.bpp.TelegramBotFileClientObservabilityBeanPostProcessor;
 import io.ksilisk.telegrambot.observability.bpp.UpdateDeliveryObservabilityBeanPostProcessor;
 import io.ksilisk.telegrambot.observability.bpp.UpdateHandlerObservabilityBeanPostProcessor;
 import io.ksilisk.telegrambot.observability.recorder.MetricsRecorder;
@@ -35,5 +36,11 @@ public class TelegramBotObservabilityBeanPostProcessorConfiguration {
             ObjectProvider<MetricsRecorder> metricsRecorderObjectProvider,
             ObjectProvider<TelegramBotChannelResolver> telegramBotChannelResolver) {
         return new UpdateHandlerObservabilityBeanPostProcessor(metricsRecorderObjectProvider, telegramBotChannelResolver);
+    }
+
+    @Bean
+    public static TelegramBotFileClientObservabilityBeanPostProcessor telegramBotFileClientObservabilityBeanPostProcessor(
+            ObjectProvider<MetricsRecorder> metricsRecorderObjectProvider) {
+        return new TelegramBotFileClientObservabilityBeanPostProcessor(metricsRecorderObjectProvider);
     }
 }
