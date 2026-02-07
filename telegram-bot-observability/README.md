@@ -115,6 +115,18 @@ If no MeterRegistry is present in the Spring context, observability is **automat
 |telegram.bot.delivery.pool.active|Gauge|Number of active threads|
 |telegram.bot.delivery.pool.queue.size|Gauge|Size of the delivery queue|
 
+---
+
+### **Telegram File API**
+
+
+|**Metric**|**Type**|**Description**|
+|---|---|---|
+|telegram.bot.file.download.duration|Timer|Time spent downloading a file into memory via TelegramBotFileClient.downloadBy*(..)|
+|telegram.bot.file.stream.open.duration|Timer|Time spent opening a download stream via TelegramBotFileClient.openStreamBy*(..)|
+|telegram.bot.file.calls|Counter|Total number of TelegramBotFileClient operations|
+|telegram.bot.file.download.bytes|DistributionSummary|Number of bytes downloaded by TelegramBotFileClient downloadBy* methods|
+
 ## **Customization**
 
 ### **Channel Resolution**
