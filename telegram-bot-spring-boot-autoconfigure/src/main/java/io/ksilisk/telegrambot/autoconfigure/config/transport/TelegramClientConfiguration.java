@@ -1,6 +1,7 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport;
 
 import com.pengrad.telegrambot.utility.BotUtils;
+import io.ksilisk.telegrambot.autoconfigure.customizer.OkHttpClientCustomizer;
 import io.ksilisk.telegrambot.autoconfigure.executor.OkHttpTelegramBotExecutor;
 import io.ksilisk.telegrambot.autoconfigure.executor.OkHttpTelegramBotFileClient;
 import io.ksilisk.telegrambot.autoconfigure.executor.RestClientTelegramBotExecutor;
@@ -12,6 +13,7 @@ import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import io.ksilisk.telegrambot.core.file.TelegramBotFileClient;
 import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
 import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -42,14 +44,17 @@ public class TelegramClientConfiguration {
         public static class PreferOkHttp {
             @Bean
             @ConditionalOnMissingBean
-            public OkHttpClient okHttpClient(TelegramBotProperties properties) {
+            public OkHttpClient okHttpClient(TelegramBotProperties properties,
+                                             ObjectProvider<OkHttpClientCustomizer> customizers) {
                 OkHttpClientProperties props = properties.getClient().getOkhttp();
-                return new OkHttpClient.Builder()
+                OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
                         .connectTimeout(props.getConnectTimeout())
                         .readTimeout(props.getReadTimeout())
                         .writeTimeout(props.getWriteTimeout())
-                        .callTimeout(props.getCallTimeout())
-                        .build();
+                        .callTimeout(props.getCallTimeout());
+
+                customizers.orderedStream().forEach(c -> c.customize(okhttpBuilder));
+                return okhttpBuilder.build();
             }
 
             @Bean
@@ -140,14 +145,17 @@ public class TelegramClientConfiguration {
     public static class OkHttpTelegramClientConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        public OkHttpClient okHttpClient(TelegramBotProperties properties) {
+        public OkHttpClient okHttpClient(TelegramBotProperties properties,
+                                         ObjectProvider<OkHttpClientCustomizer> customizers) {
             OkHttpClientProperties props = properties.getClient().getOkhttp();
-            return new OkHttpClient.Builder()
+            OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
                     .connectTimeout(props.getConnectTimeout())
                     .readTimeout(props.getReadTimeout())
                     .writeTimeout(props.getWriteTimeout())
-                    .callTimeout(props.getCallTimeout())
-                    .build();
+                    .callTimeout(props.getCallTimeout());
+
+            customizers.orderedStream().forEach(c -> c.customize(okhttpBuilder));
+            return okhttpBuilder.build();
         }
 
         @Bean
