@@ -37,7 +37,7 @@ The project follows standard Spring Boot conventions and avoids hidden runtime m
 <dependency>
     <groupId>io.github.ksilisk</groupId>
     <artifactId>telegram-bot-spring-boot-starter</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
 
