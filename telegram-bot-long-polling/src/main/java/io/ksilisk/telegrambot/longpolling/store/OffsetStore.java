@@ -15,7 +15,7 @@ public interface OffsetStore {
      *
      * @return the offset, or {@link OptionalInt#empty()} if none is stored
      */
-    OptionalInt read();
+    int read();
 
     /**
      * Persist the given offset.

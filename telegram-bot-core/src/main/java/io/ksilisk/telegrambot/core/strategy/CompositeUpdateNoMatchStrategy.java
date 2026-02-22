@@ -28,6 +28,7 @@ public class CompositeUpdateNoMatchStrategy implements UpdateNoMatchStrategy {
         List<UpdateNoMatchStrategy> selectedStrategies = noMatchStrategySelector.select(this.noMatchStrategies, update);
         for (UpdateNoMatchStrategy updateNoMatchStrategy : selectedStrategies) {
             try {
+                log.debug("Invoking NoMatchStrategy: '{}'", updateNoMatchStrategy.name());
                 updateNoMatchStrategy.handle(update);
                 if (updateNoMatchStrategy.terminal()) {
                     return;
@@ -35,7 +36,10 @@ public class CompositeUpdateNoMatchStrategy implements UpdateNoMatchStrategy {
             } catch (Exception ex) {
                 switch (strategyErrorPolicy) {
                     case THROW -> throw new StrategyExecutionException(ex);
-                    case LOG -> log.error("NoMatchStrategy '{}' failed", updateNoMatchStrategy.name(), ex);
+                    case LOG -> log.warn(
+                            "NoMatchStrategy '{}' failed while handling update (id={}). " +
+                                    "Ignoring due to ErrorPolicy=LOG",
+                            updateNoMatchStrategy.name(), update.updateId(), ex);
                 }
             }
         }

@@ -31,7 +31,7 @@ public class DefaultWebhookLifecycle implements WebhookLifecycle, SmartLifecycle
     @Override
     public void register() {
         if (!webhookProperties.getAutoRegister()) {
-            log.info("Auto webhook registration is disabled (telegram.webhook.auto-register=false)");
+            log.debug("Auto webhook registration is disabled (telegram.webhook.auto-register=false)");
             return;
         }
 
@@ -51,7 +51,7 @@ public class DefaultWebhookLifecycle implements WebhookLifecycle, SmartLifecycle
     @Override
     public void remove() {
         if (!webhookProperties.getAutoRemove()) {
-            log.info("Auto webhook removal is disabled (telegram.webhook.auto-remove=false)");
+            log.debug("Auto webhook removal is disabled (telegram.webhook.auto-remove=false)");
             return;
         }
 
