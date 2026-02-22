@@ -34,6 +34,7 @@ public class CompositeUpdateExceptionHandler implements UpdateExceptionHandler {
         for (UpdateExceptionHandler updateExceptionHandler : selectedHandlers) {
             try {
                 if (updateExceptionHandler.supports(t, update)) {
+                    log.debug("Invoking ExceptionHandler: '{}'", updateExceptionHandler.name());
                     updateExceptionHandler.handle(t, update);
                     if (updateExceptionHandler.terminal()) {
                         return;
@@ -41,7 +42,10 @@ public class CompositeUpdateExceptionHandler implements UpdateExceptionHandler {
                 }
             } catch (Exception ex) {
                 switch (errorPolicy) {
-                    case LOG -> log.error("ExceptionHandler '{}' failed.", updateExceptionHandler.name(), ex);
+                    case LOG -> log.warn(
+                            "ExceptionHandler '{}' failed while catching throwable '{}' " +
+                                    "for update (id={}). Ignoring due to ErrorPolicy=LOG",
+                            updateExceptionHandler.name(), t, update.updateId(), ex);
                     case THROW -> throw new ExceptionHandlerExecutionException(ex);
                 }
             }
