@@ -79,7 +79,7 @@ Default implementation uses a configurable thread pool and is shared across tran
 Interceptors allow observing or transforming updates **before routing**.
 
 Contracts:
-- Interceptor<U>
+- Interceptor<\U>
 - UpdateInterceptor
 
 Typical use cases:
@@ -92,12 +92,43 @@ Interceptors are ordered and composable.
 
 ---
 
+## **MDC and logging context**
+
+Core provides small utilities to enrich logs with Telegram update context using SLF4J **MDC**.
+
+### **MDCSnapshot**
+
+MDCSnapshot captures the current MDC context map and can propagate it to another thread.
+
+Typical use case:
+- preserve external MDC (e.g. request/trace ids) when delegating update processing to a thread pool
+
+Usage:
+- capture once (often per batch)
+- wrap tasks before submitting them to an executor
+
+### **UpdateMDC**
+
+UpdateMDC populates MDC with context extracted from a Telegram Update.
+
+Keys:
+- update_id
+- update_type
+- user_id
+- chat_id
+
+UpdateMDC.open(update) returns an AutoCloseable scope that restores previous MDC values on close.
+
+Use it with try-with-resources to avoid context leakage in thread pools.
+
+---
+
 ### **Dispatching**
 
 Dispatching is the hand-off point between delivery and routing.
 
 Contracts:
-- Dispatcher<U>
+- Dispatcher<\U>
 - UpdateDispatcher
 
 Responsibilities:
@@ -144,7 +175,7 @@ Registries are responsible for **lookup**, not execution.
 Handlers contain **user-defined business logic**.
 
 Main contracts:
-- Handler<U>
+- Handler<\U>
 - UpdateHandler
 - specializations:
     - command handlers
@@ -209,6 +240,35 @@ Core abstracts Telegram API execution behind:
 
 This allows multiple HTTP client implementations without leaking details into handlers.
 
+### **TelegramBotFileClient**
+
+TelegramBotFileClient provides a focused API for downloading files from Telegram via the Bot API.
+
+Telegram file downloads are performed in two steps:
+1. resolve file_id to file_path using getFile
+2. download file bytes from /file/bot<token>/<file_path>
+
+The interface typically offers two styles of methods:
+- *ById(..) methods that perform both steps
+- *ByPath(..) methods for cases where file_path is already known
+
+This keeps file operations out of handlers and routing logic, while still allowing custom HTTP client implementations underneath.
+
+---
+
+## **Update utilities**
+
+### **Updates**
+
+Updates is a small utility class for working with Telegram Update objects.
+
+It provides consistent extraction of common values across all update kinds, such as:
+- update type classification
+- user id extraction
+- chat id extraction
+
+The goal is to keep routing, logging, and diagnostics code simple and uniform, without duplicating Telegram object traversal logic across the pipeline.
+
 ---
 
 ## **Ordering and composition**
@@ -220,7 +280,6 @@ This allows predictable execution of:
 - interceptors
 - strategies
 - exception handlers
-
 
 ---
 

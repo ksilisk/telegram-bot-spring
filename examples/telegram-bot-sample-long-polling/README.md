@@ -85,3 +85,17 @@ Rules define which handler should process a specific type of update.
 ## Update Interceptor
 
 LoggingUpdateInterceptor logs each received Update before it is passed further through the processing pipeline.
+
+## **Logging (logback-spring.xml)**
+
+This example ships with a `logback-spring.xml` that extends the default Spring Boot console logging format and additionally prints **MDC** entries.
+
+This is useful for correlating logs produced during update processing. The starter populates MDC with values such as:
+- `update_id`
+- `update_type`
+- `user_id`
+- `chat_id`
+
+The config uses `%mdc`, so only MDC keys that are actually present are printed (no extra noise when MDC is empty).
+
+---

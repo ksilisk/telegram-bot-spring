@@ -1,6 +1,5 @@
 package io.ksilisk.telegrambot.observability.configuration;
 
-import io.ksilisk.telegrambot.observability.TelegramBotObservabilityAutoConfiguration;
 import io.ksilisk.telegrambot.observability.handler.exception.ObservabilityUpdateExceptionHandler;
 import io.ksilisk.telegrambot.observability.nomatch.ObservabilityUpdateNoMatchStrategy;
 import io.ksilisk.telegrambot.observability.properties.TelegramBotObservabilityProperties;
@@ -21,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
 public class TelegramBotObservabilityMetricsConfiguration {
-    private static final Logger log = LoggerFactory.getLogger(TelegramBotObservabilityAutoConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(TelegramBotObservabilityMetricsConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean(ObservabilityUpdateNoMatchStrategy.class)
