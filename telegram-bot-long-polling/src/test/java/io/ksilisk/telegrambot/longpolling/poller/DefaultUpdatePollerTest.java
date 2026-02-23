@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +39,7 @@ class DefaultUpdatePollerTest {
         when(properties.getLimit()).thenReturn(100);
         when(properties.getRetryDelay()).thenReturn(Duration.ZERO);
         when(properties.getShutdownTimeout()).thenReturn(Duration.ofSeconds(1));
-        when(offsetStore.read()).thenReturn(OptionalInt.of(0));
+        when(offsetStore.read()).thenReturn(0);
     }
 
     private DefaultUpdatePoller createPoller() {
@@ -76,8 +75,8 @@ class DefaultUpdatePollerTest {
         drain.setAccessible(true);
         drain.invoke(poller);
 
-        // Expect offsetStore.write(lastUpdateId + 1)
-        verify(offsetStore).write(21);
+        // Expect offsetStore.write(lastUpdateId)
+        verify(offsetStore).write(20);
     }
 
     @Test
@@ -162,7 +161,7 @@ class DefaultUpdatePollerTest {
 
         // At least one successful delivery and offset update should have happened
         verify(updateDelivery, atLeastOnce()).deliver(anyList());
-        verify(offsetStore, atLeastOnce()).write(21);
+        verify(offsetStore, atLeastOnce()).write(20);
     }
 
     // --------------------------------------------------

@@ -164,3 +164,5 @@ You may replace it with a custom implementation by defining your own MetricsReco
 - Low-cardinality metric tags
 - No impact on business logic
 - Safe fallback when metrics are disabled
+
+---

@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import io.ksilisk.telegrambot.core.dispatcher.UpdateDispatcher;
 import io.ksilisk.telegrambot.core.handler.exception.CompositeUpdateExceptionHandler;
 import io.ksilisk.telegrambot.core.interceptor.CompositeUpdateInterceptor;
+import io.ksilisk.telegrambot.core.mdc.MDCSnapshot;
+import io.ksilisk.telegrambot.core.mdc.UpdateMDC;
 import io.ksilisk.telegrambot.core.properties.DeliveryProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +37,18 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
 
     @Override
     public void deliver(List<Update> polledUpdates) {
+        MDCSnapshot capture = MDCSnapshot.capture();
+
         for (Update update : polledUpdates) {
-            executorService.submit(() -> processUpdate(update));
+            Runnable processUpdateWithMDC = () -> {
+                try (AutoCloseable ignored = UpdateMDC.open(update)) {
+                    processUpdate(update);
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            };
+
+            executorService.submit(() -> capture.wrap(processUpdateWithMDC).run());
         }
     }
 
@@ -53,6 +65,7 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
             }
             updateDispatcher.dispatch(update);
         } catch (Exception ex) {
+            log.debug("Error while processing update (id={})", update.updateId(), ex);
             exceptionHandler.handle(ex, update);
         }
     }

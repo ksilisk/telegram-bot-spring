@@ -1,6 +1,7 @@
 package io.ksilisk.telegrambot.autoconfigure;
 
 import com.pengrad.telegrambot.TelegramBot;
+import io.ksilisk.telegrambot.autoconfigure.config.diagnostic.TelegramBotDiagnosticsConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DeliveryConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.DispatcherConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.dispatch.ExceptionHandlerConfiguration;
@@ -30,7 +31,8 @@ import org.springframework.context.annotation.Import;
         ExceptionHandlerConfiguration.class,
         RoutingConfiguration.class,
         DispatcherConfiguration.class,
-        DeliveryConfiguration.class
+        DeliveryConfiguration.class,
+        TelegramBotDiagnosticsConfiguration.class,
 })
 public class TelegramBotAutoConfiguration {
 }

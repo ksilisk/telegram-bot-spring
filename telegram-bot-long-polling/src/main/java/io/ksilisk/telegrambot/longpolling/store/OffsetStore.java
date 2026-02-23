@@ -1,7 +1,5 @@
 package io.ksilisk.telegrambot.longpolling.store;
 
-import java.util.OptionalInt;
-
 /**
  * Stores the update offset used by long-polling.
  *
@@ -13,9 +11,9 @@ public interface OffsetStore {
     /**
      * Read the last stored offset.
      *
-     * @return the offset, or {@link OptionalInt#empty()} if none is stored
+     * @return the offset, or 0 if none is stored
      */
-    OptionalInt read();
+    int read();
 
     /**
      * Persist the given offset.

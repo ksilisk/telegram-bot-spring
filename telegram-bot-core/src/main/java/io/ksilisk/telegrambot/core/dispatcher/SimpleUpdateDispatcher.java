@@ -24,6 +24,6 @@ public class SimpleUpdateDispatcher implements UpdateDispatcher {
             noMatchStrategy.handle(update);
             return;
         }
-        log.debug("Successfully dispatched update with id: '{}'", update.updateId());
+        log.debug("Successfully dispatched update (id={})", update.updateId());
     }
 }

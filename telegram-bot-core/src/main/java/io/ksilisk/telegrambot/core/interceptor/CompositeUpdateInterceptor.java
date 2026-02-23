@@ -19,9 +19,10 @@ public class CompositeUpdateInterceptor implements UpdateInterceptor {
     public Update intercept(Update input) {
         Update current = input;
         for (UpdateInterceptor updateInterceptor : delegates) {
+            log.debug("Invoking update interceptor: {}", updateInterceptor.getClass().getSimpleName());
             current = updateInterceptor.intercept(current);
             if (current == null) {
-                log.debug("Update {} skipped by {}", current, updateInterceptor.getClass().getSimpleName());
+                log.debug("Update (id={}) was skipped by {}", input.updateId(), updateInterceptor.getClass().getSimpleName());
                 return null;
             }
         }

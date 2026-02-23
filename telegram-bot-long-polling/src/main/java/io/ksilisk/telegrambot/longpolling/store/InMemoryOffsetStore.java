@@ -1,14 +1,13 @@
 package io.ksilisk.telegrambot.longpolling.store;
 
-import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryOffsetStore implements OffsetStore {
     private final AtomicInteger currentOffset = new AtomicInteger(0);
 
     @Override
-    public OptionalInt read() {
-        return OptionalInt.of(currentOffset.get());
+    public int read() {
+        return currentOffset.get();
     }
 
     @Override
