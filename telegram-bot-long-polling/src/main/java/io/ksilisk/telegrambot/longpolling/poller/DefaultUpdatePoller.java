@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -76,6 +77,7 @@ public class DefaultUpdatePoller implements UpdatePoller, Closeable {
     }
 
     private void runLoop() {
+        int failureCount = 0;
         try {
             if (properties.getDropPendingOnStart()) {
                 drainPendingUpdates();
@@ -93,11 +95,12 @@ public class DefaultUpdatePoller implements UpdatePoller, Closeable {
                     log.warn("Error while executing GetUpdates request", ex);
 
                     try {
-                        Thread.sleep(properties.getRetryDelay().toMillis());
+                        Thread.sleep(computeRetryDelay(failureCount));
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         break;
                     }
+                    failureCount++;
                     continue;
                 }
 
@@ -111,6 +114,7 @@ public class DefaultUpdatePoller implements UpdatePoller, Closeable {
                     continue;
                 }
 
+                failureCount = 0;
                 List<Update> updates = getUpdatesResponse.updates();
                 updateDelivery.deliver(updates);
 
@@ -152,6 +156,18 @@ public class DefaultUpdatePoller implements UpdatePoller, Closeable {
         getUpdates.limit(properties.getLimit());
 
         return getUpdates;
+    }
+
+    private long computeRetryDelay(int failureCount) {
+        if (!properties.getBackoffEnabled()) {
+            return properties.getRetryDelay().toMillis();
+        }
+        long baseDelay = properties.getRetryDelay().toMillis();
+        long maxDelay = properties.getBackoffMaxDelay().toMillis();
+        double multiplier = properties.getBackoffMultiplier();
+        long exponential = (long) (baseDelay * Math.pow(multiplier, failureCount));
+        long jitter = ThreadLocalRandom.current().nextLong(0, Math.max(1, baseDelay));
+        return Math.min(exponential + jitter, maxDelay);
     }
 
     private ExecutorService buildExecutorService() {

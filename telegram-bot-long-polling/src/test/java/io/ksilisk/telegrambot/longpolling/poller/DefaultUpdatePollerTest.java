@@ -39,6 +39,7 @@ class DefaultUpdatePollerTest {
         when(properties.getLimit()).thenReturn(100);
         when(properties.getRetryDelay()).thenReturn(Duration.ZERO);
         when(properties.getShutdownTimeout()).thenReturn(Duration.ofSeconds(1));
+        when(properties.getBackoffEnabled()).thenReturn(false);
         when(offsetStore.read()).thenReturn(0);
     }
 
@@ -188,5 +189,111 @@ class DefaultUpdatePollerTest {
         poller.start(); // should not break anything
 
         poller.stop();
+    }
+
+    // --------------------------------------------------
+    // computeRetryDelay()
+    // --------------------------------------------------
+
+    @Test
+    void computeRetryDelayShouldGrowExponentiallyWithFailureCount() throws Exception {
+        when(properties.getBackoffEnabled()).thenReturn(true);
+        when(properties.getRetryDelay()).thenReturn(Duration.ofMillis(100));
+        when(properties.getBackoffMaxDelay()).thenReturn(Duration.ofMinutes(1));
+        when(properties.getBackoffMultiplier()).thenReturn(2.0);
+
+        DefaultUpdatePoller poller = createPoller();
+        Method method = DefaultUpdatePoller.class.getDeclaredMethod("computeRetryDelay", int.class);
+        method.setAccessible(true);
+
+        long delay0 = (long) method.invoke(poller, 0);
+        long delay1 = (long) method.invoke(poller, 1);
+        long delay2 = (long) method.invoke(poller, 2);
+
+        assertTrue(delay0 >= 100L, "First retry should be at least base delay");
+        assertTrue(delay1 >= 200L, "Second retry should be at least 2x base delay");
+        assertTrue(delay2 >= 400L, "Third retry should be at least 4x base delay");
+    }
+
+    @Test
+    void computeRetryDelayShouldBeCappedAtMaxDelay() throws Exception {
+        when(properties.getBackoffEnabled()).thenReturn(true);
+        when(properties.getRetryDelay()).thenReturn(Duration.ofMillis(100));
+        when(properties.getBackoffMaxDelay()).thenReturn(Duration.ofMillis(300));
+        when(properties.getBackoffMultiplier()).thenReturn(2.0);
+
+        DefaultUpdatePoller poller = createPoller();
+        Method method = DefaultUpdatePoller.class.getDeclaredMethod("computeRetryDelay", int.class);
+        method.setAccessible(true);
+
+        long delay = (long) method.invoke(poller, 10);
+
+        assertTrue(delay <= 300L, "Delay should be capped at backoffMaxDelay");
+    }
+
+    @Test
+    void computeRetryDelayShouldReturnFixedDelayWhenBackoffDisabled() throws Exception {
+        when(properties.getBackoffEnabled()).thenReturn(false);
+        when(properties.getRetryDelay()).thenReturn(Duration.ofMillis(500));
+
+        DefaultUpdatePoller poller = createPoller();
+        Method method = DefaultUpdatePoller.class.getDeclaredMethod("computeRetryDelay", int.class);
+        method.setAccessible(true);
+
+        long delay0 = (long) method.invoke(poller, 0);
+        long delay5 = (long) method.invoke(poller, 5);
+
+        assertEquals(500L, delay0);
+        assertEquals(500L, delay5);
+    }
+
+    @Test
+    void runLoopShouldRecoverAndResetBackoffAfterSuccessfulResponse() throws Exception {
+        when(properties.getDropPendingOnStart()).thenReturn(false);
+        when(properties.getBackoffEnabled()).thenReturn(true);
+        when(properties.getBackoffMaxDelay()).thenReturn(Duration.ofSeconds(60));
+        when(properties.getBackoffMultiplier()).thenReturn(2.0);
+
+        GetUpdatesResponse response = mock(GetUpdatesResponse.class);
+        Update update = mock(Update.class);
+        when(update.updateId()).thenReturn(42);
+        when(response.isOk()).thenReturn(true);
+        when(response.updates()).thenReturn(List.of(update));
+
+        CountDownLatch deliverLatch = new CountDownLatch(1);
+        doAnswer(invocation -> {
+            deliverLatch.countDown();
+            return null;
+        }).when(updateDelivery).deliver(anyList());
+
+        // First call throws, second call succeeds – verifies backoff reset path is reached
+        when(telegramBotExecutor.execute(any(GetUpdates.class)))
+                .thenThrow(new RuntimeException("transient error"))
+                .thenReturn(response);
+
+        DefaultUpdatePoller poller = createPoller();
+        setPrivateBooleanField(poller, "running", true);
+
+        Method runLoop = DefaultUpdatePoller.class.getDeclaredMethod("runLoop");
+        runLoop.setAccessible(true);
+
+        Thread t = new Thread(() -> {
+            try {
+                runLoop.invoke(poller);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }, "test-backoff-reset-thread");
+
+        t.start();
+
+        assertTrue(deliverLatch.await(3, java.util.concurrent.TimeUnit.SECONDS),
+                "UpdateDelivery.deliver should be invoked after recovering from failure");
+
+        setPrivateBooleanField(poller, "running", false);
+        t.join(2000);
+
+        verify(updateDelivery, atLeastOnce()).deliver(anyList());
+        verify(offsetStore, atLeastOnce()).write(42);
     }
 }

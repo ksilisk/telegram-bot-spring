@@ -19,6 +19,9 @@ public class LongPollingProperties {
     private static final Duration DEFAULT_SHUTDOWN_TIMEOUT = Duration.ofSeconds(2);
     private static final boolean DEFAULT_DROP_PENDING_ON_START = false;
     private static final int DEFAULT_LIMIT = 100;
+    private static final boolean DEFAULT_BACKOFF_ENABLED = true;
+    private static final Duration DEFAULT_BACKOFF_MAX_DELAY = Duration.ofSeconds(60);
+    private static final double DEFAULT_BACKOFF_MULTIPLIER = 2.0;
 
     /**
      * Delay before retrying a failed poll request.
@@ -56,6 +59,21 @@ public class LongPollingProperties {
      * Maximum time to wait for poller shutdown during application stop.
      */
     private Duration shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
+
+    /**
+     * Whether to use exponential backoff with jitter when retrying failed poll requests.
+     */
+    private boolean backoffEnabled = DEFAULT_BACKOFF_ENABLED;
+
+    /**
+     * Maximum delay cap for exponential backoff retries.
+     */
+    private Duration backoffMaxDelay = DEFAULT_BACKOFF_MAX_DELAY;
+
+    /**
+     * Multiplier applied to the retry delay on each consecutive failure.
+     */
+    private double backoffMultiplier = DEFAULT_BACKOFF_MULTIPLIER;
 
 
     public Duration getShutdownTimeout() {
@@ -104,5 +122,29 @@ public class LongPollingProperties {
 
     public void setDropPendingOnStart(boolean dropPendingOnStart) {
         this.dropPendingOnStart = dropPendingOnStart;
+    }
+
+    public boolean getBackoffEnabled() {
+        return backoffEnabled;
+    }
+
+    public void setBackoffEnabled(boolean backoffEnabled) {
+        this.backoffEnabled = backoffEnabled;
+    }
+
+    public Duration getBackoffMaxDelay() {
+        return backoffMaxDelay;
+    }
+
+    public void setBackoffMaxDelay(Duration backoffMaxDelay) {
+        this.backoffMaxDelay = backoffMaxDelay;
+    }
+
+    public double getBackoffMultiplier() {
+        return backoffMultiplier;
+    }
+
+    public void setBackoffMultiplier(double backoffMultiplier) {
+        this.backoffMultiplier = backoffMultiplier;
     }
 }
