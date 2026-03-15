@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.autoconfigure.properties;
 
+import io.ksilisk.telegrambot.core.properties.ClientRetryProperties;
 import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,11 @@ public class ClientProperties {
 
     private ClientImplementation implementation = DEFAULT_IMPLEMENTATION;
 
+    @Valid
+    @NotNull
+    @NestedConfigurationProperty
+    private ClientRetryProperties retry = new ClientRetryProperties();
+
     public ClientImplementation getImplementation() {
         return implementation;
     }
@@ -58,4 +64,11 @@ public class ClientProperties {
         this.okhttp = okhttp;
     }
 
+    public ClientRetryProperties getRetry() {
+        return retry;
+    }
+
+    public void setRetry(ClientRetryProperties retry) {
+        this.retry = retry;
+    }
 }
