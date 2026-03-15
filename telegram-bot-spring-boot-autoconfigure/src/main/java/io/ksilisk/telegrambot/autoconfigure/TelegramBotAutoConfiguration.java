@@ -10,7 +10,7 @@ import io.ksilisk.telegrambot.autoconfigure.config.dispatch.RoutingConfiguration
 import io.ksilisk.telegrambot.autoconfigure.config.transport.CustomMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.LongPollingMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.NoIngressModeConfiguration;
-import io.ksilisk.telegrambot.autoconfigure.config.transport.TelegramClientConfiguration;
+import io.ksilisk.telegrambot.autoconfigure.config.transport.client.TelegramClientConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.config.transport.WebhookMissingIngressConfiguration;
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

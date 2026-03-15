@@ -240,6 +240,24 @@ Core abstracts Telegram API execution behind:
 
 This allows multiple HTTP client implementations without leaking details into handlers.
 
+### **Retry support**
+
+Core also provides retry abstractions for Telegram Bot API calls:
+- RetryRule
+- RetryDelayStrategy
+- RetryingTelegramBotExecutor
+
+Retry behavior is intentionally split into small extension points:
+- rules decide whether a failed request may be retried
+- delay strategies decide how long to wait before the next attempt
+- the retrying executor decorates another TelegramBotExecutor
+
+Default reusable implementations include:
+- CompositeRetryRule
+- MaxAttemptsRetryRule
+- RetryableMethodsRetryRule
+- FixedRetryDelayStrategy
+
 ### **TelegramBotFileClient**
 
 TelegramBotFileClient provides a focused API for downloading files from Telegram via the Bot API.

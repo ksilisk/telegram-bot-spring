@@ -7,6 +7,7 @@ import io.ksilisk.telegrambot.longpolling.ingress.DefaultLongPollingUpdateIngres
 import io.ksilisk.telegrambot.longpolling.ingress.LongPollingUpdateIngress;
 import io.ksilisk.telegrambot.longpolling.poller.DefaultUpdatePoller;
 import io.ksilisk.telegrambot.longpolling.properties.LongPollingProperties;
+import io.ksilisk.telegrambot.longpolling.retry.GetUpdatesExcludedRetryRule;
 import io.ksilisk.telegrambot.longpolling.store.InMemoryOffsetStore;
 import io.ksilisk.telegrambot.longpolling.store.OffsetStore;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -44,5 +45,10 @@ public class TelegramBotLongPollingAutoConfiguration {
     @ConditionalOnMissingBean(OffsetStore.class)
     public OffsetStore offsetStore() {
         return new InMemoryOffsetStore();
+    }
+
+    @Bean
+    public GetUpdatesExcludedRetryRule getUpdatesExcludedRetryRule() {
+        return new GetUpdatesExcludedRetryRule();
     }
 }
