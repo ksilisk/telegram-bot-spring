@@ -16,6 +16,7 @@ import io.ksilisk.telegrambot.core.order.CoreOrdered;
  * <p>This contract also extends {@link CoreOrdered}, so multiple rules
  * can be evaluated in a deterministic order.
  */
+@FunctionalInterface
 public interface RetryRule extends CoreOrdered {
     /**
      * Determines whether the given failed request should be retried.

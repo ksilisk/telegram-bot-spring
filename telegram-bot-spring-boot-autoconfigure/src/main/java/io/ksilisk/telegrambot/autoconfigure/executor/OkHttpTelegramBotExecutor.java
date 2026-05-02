@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.request.TelegramRequestException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -23,12 +24,12 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
 
     private final OkHttpClient okHttpClient;
     private final Gson gson;
-    private final String baseUrl;
+    private final TelegramBotApiUrlProvider apiUrlProvider;
 
-    public OkHttpTelegramBotExecutor(OkHttpClient okHttpClient, Gson gson, String baseUrl) {
+    public OkHttpTelegramBotExecutor(OkHttpClient okHttpClient, Gson gson, TelegramBotApiUrlProvider urlProvider) {
         this.okHttpClient = okHttpClient;
         this.gson = gson;
-        this.baseUrl = baseUrl;
+        this.apiUrlProvider = urlProvider;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class OkHttpTelegramBotExecutor implements TelegramBotExecutor {
     }
 
     private Request createRequest(BaseRequest<?, ?> request) {
-        String url = baseUrl + request.getMethod();
+        String url = apiUrlProvider.getApiUrl() + request.getMethod();
         RequestBody requestBody = createRequestBody(request);
 
         return new Request.Builder()

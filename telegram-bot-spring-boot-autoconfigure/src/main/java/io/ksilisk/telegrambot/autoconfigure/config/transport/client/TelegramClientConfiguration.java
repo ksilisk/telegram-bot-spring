@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport.client;
 
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -10,5 +11,6 @@ import org.springframework.context.annotation.Import;
         OkHttpTelegramClientConfiguration.class,
         SpringTelegramClientConfiguration.class
 })
+@AutoConfigureOrder
 public class TelegramClientConfiguration {
 }

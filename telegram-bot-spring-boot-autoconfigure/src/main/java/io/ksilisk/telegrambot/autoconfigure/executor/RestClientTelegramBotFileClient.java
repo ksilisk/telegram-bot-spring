@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.autoconfigure.executor;
 
 import io.ksilisk.telegrambot.core.exception.file.TelegramFileDownloadException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import io.ksilisk.telegrambot.core.file.TelegramBotFileClient;
 import io.ksilisk.telegrambot.core.file.TelegramBotFiles;
 import org.springframework.http.HttpMethod;
@@ -12,20 +13,20 @@ import java.io.InputStream;
 
 public class RestClientTelegramBotFileClient implements TelegramBotFileClient {
     private final RestClient restClient;
-    private final String baseUrl;
+    private final TelegramBotApiUrlProvider urlProvider;
     private final TelegramBotExecutor telegramBotExecutor;
 
     public RestClientTelegramBotFileClient(RestClient restClient,
-                                           String baseUrl,
+                                           TelegramBotApiUrlProvider apiUrlProvider,
                                            TelegramBotExecutor telegramBotExecutor) {
         this.restClient = restClient;
-        this.baseUrl = baseUrl;
+        this.urlProvider = apiUrlProvider;
         this.telegramBotExecutor = telegramBotExecutor;
     }
 
     @Override
     public byte[] downloadByPath(String filePath) {
-        String url = TelegramBotFiles.buildFileUrl(baseUrl, filePath);
+        String url = TelegramBotFiles.buildFileUrl(urlProvider.getFileUrl(), filePath);
 
         try {
             return restClient.get()
@@ -39,7 +40,7 @@ public class RestClientTelegramBotFileClient implements TelegramBotFileClient {
 
     @Override
     public InputStream openStreamByPath(String filePath) {
-        String url = TelegramBotFiles.buildFileUrl(baseUrl, filePath);
+        String url = TelegramBotFiles.buildFileUrl(urlProvider.getFileUrl(), filePath);
 
         try {
             return restClient.method(HttpMethod.GET)
