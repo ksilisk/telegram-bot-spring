@@ -48,7 +48,7 @@ public class DurationBasedMasterSwitchPolicy implements MasterSwitchPolicy {
 
     public void recordFailure(Throwable throwable) {
         if (!failureClassifier.isFailure(throwable)) {
-            log.debug("Long polling failure ignored by classifier: {}", throwable.toString());
+            log.debug("Long polling failure ignored by classifier: {}", String.valueOf(throwable));
             return;
         }
         Instant now = Instant.now(clock);
