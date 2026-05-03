@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.longpolling.properties;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -57,6 +58,22 @@ public class LongPollingProperties {
      */
     private Duration shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
 
+    /**
+     * Long polling failover settings.
+     *
+     * <p>Controls when and how the active Telegram Bot API endpoint is switched
+     * after long polling failures.</p>
+     */
+    @NestedConfigurationProperty
+    private FailoverProperties failover = new FailoverProperties();
+
+    public FailoverProperties getFailover() {
+        return failover;
+    }
+
+    public void setFailover(FailoverProperties failover) {
+        this.failover = failover;
+    }
 
     public Duration getShutdownTimeout() {
         return shutdownTimeout;

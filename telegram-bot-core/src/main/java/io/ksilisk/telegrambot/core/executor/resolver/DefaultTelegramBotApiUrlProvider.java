@@ -19,6 +19,6 @@ public class DefaultTelegramBotApiUrlProvider implements TelegramBotApiUrlProvid
 
     @Override
     public String getFileUrl() {
-        return FILE_URL + botToken +  (testServer ? "/test/" : "/");
+        return FILE_URL + botToken + (testServer ? "/test/" : "/");
     }
 }

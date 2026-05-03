@@ -2,6 +2,7 @@ package io.ksilisk.telegrambot.autoconfigure.executor;
 
 import io.ksilisk.telegrambot.core.exception.file.TelegramFileDownloadException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import io.ksilisk.telegrambot.core.file.TelegramBotFileClient;
 import io.ksilisk.telegrambot.core.file.TelegramBotFiles;
 import okhttp3.Call;
@@ -16,20 +17,20 @@ import java.io.InputStream;
 public class OkHttpTelegramBotFileClient implements TelegramBotFileClient {
 
     private final OkHttpClient okHttpClient;
-    private final String baseUrl;
+    private final TelegramBotApiUrlProvider urlProvider;
     private final TelegramBotExecutor telegramBotExecutor;
 
     public OkHttpTelegramBotFileClient(OkHttpClient okHttpClient,
-                                       String baseUrl,
+                                       TelegramBotApiUrlProvider apiUrlProvider,
                                        TelegramBotExecutor telegramBotExecutor) {
         this.okHttpClient = okHttpClient;
-        this.baseUrl = baseUrl;
+        this.urlProvider = apiUrlProvider;
         this.telegramBotExecutor = telegramBotExecutor;
     }
 
     @Override
-    public byte[] downloadByPath(String filePath)  {
-        String url = TelegramBotFiles.buildFileUrl(baseUrl, filePath);
+    public byte[] downloadByPath(String filePath) {
+        String url = TelegramBotFiles.buildFileUrl(urlProvider.getFileUrl(), filePath);
 
         Request request = new Request.Builder()
                 .get()
@@ -54,7 +55,7 @@ public class OkHttpTelegramBotFileClient implements TelegramBotFileClient {
 
     @Override
     public InputStream openStreamByPath(String filePath) {
-        String url = TelegramBotFiles.buildFileUrl(baseUrl, filePath);
+        String url = TelegramBotFiles.buildFileUrl(urlProvider.getFileUrl(), filePath);
 
         Request request = new Request.Builder()
                 .get()

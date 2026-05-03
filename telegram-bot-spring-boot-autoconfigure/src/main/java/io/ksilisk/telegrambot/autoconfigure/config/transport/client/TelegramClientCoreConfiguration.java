@@ -1,7 +1,8 @@
 package io.ksilisk.telegrambot.autoconfigure.config.transport.client;
 
 import io.ksilisk.telegrambot.autoconfigure.properties.TelegramBotProperties;
-import io.ksilisk.telegrambot.core.executor.resolver.DefaultTelegramBotApiUrlProvider;
+import io.ksilisk.telegrambot.core.executor.resolver.DefaultSwitchableTelegramBotApiUrlProvider;
+import io.ksilisk.telegrambot.core.executor.resolver.SwitchableTelegramBotApiUrlProvider;
 import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +13,11 @@ public class TelegramClientCoreConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TelegramBotApiUrlProvider.class)
-    public TelegramBotApiUrlProvider telegramBotApiUrlProvider(TelegramBotProperties properties) {
-        return new DefaultTelegramBotApiUrlProvider(
+    public SwitchableTelegramBotApiUrlProvider telegramBotApiUrlProvider(TelegramBotProperties properties) {
+        return new DefaultSwitchableTelegramBotApiUrlProvider(
                 properties.getToken(),
-                properties.getUseTestServer()
+                properties.getUseTestServer(),
+                properties.getClient().getApi().getEndpoints()
         );
     }
 }

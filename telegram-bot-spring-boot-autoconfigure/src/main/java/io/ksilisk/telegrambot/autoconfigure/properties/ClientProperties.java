@@ -1,5 +1,6 @@
 package io.ksilisk.telegrambot.autoconfigure.properties;
 
+import io.ksilisk.telegrambot.core.properties.ClientApiProperties;
 import io.ksilisk.telegrambot.core.properties.ClientRetryProperties;
 import io.ksilisk.telegrambot.core.properties.OkHttpClientProperties;
 import jakarta.validation.Valid;
@@ -50,11 +51,29 @@ public class ClientProperties {
     @NestedConfigurationProperty
     private ClientRetryProperties retry = new ClientRetryProperties();
 
+    /**
+     * Telegram Bot API client settings.
+     */
+    @Valid
+    @NotNull
+    @NestedConfigurationProperty
+    private ClientApiProperties api = new ClientApiProperties();
+
+    public ClientApiProperties getApi() {
+        return api;
+    }
+
+    public void setApi(ClientApiProperties api) {
+        this.api = api;
+    }
+
     public ClientImplementation getImplementation() {
         return implementation;
     }
 
-    public void setImplementation(ClientImplementation implementation) { this.implementation = implementation;}
+    public void setImplementation(ClientImplementation implementation) {
+        this.implementation = implementation;
+    }
 
     public OkHttpClientProperties getOkhttp() {
         return okhttp;

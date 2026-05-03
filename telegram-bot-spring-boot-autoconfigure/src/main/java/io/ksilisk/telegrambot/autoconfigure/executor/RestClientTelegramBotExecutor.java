@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import io.ksilisk.telegrambot.core.exception.request.TelegramRequestException;
 import io.ksilisk.telegrambot.core.executor.TelegramBotExecutor;
+import io.ksilisk.telegrambot.core.executor.resolver.TelegramBotApiUrlProvider;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.web.client.RestClient;
@@ -16,11 +17,11 @@ import java.util.Map;
 
 public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     private final RestClient restClient;
-    private final String baseUrl;
+    private final TelegramBotApiUrlProvider urlProvider;
 
-    public RestClientTelegramBotExecutor(RestClient restClient, String baseUrl) {
+    public RestClientTelegramBotExecutor(RestClient restClient, TelegramBotApiUrlProvider apiUrlProvider) {
         this.restClient = restClient;
-        this.baseUrl = baseUrl;
+        this.urlProvider = apiUrlProvider;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
         }
 
         return restClient.post()
-                .uri(baseUrl + request.getMethod())
+                .uri(urlProvider.getApiUrl() + request.getMethod())
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(builder.build())
                 .retrieve()
@@ -100,7 +101,7 @@ public class RestClientTelegramBotExecutor implements TelegramBotExecutor {
     private <T extends BaseRequest<T, R>, R extends BaseResponse> R executeFormRequest(BaseRequest<T, R> request) {
 
         return restClient.post()
-                .uri(baseUrl + request.getMethod())
+                .uri(urlProvider.getApiUrl() + request.getMethod())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request.getParameters())
                 .retrieve()
