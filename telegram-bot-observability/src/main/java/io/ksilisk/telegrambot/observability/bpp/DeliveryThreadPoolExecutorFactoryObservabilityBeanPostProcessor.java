@@ -19,7 +19,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * BeanPostProcessor that instruments {@link DeliveryThreadPoolExecutorFactory}
- * to register gauges for the delivery {@link ThreadPoolExecutor}.
+ * to register gauges for the delivery {@link ThreadPoolExecutor}. Executors
+ * supplied by other implementations are left unchanged.
  */
 public final class DeliveryThreadPoolExecutorFactoryObservabilityBeanPostProcessor
         implements BeanPostProcessor, PriorityOrdered {

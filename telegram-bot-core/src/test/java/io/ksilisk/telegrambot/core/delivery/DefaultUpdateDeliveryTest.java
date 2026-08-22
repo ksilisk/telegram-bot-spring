@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,11 +59,11 @@ class DefaultUpdateDeliveryTest {
         List<Runnable> submittedTasks = new ArrayList<>();
 
         // Capture submitted Runnable tasks instead of actually running them on a real executor
-        when(executorService.submit(any(Runnable.class))).thenAnswer(invocation -> {
+        doAnswer(invocation -> {
             Runnable task = invocation.getArgument(0);
             submittedTasks.add(task);
-            return mock(Future.class);
-        });
+            return null;
+        }).when(executorService).execute(any(Runnable.class));
 
         when(compositeUpdateInterceptor.intercept(update1)).thenReturn(update1); // intercepted but same instance is fine
         when(compositeUpdateInterceptor.intercept(update2)).thenReturn(update2);
@@ -94,11 +94,11 @@ class DefaultUpdateDeliveryTest {
         Update update = mock(Update.class);
         List<Runnable> submittedTasks = new ArrayList<>();
 
-        when(executorService.submit(any(Runnable.class))).thenAnswer(invocation -> {
+        doAnswer(invocation -> {
             Runnable task = invocation.getArgument(0);
             submittedTasks.add(task);
-            return mock(Future.class);
-        });
+            return null;
+        }).when(executorService).execute(any(Runnable.class));
 
         // Interceptor decides to skip this update
         when(compositeUpdateInterceptor.intercept(update)).thenReturn(null);
@@ -126,15 +126,44 @@ class DefaultUpdateDeliveryTest {
     }
 
     @Test
+    void shouldSupportExecutorImplementationsThatAreNotExecutorServices() throws Exception {
+        Executor executor = mock(Executor.class);
+        DefaultUpdateDelivery executorDelivery = new DefaultUpdateDelivery(
+                updateDispatcher,
+                executor,
+                deliveryProperties,
+                compositeUpdateInterceptor,
+                exceptionHandler
+        );
+        Update update = mock(Update.class);
+        List<Runnable> submittedTasks = new ArrayList<>();
+
+        doAnswer(invocation -> {
+            submittedTasks.add(invocation.getArgument(0));
+            return null;
+        }).when(executor).execute(any(Runnable.class));
+        when(compositeUpdateInterceptor.intercept(update)).thenReturn(update);
+
+        executorDelivery.deliver(List.of(update));
+        submittedTasks.get(0).run();
+        executorDelivery.stop();
+
+        verify(executor).execute(any(Runnable.class));
+        verify(compositeUpdateInterceptor).intercept(update);
+        verify(updateDispatcher).dispatch(update);
+        verifyNoInteractions(exceptionHandler);
+    }
+
+    @Test
     void shouldInvokeExceptionHandlerWhenInterceptorThrows() throws Exception {
         Update update = mock(Update.class);
         List<Runnable> submittedTasks = new ArrayList<>();
 
-        when(executorService.submit(any(Runnable.class))).thenAnswer(invocation -> {
+        doAnswer(invocation -> {
             Runnable task = invocation.getArgument(0);
             submittedTasks.add(task);
-            return mock(Future.class);
-        });
+            return null;
+        }).when(executorService).execute(any(Runnable.class));
 
         RuntimeException ex = new RuntimeException("interceptor failed");
         when(compositeUpdateInterceptor.intercept(update)).thenThrow(ex);
@@ -153,11 +182,11 @@ class DefaultUpdateDeliveryTest {
         Update update = mock(Update.class);
         List<Runnable> submittedTasks = new ArrayList<>();
 
-        when(executorService.submit(any(Runnable.class))).thenAnswer(invocation -> {
+        doAnswer(invocation -> {
             Runnable task = invocation.getArgument(0);
             submittedTasks.add(task);
-            return mock(Future.class);
-        });
+            return null;
+        }).when(executorService).execute(any(Runnable.class));
 
         when(compositeUpdateInterceptor.intercept(update)).thenReturn(update);
 

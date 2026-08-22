@@ -72,6 +72,19 @@ Main contracts:
 
 Default implementation uses a configurable thread pool and is shared across transports.
 
+The factory returns a `java.util.concurrent.Executor`, so Spring applications can supply a
+managed `ThreadPoolTaskExecutor` and configure a `TaskDecorator` for context propagation:
+
+```java
+@Bean
+DeliveryThreadPoolExecutorFactory deliveryThreadPoolExecutorFactory(ThreadPoolTaskExecutor executor) {
+    return () -> executor;
+}
+```
+
+The default factory still creates and shuts down a `ThreadPoolExecutor`. Executors managed by
+an application container are not shut down by `DefaultUpdateDelivery`.
+
 ---
 
 ### **Interceptors**

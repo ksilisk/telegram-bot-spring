@@ -30,7 +30,7 @@ class DeliveryThreadPoolExecutorFactoryObservabilityBeanPostProcessorTest {
                     DeliveryThreadPoolExecutorFactory factory = ctx.getBean(DeliveryThreadPoolExecutorFactory.class);
                     SimpleMeterRegistry registry = ctx.getBean(SimpleMeterRegistry.class);
 
-                    ThreadPoolExecutor executor = factory.buildThreadPoolExecutor();
+                    ThreadPoolExecutor executor = (ThreadPoolExecutor) factory.buildThreadPoolExecutor();
 
                     // Gauges should be registered
                     Gauge active = registry.find(TelegramBotMetric.DELIVERY_POOL_ACTIVE.metricName())
@@ -87,7 +87,7 @@ class DeliveryThreadPoolExecutorFactoryObservabilityBeanPostProcessorTest {
                     DeliveryThreadPoolExecutorFactory factory = ctx.getBean(DeliveryThreadPoolExecutorFactory.class);
                     SimpleMeterRegistry registry = ctx.getBean(SimpleMeterRegistry.class);
 
-                    ThreadPoolExecutor executor = factory.buildThreadPoolExecutor();
+                    ThreadPoolExecutor executor = (ThreadPoolExecutor) factory.buildThreadPoolExecutor();
                     executor.shutdownNow();
 
                     assertNull(registry.find(TelegramBotMetric.DELIVERY_POOL_ACTIVE.metricName()).tags(Tags.empty()).gauge());
@@ -104,7 +104,7 @@ class DeliveryThreadPoolExecutorFactoryObservabilityBeanPostProcessorTest {
                     DeliveryThreadPoolExecutorFactory factory = ctx.getBean(DeliveryThreadPoolExecutorFactory.class);
                     SimpleMeterRegistry registry = ctx.getBean(SimpleMeterRegistry.class);
 
-                    ThreadPoolExecutor executor = factory.buildThreadPoolExecutor();
+                    ThreadPoolExecutor executor = (ThreadPoolExecutor) factory.buildThreadPoolExecutor();
                     executor.shutdownNow();
 
                     assertNull(registry.find(TelegramBotMetric.DELIVERY_POOL_ACTIVE.metricName()).tags(Tags.empty()).gauge());
