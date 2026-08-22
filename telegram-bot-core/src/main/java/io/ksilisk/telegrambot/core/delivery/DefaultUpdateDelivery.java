@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -18,18 +19,18 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
     private static final Logger log = LoggerFactory.getLogger(DefaultUpdateDelivery.class);
 
     private final UpdateDispatcher updateDispatcher;
-    private final ExecutorService executorService;
+    private final Executor executor;
     private final DeliveryProperties deliveryProperties;
     private final CompositeUpdateInterceptor compositeUpdateInterceptor;
     private final CompositeUpdateExceptionHandler exceptionHandler;
 
     public DefaultUpdateDelivery(UpdateDispatcher updateDispatcher,
-                                 ExecutorService executorService,
+                                 Executor executor,
                                  DeliveryProperties deliveryProperties,
                                  CompositeUpdateInterceptor compositeUpdateInterceptor,
                                  CompositeUpdateExceptionHandler exceptionHandler) {
         this.updateDispatcher = updateDispatcher;
-        this.executorService = executorService;
+        this.executor = executor;
         this.deliveryProperties = deliveryProperties;
         this.compositeUpdateInterceptor = compositeUpdateInterceptor;
         this.exceptionHandler = exceptionHandler;
@@ -48,7 +49,7 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
                 }
             };
 
-            executorService.submit(() -> capture.wrap(processUpdateWithMDC).run());
+            executor.execute(capture.wrap(processUpdateWithMDC));
         }
     }
 
@@ -72,6 +73,11 @@ public class DefaultUpdateDelivery implements UpdateDelivery {
 
     public void stop() {
         log.info("Stopping Update Delivery");
+        if (!(executor instanceof ExecutorService executorService)) {
+            log.info("Skipping executor shutdown because it is managed externally: {}",
+                    executor.getClass().getName());
+            return;
+        }
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(

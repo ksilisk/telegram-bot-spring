@@ -12,7 +12,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Registers delivery thread pool gauges for a {@link ThreadPoolExecutor}
- * created by {@link DeliveryThreadPoolExecutorFactory}.
+ * created by {@link DeliveryThreadPoolExecutorFactory}. Executors of other
+ * types are returned without instrumentation.
  */
 final class DeliveryThreadPoolExecutorMetricsInterceptor implements MethodInterceptor {
     private static final Tags NO_TAGS = Tags.empty();
